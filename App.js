@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import {
   extendTheme,
@@ -7,47 +8,50 @@ import {
   Center,
   Button,
 } from "native-base";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer, DefaultTheme  } from "@react-navigation/native";
+import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';;
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { enableScreens } from "react-native-screens";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import GetStarted from "./app/screens/GetStarted";
+import Background from "./app/CustomComponents/Background";
+import Animated from "react-native-reanimated";
 
-enableScreens()
+const Stack = createStackNavigator();
 
-// 2. Extend the theme to include custom colors, fonts, etc
-const newColorTheme = {
-  brand: {
-    900: "#8287af",
-    800: "#7c83db",
-    700: "#b3bef6",
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'transparent',
   },
 };
-
-const config = {
-  dependencies: {
-    "linear-gradient": require("expo-linear-gradient").LinearGradient,
-  },
-};
-
-const Stack = createSharedElementStackNavigator();
-
-const theme = extendTheme({ colors: newColorTheme });
 
 export default function App() {
   return (
-    <NativeBaseProvider theme={theme} config={config}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-          headerShown: false
-        }}>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Details" component={GetStarted} />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <NativeBaseProvider>
+      <Background>
+        <NavigationContainer  theme={MyTheme}>
+          <Stack.Navigator
+           screenOptions={{
+            headerShown: false,
+          }}
+          // initialRouteName="Details"
+          >
+            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+            <Stack.Screen name="Details" component={GetStarted}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="Details asd" component={DetailsScreen}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Background>
     </NativeBaseProvider>
   );
 }

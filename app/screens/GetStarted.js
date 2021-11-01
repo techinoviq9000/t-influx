@@ -1,16 +1,21 @@
-import { Box, Button, Image, Text } from "native-base";
+import { Box, Button, CheckIcon, HStack, Image, Text } from "native-base";
 import React from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
-import { SharedElement } from "react-navigation-shared-element";
-import Background from "../CustomComponents/Background";
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  Inter_900Black,
+} from '@expo-google-fonts/inter';
 
 const GetStarted = ({ navigation }) => {
+  let [fontsLoaded] = useFonts({
+    Inter_900Black,
+  });
+  if (!fontsLoaded) 
+    return <AppLoading />;
+  else
   return (
-    <Box flex={1} alignItems="center" minHeight="100%">
-      <Background>
-        <Text fontSize="7xl" color="white" zIndex={1} mt={6}>
-          T Influx
-        </Text>
+    <Box flex={1} alignItems="center" minHeight="100%" px={3}>
         <Image
           source={require("../assets/Get_started.png")}
           alt="Alternate Text"
@@ -18,7 +23,32 @@ const GetStarted = ({ navigation }) => {
           mt={24}
           resizeMode="contain"
         />
-        <Box flex={1} width="100%" justifyContent="flex-end" px={3} mb={5}>
+        <Text fontSize="3xl" color="white" fontWeight="bold">Before you get started</Text>
+        <Text fontSize="2xl" mx={5} mt={1} textAlign="center" color="white" fontWeight="thin">You should have the following documents</Text>
+        <Box backgroundColor="white" rounded="lg" p={8} width="100%" mt={10}>
+        <HStack space={2}>
+          <CheckIcon size="5" mt="0.5" color="emerald.500" />
+          <Text color="#414141" fontSize="md" fontWeight="medium">Active Mobile number & Email ID</Text>
+        </HStack>
+        <HStack space={2} mt={2}>
+          <CheckIcon size="5" mt="0.5" color="emerald.500" />
+          <Text color="#414141" fontSize="md" fontWeight="medium" >Aged 18 and Above</Text>
+        </HStack>
+        <HStack space={2} mt={2}>
+          <CheckIcon size="5" mt="0.5" color="emerald.500" />
+          <Text color="#414141" fontSize="md" fontWeight="medium" >NADRA CNIC/Passport</Text>
+        </HStack>
+        <HStack space={2} mt={2}>
+          <CheckIcon size="5" mt="0.5" color="emerald.500" />
+          <Text color="#414141" fontSize="md" fontWeight="medium" >Proof of Income</Text>
+        </HStack>
+        <HStack space={2} mt={2}>
+          <CheckIcon size="5" mt="0.5" color="emerald.500" />
+          <Text color="#414141" fontSize="md" fontWeight="medium" >Active Filer</Text>
+        </HStack>          
+          
+        </Box>
+        <Box flex={1} width="100%" justifyContent="flex-end" mt={20}>
           <Button
             size="md"
             rounded="md"
@@ -29,25 +59,12 @@ const GetStarted = ({ navigation }) => {
             mb={20}
             shadow={5}
             onPress={() =>
-              navigation.push("Details", { name: "salman", age: 12 })
+              navigation.goBack()
             }
           >
-            LOGIN
-          </Button>
-          <Button
-            size="md"
-            rounded="md"
-            shadow={5}
-            backgroundColor="white"
-            _text={{
-              color: "#414141",
-            }}
-            onPress={() => navigation.goBack()}
-          >
-            Go back
+            I'M READY
           </Button>
         </Box>
-      </Background>
     </Box>
   );
 }
