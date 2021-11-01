@@ -1,0 +1,11 @@
+**/node_modules
+.expo
+.nhost
+.DS_Store
+.env.development
+api/node_modules
+nmig
+packager-info.json
+.DS_Store
+web-build
+.nhost
