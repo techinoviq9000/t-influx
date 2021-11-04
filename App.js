@@ -16,6 +16,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import WelcomeScreen from "./app/screens/WelcomeScreen";
 import GetStarted from "./app/screens/GetStarted";
+import ContinueRegistration from "./app/screens/ContinueRegistration";
 import Background from "./app/CustomComponents/Background";
 import Animated from "react-native-reanimated";
 
@@ -38,13 +39,16 @@ export default function App() {
            screenOptions={{
             headerShown: false,
           }}
-          // initialRouteName="Details"
+          initialRouteName="Continue Registration"
           >
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}/>
-            <Stack.Screen name="Details" component={GetStarted}  options={{
+            <Stack.Screen name="Get Started" component={GetStarted}  options={{
           ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+            <Stack.Screen name="Continue Registration" component={ContinueRegistration}  options={{
+          ...TransitionPresets.RevealFromBottomAndroid,
         }}/>
         <Stack.Screen name="Details asd" component={DetailsScreen}  options={{
           ...TransitionPresets.SlideFromRightIOS,

@@ -20,7 +20,7 @@ const GetStarted = ({ navigation }) => {
           source={require("../assets/Get_started.png")}
           alt="Alternate Text"
           size="2xl"
-          mt={24}
+          mt={10}
           resizeMode="contain"
         />
         <Text fontSize="3xl" color="white" fontWeight="bold">Before you get started</Text>
@@ -48,7 +48,7 @@ const GetStarted = ({ navigation }) => {
         </HStack>          
           
         </Box>
-        <Box flex={1} width="100%" justifyContent="flex-end" mt={20}>
+        <Box flex={1} width="100%" justifyContent="flex-end" mt={6}>
           <Button
             size="md"
             rounded="md"
@@ -59,7 +59,8 @@ const GetStarted = ({ navigation }) => {
             mb={20}
             shadow={5}
             onPress={() =>
-              navigation.goBack()
+              // navigation.goBack()
+              navigation.navigate("Welcome")
             }
           >
             I'M READY
