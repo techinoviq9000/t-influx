@@ -48,7 +48,7 @@ const GetStarted = ({ navigation }) => {
         </HStack>          
           
         </Box>
-        <Box flex={1} width="100%" justifyContent="flex-end" mt={6}>
+        <Box flex={1} width="100%" justifyContent="flex-end" mt={6} mb={5}>
           <Button
             size="md"
             rounded="md"
@@ -56,14 +56,31 @@ const GetStarted = ({ navigation }) => {
             border={1}
             borderWidth="1"
             borderColor="white"
-            mb={20}
             shadow={5}
+            mb={5}
             onPress={() =>
               // navigation.goBack()
-              navigation.navigate("Welcome")
+              navigation.navigate("Continue Registration")
             }
           >
             I'M READY
+          </Button>
+          <Button
+            size="md"
+            rounded="md"
+            backgroundColor="white"
+            border={1}
+            borderWidth="1"
+            borderColor="white"
+            shadow={5}
+            _text={{
+              color: "#414141",
+            }}
+            onPress={() =>
+              navigation.goBack()
+            }
+          >
+            GO BACK
           </Button>
         </Box>
     </Box>

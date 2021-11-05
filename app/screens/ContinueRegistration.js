@@ -30,7 +30,10 @@ const ContinueRegistration = ({ navigation }) => {
       <Box flex={1} minHeight="100%">
         <Box alignItems="flex-start" px={6}>
           <Box mt={6}>
-            <Ionicons name="arrow-back-circle-sharp" size={36} color="white" />
+            <Ionicons name="arrow-back-circle-sharp" size={36} color="white" onPress={() =>
+              navigation.goBack()
+              // navigation.navigate("Welcome")
+            }/>
           </Box>
           <Text
             fontSize="2xl"
@@ -54,7 +57,7 @@ const ContinueRegistration = ({ navigation }) => {
               pb: 20,
               px: 6
             }}> 
-            <Box flex={1} backgroundColor="#ccc">
+            <Box flex={1}>
             <HStack space={4} mb={4}>
               <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
               <VStack space={1}>
@@ -150,7 +153,7 @@ const ContinueRegistration = ({ navigation }) => {
               </Box>
             </HStack>
             </Box>
-            <Box flex={1} backgroundColor="#ccc" minHeight="100%">
+            <Box flex={1} minHeight="100%">
             <Button
             size="md"
             rounded="md"

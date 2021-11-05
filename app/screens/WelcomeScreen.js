@@ -51,7 +51,7 @@ const WelcomeScreen = ({ navigation }) => {
             mb={5}
             shadow={5}
             onPress={() =>
-              navigation.navigate("Details", { name: "salman", age: 12 })
+              navigation.navigate("Get Started")
             }
           >
             LOGIN
