@@ -4,7 +4,6 @@ import {
   CheckIcon,
   HStack,
   Image,
-  ScrollView,
   Text,
   VStack,
 } from "native-base";
@@ -14,6 +13,7 @@ import {
   StyleSheet,
   View,
   SafeAreaViewBase,
+  ScrollView
 } from "react-native";
 import AppLoading from "expo-app-loading";
 import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
@@ -46,7 +46,7 @@ const ContinueRegistration = ({ navigation }) => {
           </Text>
         </Box>
           <Box
-            backgroundColor="white"
+            backgroundColor="#ccc"
             rounded="xl"
             py={8}
             width="100%"
@@ -152,8 +152,255 @@ const ContinueRegistration = ({ navigation }) => {
                 />
               </Box>
             </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
+
+            <HStack space={4} mb={4}>
+              <Ionicons name="checkmark-circle" size={36} color="#317F6E" />
+              <VStack space={1}>
+                <Text color="#317F6E" fontSize="lg" fontWeight="bold">
+                  Product Selection
+                </Text>
+                <Text color="#ccc" fontSize="sm">
+                  Pending
+                </Text>
+              </VStack>
+              <Box flex={1} alignItems="flex-end">
+                <Ionicons
+                  name="chevron-down-circle-outline"
+                  size={24}
+                  color="blue"
+                />
+              </Box>
+            </HStack>
             </Box>
-            <Box flex={1} minHeight="100%">
+            {/* <Box flex={1} minHeight="100%" justifyItems="flex-end">
             <Button
             size="md"
             rounded="md"
@@ -170,7 +417,7 @@ const ContinueRegistration = ({ navigation }) => {
           >
             I'M READY
           </Button>
-          </Box>
+          </Box> */}
           </ScrollView>
           </Box>
       </Box>
