@@ -19,6 +19,11 @@ import GetStarted from "./app/screens/GetStarted";
 import ContinueRegistration from "./app/screens/ContinueRegistration";
 import Background from "./app/CustomComponents/Background";
 import Animated from "react-native-reanimated";
+import UploadDocuments from "./app/screens/UploadDocuments";
+import BeginDocumentSubmission from "./app/screens/BeginDocumentSubmission";
+import EligibiltyCheck from "./app/screens/EligibiltyCheck";
+import VerifyOTP from "./app/screens/VerifyOTP";
+import PersonalDetails from "./app/screens/PersonalDetails";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +44,7 @@ export default function App() {
            screenOptions={{
             headerShown: false,
           }}
-          initialRouteName="Continue Registration"
+          initialRouteName="Welcome"
           >
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
           ...TransitionPresets.SlideFromRightIOS,
@@ -50,7 +55,19 @@ export default function App() {
             <Stack.Screen name="Continue Registration" component={ContinueRegistration}  options={{
           ...TransitionPresets.RevealFromBottomAndroid,
         }}/>
-        <Stack.Screen name="Details asd" component={DetailsScreen}  options={{
+        <Stack.Screen name="Upload Documents" component={UploadDocuments}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="Begin Document Submission" component={BeginDocumentSubmission}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="EligibiltyCheck" component={EligibiltyCheck}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="VerifyOTP" component={VerifyOTP}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="Personal Details" component={PersonalDetails}  options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}/>
           </Stack.Navigator>

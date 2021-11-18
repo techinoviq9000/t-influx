@@ -27,7 +27,7 @@ const WelcomeScreen = ({ navigation }) => {
   };
 
   return (
-    <Box  alignItems="center" width="100%" minHeight="100%">
+    <Box alignItems="center" width="100%" minHeight="100%" safeAreaTop={5}>
         <Text fontSize="7xl" color="white" zIndex={1} mt={6}>
           T Influx
         </Text>
