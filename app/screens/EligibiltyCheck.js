@@ -1,7 +1,7 @@
 import {
   Box,
   Button,
-  CheckIcon,
+  CloseIcon,
   HStack,
   Image,
   Text,
@@ -11,6 +11,7 @@ import {
   Stack,
   Center,
   Input,
+  CheckIcon,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -36,58 +37,21 @@ const EligibiltyCheck = ({ navigation }) => {
     Inter_900Black,
   });
 
-  const [list, setList] = useState([
-    {
-      id: 0,
-      title: "First Name",
-      status: true,
-      description: "CNIC junaid.png",
-    },
-    {
-      id: 1,
-      title: "Proof Of Income",
-      status: true,
-      description: "proof of income.pdf",
-    },
-    {
-      id: 2,
-      title: "Active Filer Certificate",
-      status: false,
-      description: "certificte.pdf",
-    },
-  ]);
-
-  const Uploader = ({
-    id,
-    title,
-    status,
-    description,
-    collapsed,
-    toggleExpanded,
-  }) => {
-    return (
-      <Stack
-        direction="row"
-        alignItems="center"
-        p={3}
-        backgroundColor="white"
-        borderColor="#13B995"
-        borderRadius="lg"
-        borderWidth={1}
-        shadow={4}
-        mb={4}
-      >
-        <Box flex={1}>
-          <Text color="#13B995">{title}</Text>
-          <Text color="#565656">{description}</Text>
-        </Box>
-        <Box alignItems="flex-end">
-          <MaterialIcons name="file-upload" size={24} color="blue" />
-        </Box>
-      </Stack>
-    );
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [cnic, setcnic] = useState("");
+  // "#13B995"
+  const getColor = (field, color) => {
+    if (field?.length >= 1) {
+      if (field.match(/^[A-Za-z\s]+$/)) {
+        return color;
+      } else {
+        return "red.500";
+      }
+    } else {
+      return color;
+    }
   };
-
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
@@ -153,100 +117,145 @@ const EligibiltyCheck = ({ navigation }) => {
           >
             <Box>
               {/* First name */}
-              <Stack
-                direction="row"
-                alignItems="center"
-                py={3}
-                px={4}
-                backgroundColor="white"
-                borderColor="#13B995"
-                borderRadius="lg"
-                borderWidth={1}
-                shadow={4}
-                mb={4}
-              >
-                <Box mr={3}>
-                  <MaterialIcons name="person" size={24} color="black" />
-                </Box>
-                <Box flex={1}>
-                  <Text color="#13B995">First Name</Text>
-                  <Input
-                    variant="unstyled"
-                    size="xl"
-                    p={0}
-                    placeholder="First Name"
-                    color="black"
-                    placeholderTextColor="#ccc"
-                  />
-                </Box>
-                <Box alignItems="flex-end">
-                  <CheckIcon size="5" mt="0.5" color="emerald.500" />
-                </Box>
-              </Stack>
+              <Box flex={1}>
+                <Text
+                  ml={12}
+                  pl={3}
+                  position="relative"
+                  top={8}
+                  color={
+                    getColor(firstName, "#13B995")
+                  }
+                >
+                  First Name
+                </Text>
+                <Input
+                  variant="unstyled"
+                  size="xl"
+                  placeholder="First Name"
+                  color="black"
+                  placeholderTextColor="#ccc"
+                  value={firstName}
+                  type="text"
+                  onChange={(e) => setfirstName(e.nativeEvent.text)}
+                  InputRightElement={
+                    <>
+                      {firstName?.length >= 1 ? (
+                        firstName.match(/^[A-Za-z\s]+$/) ? (
+                          <CheckIcon
+                            size="5"
+                            mt="0.5"
+                            color="emerald.500"
+                            mr="4"
+                          />
+                        ) : (
+                          <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
+                        )
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  }
+                  InputLeftElement={
+                    <Box pl="5">
+                      <MaterialIcons name="person" size={23} color="black" />
+                    </Box>
+                  }
+                  pb={3}
+                  pt={7}
+                  px={4}
+                  borderColor={
+                    getColor(firstName, "#a4ffc8")
+                  }
+                  borderRadius="lg"
+                  borderWidth={1}
+                  // "#13B995"
+                  _focus={{
+                    borderColor: `${
+                     getColor(firstName, "#13B995")
+                    }`,
+                  }}
+                />
+              </Box>
 
               {/* Last Name */}
-              <Stack
-                direction="row"
-                alignItems="center"
-                py={3}
-                px={4}
-                backgroundColor="white"
-                borderColor="#13B995"
-                borderRadius="lg"
-                borderWidth={1}
-                shadow={4}
-                mb={4}
-              >
-                <Box mr={3}>
-                  <MaterialIcons name="person" size={24} color="black" />
-                </Box>
-                <Box flex={1}>
-                  <Text color="#13B995">Last Name</Text>
-                  <Input
-                    variant="unstyled"
-                    size="xl"
-                    p={0}
-                    placeholder="Last Name"
-                    color="black"
-                    placeholderTextColor="#ccc"
-                  />
-                </Box>
-                <Box alignItems="flex-end">
-                  {/* <CheckIcon size="5" mt="0.5" color="emerald.500" /> */}
-                </Box>
-              </Stack>
+              <Box flex={1}>
+                <Text
+                  ml={12}
+                  pl={3}
+                  position="relative"
+                  top={8}
+                  color="#13B995"
+                >
+                  Last Name
+                </Text>
+                <Input
+                  variant="unstyled"
+                  size="xl"
+                  placeholder="Last Name"
+                  color="black"
+                  placeholderTextColor="#ccc"
+                  // InputRightElement={
+                  //   <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
+                  // }
+                  InputLeftElement={
+                    <Box pl="5">
+                      <MaterialIcons name="person" size={23} color="black" />
+                    </Box>
+                  }
+                  pb={3}
+                  pt={7}
+                  px={4}
+                  borderColor="#a4ffc8"
+                  borderRadius="lg"
+                  borderWidth={1}
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+              </Box>
 
               {/* CNIC NUMBER */}
-              <Stack
-                direction="row"
-                alignItems="center"
-                py={3}
-                px={4}
-                backgroundColor="white"
-                borderColor="#13B995"
-                borderRadius="lg"
-                borderWidth={1}
-                shadow={4}
-                mb={4}
-              >
-                <Box mr={3}>
-                  <MaterialIcons name="credit-card" size={24} color="black" />
-                </Box>
-                <Box flex={1}>
-                  <Text color="#13B995">CNIC Name</Text>
-                  <Input
-                    variant="unstyled"
-                    size="xl"
-                    p={0}
-                    placeholder="XXXXX-XXXXXXX-X"
-                    color="black"
-                    placeholderTextColor="#ccc"
-                  />
-                </Box>
-                <Box alignItems="flex-end">
-                  {/* <CheckIcon size="5" mt="0.5" color="emerald.500" /> */}
-                </Box>
-              </Stack>
+              <Box flex={1}>
+                <Text
+                  ml={12}
+                  pl={3}
+                  position="relative"
+                  top={8}
+                  color="#13B995"
+                >
+                  CNIC Number
+                </Text>
+                <Input
+                  variant="unstyled"
+                  size="xl"
+                  placeholder="XXXXX-XXXXXXX-X"
+                  color="black"
+                  placeholderTextColor="#ccc"
+                  InputRightElement={
+                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
+                    <></>
+                  }
+                  InputLeftElement={
+                    <Box pl="5">
+                      <MaterialIcons
+                        name="credit-card"
+                        size={23}
+                        color="black"
+                      />
+                    </Box>
+                  }
+                  pb={3}
+                  pt={7}
+                  px={4}
+                  borderColor="#a4ffc8"
+                  borderRadius="lg"
+                  borderWidth={1}
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+              </Box>
             </Box>
           </ScrollView>
         </Box>

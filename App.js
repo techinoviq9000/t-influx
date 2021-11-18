@@ -44,7 +44,7 @@ export default function App() {
            screenOptions={{
             headerShown: false,
           }}
-          initialRouteName="Welcome"
+          initialRouteName="EligibiltyCheck"
           >
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
           ...TransitionPresets.SlideFromRightIOS,

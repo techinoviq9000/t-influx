@@ -11,8 +11,9 @@ import {
   Stack,
   Center,
   Input,
+  Pressable,
 } from "native-base";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -36,57 +37,44 @@ const VerifyOTP = ({ navigation }) => {
     Inter_900Black,
   });
 
-  const [list, setList] = useState([
+  const [otp, setOtp] = useState([
     {
       id: 0,
-      title: "First Name",
-      status: true,
-      description: "CNIC junaid.png",
+      value: "",
     },
     {
       id: 1,
-      title: "Proof Of Income",
-      status: true,
-      description: "proof of income.pdf",
+      value: "",
     },
     {
       id: 2,
-      title: "Active Filer Certificate",
-      status: false,
-      description: "certificte.pdf",
+      value: "",
+    },
+    {
+      id: 3,
+      value: "",
     },
   ]);
 
-  const Uploader = ({
-    id,
-    title,
-    status,
-    description,
-    collapsed,
-    toggleExpanded,
-  }) => {
-    return (
-      <Stack
-        direction="row"
-        alignItems="center"
-        p={3}
-        backgroundColor="white"
-        borderColor="#13B995"
-        borderRadius="lg"
-        borderWidth={1}
-        shadow={4}
-        mb={4}
-      >
-        <Box flex={1}>
-          <Text color="#13B995">{title}</Text>
-          <Text color="#565656">{description}</Text>
-        </Box>
-        <Box alignItems="flex-end">
-          <MaterialIcons name="file-upload" size={24} color="blue" />
-        </Box>
-      </Stack>
+  const firstOTP = useRef();
+  const secondOTP = useRef();
+  const thirdOTP = useRef();
+  const fourthOTP = useRef();
+  const handleChange = (inputValue, id, firstRef, secondRef) => {
+    setOtp(
+      otp.map((item) => {
+        if (item.id == id) {
+          return { ...item, value: inputValue };
+        } else {
+          return { ...item };
+        }
+      })
     );
+    if(inputValue.length == 1) {
+      secondRef?.current.focus()
+    }
   };
+  let finalOTP = otp.map((otpItem) => otpItem.value).join("");
 
   if (!fontsLoaded) return <AppLoading />;
   else
@@ -150,9 +138,9 @@ const VerifyOTP = ({ navigation }) => {
             _contentContainerStyle={{
               flexGrow: 1,
             }}
+            keyboardShouldPersistTaps="never"
           >
             <Box>
-              {/* First name */}
               <Stack
                 direction="row"
                 space={5}
@@ -161,66 +149,112 @@ const VerifyOTP = ({ navigation }) => {
                 mt={2}
                 mb={5}
               >
-                <Box
+                <Input
+                  ref={firstOTP}
+                  returnKeyType="next"
+                  onSubmitEditing={() => {secondOTP.current.focus()}}
+                  variant="unstyled"
+                  value={otp[0].value}
+                  onChange={(e) => handleChange(e.nativeEvent.text, otp[0].id, firstOTP, secondOTP)}
+                  size="xl"
                   py={5}
-                  px={6}
+                  // px={6}
+                  textAlign="center"
+                  borderColor={otp[0].value ? "#13B995" : "white"}
                   backgroundColor="white"
-                  borderColor="#13B995"
                   borderRadius="lg"
                   borderWidth={1}
+                  color="black"
+                  width={16}
                   shadow={4}
                   mb={4}
-                >
-                  <Input variant="unstyled" size="xl" p={0} color="black" width="5" maxLength={1} fontSize="4xl" keyboardType='numeric' />
-                  {/* <Text fontSize="4xl" opacity="0" fontWeight="bold">
-                    6
-                  </Text> */}
-                </Box>
-                <Box
+                  maxLength={1}
+                  fontSize="4xl"
+                  keyboardType="numeric"
+                  type="text"
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+                <Input
+                 ref={secondOTP}
+                 returnKeyType="next"
+                 onSubmitEditing={() => {thirdOTP.current.focus()}}
+                  variant="unstyled"
+                  value={otp[1].value}
+                  onChange={(e) => handleChange(e.nativeEvent.text, otp[1].id, secondOTP, thirdOTP)}
+                  size="xl"
                   py={5}
-                  px={6}
+                  // px={6}
+                  textAlign="center"
+                  borderColor={otp[1].value ? "#13B995" : "white"}
                   backgroundColor="white"
-                  // borderColor="#13B995"
                   borderRadius="lg"
-                  // borderWidth={1}
+                  borderWidth={1}
+                  color="black"
+                  width={16}
                   shadow={4}
                   mb={4}
-                >
-                  <Input variant="unstyled" size="xl" p={0} color="black" width="5" maxLength={1} fontSize="4xl" keyboardType='numeric' />
-                  {/* <Text fontSize="4xl" opacity="0" fontWeight="bold">
-                    6
-                  </Text> */}
-                </Box>
-                <Box
+                  maxLength={1}
+                  fontSize="4xl"
+                  keyboardType="numeric"
+                  type="text"
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+                <Input
+                ref={thirdOTP}
+                returnKeyType="next"
+                onSubmitEditing={() => {fourthOTP.current.focus()}}
+                  variant="unstyled"
+                  value={otp[2].value}
+                  onChange={(e) => handleChange(e.nativeEvent.text, otp[2].id, thirdOTP, fourthOTP)}
+                  size="xl"
                   py={5}
-                  px={6}
+                  // px={6}
+                  textAlign="center"
+                  borderColor={otp[2].value ? "#13B995" : "white"}
                   backgroundColor="white"
-                  // borderColor="#13B995"
                   borderRadius="lg"
-                  // borderWidth={1}
+                  borderWidth={1}
+                  color="black"
+                  width={16}
                   shadow={4}
                   mb={4}
-                >
-                  <Input variant="unstyled" size="xl" p={0} color="black" width="5" maxLength={1} fontSize="4xl" keyboardType='numeric' />
-                  {/* <Text fontSize="4xl" opacity="0" fontWeight="bold">
-                    6
-                  </Text> */}
-                </Box>
-                <Box
+                  maxLength={1}
+                  fontSize="4xl"
+                  keyboardType="numeric"
+                  type="text"
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+                <Input
+                ref={fourthOTP}
+                  variant="unstyled"
+                  value={otp[3].value}
+                  onChange={(e) => handleChange(e.nativeEvent.text, otp[3].id)}
+                  size="xl"
                   py={5}
-                  px={6}
+                  // px={6}
+                  textAlign="center"
+                  borderColor={otp[3].value ? "#13B995" : "white"}
                   backgroundColor="white"
-                  // borderColor="#13B995"
                   borderRadius="lg"
-                  // borderWidth={1}
+                  borderWidth={1}
+                  color="black"
+                  width={16}
                   shadow={4}
                   mb={4}
-                >
-                  <Input variant="unstyled" size="xl" p={0} color="black" width="5" maxLength={1} fontSize="4xl" keyboardType='numeric' />
-                  {/* <Text fontSize="4xl" opacity="0" fontWeight="bold">
-                    6
-                  </Text> */}
-                </Box>
+                  maxLength={1}
+                  fontSize="4xl"
+                  keyboardType="numeric"
+                  type="text"
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
               </Stack>
               <Box>
                 <Text color="#13B995" fontSize="lg" textAlign="center">
@@ -234,6 +268,14 @@ const VerifyOTP = ({ navigation }) => {
                   textAlign="center"
                 >
                   OOPS! THE OTP SEEMS TO BE INCORRECT
+                </Text>
+                <Text
+                  color="red.500"
+                  fontSize="lg"
+                  fontWeight="bold"
+                  textAlign="center"
+                >
+                  {finalOTP}
                 </Text>
               </Box>
             </Box>
@@ -271,9 +313,10 @@ const VerifyOTP = ({ navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              onPress={() =>
+              onPress={
+                () => console.log(finalOTP)
                 // navigation.goBack()
-                navigation.navigate("Personal Details")
+                // navigation.navigate("Personal Details")
               }
             >
               CONFIRM
