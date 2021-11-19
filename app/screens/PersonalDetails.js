@@ -12,6 +12,8 @@ import {
   Center,
   Input,
   Pressable,
+  CloseIcon,
+  FormControl,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -29,117 +31,130 @@ import {
   FontAwesome,
   Feather,
 } from "@expo/vector-icons";
-import { Collapse } from "native-base";
-
-//import for the collapsible/Expandable view
-import Collapsible from "react-native-collapsible";
-import { boxShadow } from "styled-system";
-import { flushSync } from "react-dom";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import InputFields from "../CustomComponents/InputFields";
 
 const PersonalDetails = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
-  const [plan, setPlan] = useState("startup");
-  const [groupOne, setGroupOne] = useState([
-    {
-      id: 0,
-      name: "A",
-      text: "Option A",
-      selected: false,
-    },
-    {
-      id: 1,
-      name: "B",
-      text: "Option B",
-      selected: false,
-    },
-    {
-      id: 2,
-      name: "C",
-      text: "Option C",
-      selected: false,
-    },
-    {
-      id: 3,
-      name: "D",
-      text: "Option D",
-      selected: false,
-    },
-  ]);
+  const [fields, setFields] = useState({
+    firstName: "",
+    firstNameActive: false,
+    lastName: "",
+    lastNameActive: false,
+    email: "",
+    emailActive: false,
+    dob: "",
+    dobActive: false,
+    phone: "",
+    phoneActive: false,
+  });
 
-  const [groupTwo, setGroupTwo] = useState([
-    {
-      id: 4,
-      name: "A",
-      text: "Option A",
-      selected: false,
-    },
-    {
-      id: 5,
-      name: "B",
-      text: "Option B",
-      selected: false,
-    },
-    {
-      id: 6,
-      name: "C",
-      text: "Option C",
-      selected: false,
-    },
-    {
-      id: 7,
-      name: "D",
-      text: "Option D",
-      selected: false,
-    },
-  ]);
 
-  const toggleButton = (setState, currentState, id) => {
-    setState(currentState.map(item => {
-      if(item.id == id) {
-        return {...item, selected: !item.selected}
+  const [errors, setErrors] = useState({});
+
+  const handleValidation = () => {
+    //First Name
+    if (fields.firstNameActive) {
+      if (fields.firstName === "") {
+        errors["firstName"] = "Cannot be empty";
+      } else if (!fields["firstName"].match(/^[a-zA-Z\s]+$/)) {
+        errors["firstName"] = "Only letters are allowed";
       } else {
-        return {...item, selected: false}
+        errors["firstName"] = null;
       }
-    }))
+    }
+
+    //Last Name
+    if (fields.lastNameActive) {
+      if (fields.lastName === "") {
+        errors["lastName"] = "Cannot be empty";
+      } else if (!fields["lastName"].match(/^[a-zA-Z\s]+$/)) {
+        errors["lastName"] = "Only letters are allowed";
+      } else {
+        errors["lastName"] = null;
+      }
+    }
+
+    //DOB
+    if (fields.dobActive) {
+      if (fields.dob === "") {
+        errors["dob"] = "Cannot be empty";
+      } else if (!fields["dob"].match(/^[a-zA-Z\s]+$/)) {
+        errors["dob"] = "Only letters";
+      } else {
+        errors["dob"] = null;
+      }
+    }
+
+    //phone
+    if (fields.phoneActive) {
+      if (fields.phone === "") {
+        errors["phone"] = "Cannot be empty";
+      } else if (!fields["phone"].match(/^[0-9]*$/)) {
+        errors["phone"] = "Only numbers";
+      } else {
+        errors["phone"] = null;
+      }
+    }
+
+    //Email
+    if (fields.emailActive) {
+      if (fields.email === "") {
+        errors["email"] = "Cannot be empty";
+      } else {
+        let lastAtPos = fields["email"].lastIndexOf("@");
+        let lastDotPos = fields["email"].lastIndexOf(".");
+
+        if (
+          !(
+            lastAtPos < lastDotPos &&
+            lastAtPos > 0 &&
+            fields["email"].indexOf("@@") == -1 &&
+            lastDotPos > 2 &&
+            fields["email"].length - lastDotPos > 2
+          )
+        ) {
+          errors["email"] = "Email is not valid";
+        } else {
+          errors["email"] = null;
+        }
+      }
+    }
+    setErrors({ ...errors });
+    let formIsValid = false;
+    for (var prop in errors) {
+      if (errors[prop] != null) {
+        formIsValid = false;
+        break;
+      } else {
+        formIsValid = true;
+      }
+    }
+    return formIsValid;
   };
-  const ButtonGroup = ({ setState, currentState, toggleButton }) => {
-    return (
-      <Box mb={10}>
-        {currentState.map(({ id, name, text, selected } = group) => (
-          <Pressable onPress={() => toggleButton(setState, currentState, id)}>
-            {({ isHovered, isFocused, isPressed }) => {
-              return (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  py={5}
-                  px={4}
-                  // backgroundColor="white"
-                  bg={selected ? "#13B995" : isHovered ? "#6b968d" : "white"}
-                  borderColor="#13B995"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  shadow={4}
-                  mb={4}
-                >
-                  <Box mr={3}>
-                    <Text fontSize="md" fontWeight="medium" color={selected ? "#acfbe9" : isHovered ? "#acfbe9" : "#414141"}>{name}</Text>
-                  </Box>
-                  <Box flex={1}>
-                    <Text fontSize="md" fontWeight="medium" color={selected ? "white" : isHovered ? "white" : "#414141"}>{text}</Text>
-                  </Box>
-                  <Box alignItems="flex-end">
-                    {selected && <CheckIcon size="5" mt="0.5" color="white" />}
-                  </Box>
-                </Stack>
-              );
-            }}
-          </Pressable>
-        ))}
-      </Box>
-    );
+
+  const submitForm = () => {
+    fields.firstNameActive = true;
+    fields.lastNameActive = true;
+    fields.emailActive = true;
+    fields.dobActive = true;
+    fields.phoneActive = true;
+    if (handleValidation()) {
+      alert("Form submitted");
+    } else {
+      alert("Make sure you have filled the form correctly!");
+    }
+  };
+
+  const handleChange = (field, e) => {
+    let fieldsCopy = fields;
+    fieldsCopy[field] = e.nativeEvent.text;
+    fieldsCopy[`${field}Active`] = true;
+    setFields({ ...fieldsCopy });
+    console.log(handleValidation());
+    console.log(errors);
   };
 
   if (!fontsLoaded) return <AppLoading />;
@@ -198,20 +213,71 @@ const PersonalDetails = ({ navigation }) => {
           flex={1}
           // minHeight="100%"
           mt={5}
-          
         >
           <ScrollView
             _contentContainerStyle={{
               flexGrow: 1,
               px: 6,
-              pb: 8
+              pb: 8,
             }}
           >
             <Box>
-              <Text color="black" fontSize="xl" mb={2}>What is your yearly income?</Text>
-              <ButtonGroup currentState={groupOne} setState={setGroupOne} toggleButton={toggleButton} />    
-              <Text color="black" fontSize="xl" mb={2}>What is your yearly income?</Text>
-              <ButtonGroup currentState={groupTwo} setState={setGroupTwo} toggleButton={toggleButton}/>           
+              {/* First name */}
+              <InputFields
+                fields={fields}
+                title={"First Name"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Enter your first name"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              {/* last name */}
+              <InputFields
+                fields={fields}
+                title={"Last Name"}
+                errors={errors}
+                name={"lastName"}
+                placeholder={"Enter your last name"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              {/* email */}
+              <InputFields
+                fields={fields}
+                title={"Email ID"}
+                errors={errors}
+                name={"email"}
+                placeholder={"Enter your email id"}
+                handleChange={handleChange}
+                icon={
+                  <MaterialIcons name="credit-card" size={23} color="black" />
+                }
+              />
+
+              {/* date of birth */}
+              <InputFields
+                fields={fields}
+                title={"Date of Birth"}
+                errors={errors}
+                name={"dob"}
+                placeholder={"Enter your date of birth"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              {/* phone number */}
+              <InputFields
+                fields={fields}
+                title={"Phone number"}
+                errors={errors}
+                name={"phone"}
+                placeholder={"Enter your phone number"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
             </Box>
           </ScrollView>
         </Box>
@@ -249,7 +315,8 @@ const PersonalDetails = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                // navigation.navigate("VerifyOTP")
+                submitForm()
               }
             >
               CONFIRM

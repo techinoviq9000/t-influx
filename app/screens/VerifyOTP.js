@@ -314,9 +314,9 @@ const VerifyOTP = ({ navigation }) => {
               //mb={25}
               // shadow={5}
               onPress={
-                () => console.log(finalOTP)
+                () => 
                 // navigation.goBack()
-                // navigation.navigate("Personal Details")
+                navigation.navigate("Personal Details")
               }
             >
               CONFIRM
