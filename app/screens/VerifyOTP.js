@@ -31,6 +31,8 @@ import { Collapse } from "native-base";
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
+import OtpFields from "../CustomComponents/OtpFields";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const VerifyOTP = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -60,7 +62,10 @@ const VerifyOTP = ({ navigation }) => {
   const secondOTP = useRef();
   const thirdOTP = useRef();
   const fourthOTP = useRef();
-  const handleChange = (inputValue, id, firstRef, secondRef) => {
+
+  const otpArrayFields = [firstOTP, secondOTP, thirdOTP, fourthOTP];
+
+  const handleChange = (inputValue, id, secondRef) => {
     setOtp(
       otp.map((item) => {
         if (item.id == id) {
@@ -92,37 +97,7 @@ const VerifyOTP = ({ navigation }) => {
               }
             />
           </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Verify OTP
-              </Text>
-              <Text
-                fontSize="xl"
-                color="#ccc"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Next: Personal Details
-              </Text>
-            </Box>
-            <Center
-              borderColor="#a6dfd2"
-              borderWidth="6"
-              borderRadius="full"
-              height="20"
-              width="20"
-            >
-              <Text color="white">2 of 5</Text>
-            </Center>
-          </Stack>
+          <StepHeader title="Verify OTP" nextTitle="Next: Personal Details" step="2" />
         </Box>
         <Box
           backgroundColor="white"
@@ -149,13 +124,21 @@ const VerifyOTP = ({ navigation }) => {
                 mt={2}
                 mb={5}
               >
-                <Input
+                {otpArrayFields.map((item, index) => {
+                  const nextRef = otpArrayFields[index+1]
+                  if (nextRef) {
+                    return (
+                      <OtpFields otpRef={item} secondRef={nextRef} otp={otp} handleChange={handleChange} key={index} index={index} />
+                      )
+                  }
+                })}
+                {/* <Input
                   ref={firstOTP}
                   returnKeyType="next"
                   onSubmitEditing={() => {secondOTP.current.focus()}}
                   variant="unstyled"
                   value={otp[0].value}
-                  onChange={(e) => handleChange(e.nativeEvent.text, otp[0].id, firstOTP, secondOTP)}
+                  onChange={(e) => handleChange(e.nativeEvent.text, otp[0].id, secondOTP)}
                   size="xl"
                   py={5}
                   // px={6}
@@ -229,7 +212,7 @@ const VerifyOTP = ({ navigation }) => {
                   _focus={{
                     borderColor: "#13B995",
                   }}
-                />
+                /> */}
                 <Input
                 ref={fourthOTP}
                   variant="unstyled"

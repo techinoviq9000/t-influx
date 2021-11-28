@@ -21,6 +21,7 @@ import {
   StyleSheet,
   View,
   SafeAreaViewBase,
+  Platform,
 } from "react-native";
 import AppLoading from "expo-app-loading";
 import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
@@ -33,11 +34,17 @@ import {
 } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const PersonalDetails = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
   const [fields, setFields] = useState({
     firstName: "",
     firstNameActive: false,
@@ -45,80 +52,96 @@ const PersonalDetails = ({ navigation }) => {
     lastNameActive: false,
     email: "",
     emailActive: false,
-    dob: "",
+    dob: "12/09/2021",
     dobActive: false,
     phone: "",
     phoneActive: false,
   });
 
+  const addDate = (e, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+    let tempDate = new Date(currentDate);
+    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+    let fieldsCopy = fields;
+    fieldsCopy.dob = fDate;
+    fieldsCopy.dobActive = true;
+    setFields({ ...fieldsCopy });
+    handleValidation()
+  }
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode)
+  }
 
   const [errors, setErrors] = useState({});
 
   const handleValidation = () => {
     //First Name
     if (fields.firstNameActive) {
+     
       if (fields.firstName === "") {
-        errors["firstName"] = "Cannot be empty";
-      } else if (!fields["firstName"].match(/^[a-zA-Z\s]+$/)) {
-        errors["firstName"] = "Only letters are allowed";
+        errors.firstName = "Cannot be empty";
+      } else if (!fields.firstName.match(/^[a-zA-Z\s]+$/)) {
+        errors.firstName = "Only letters are allowed";
       } else {
-        errors["firstName"] = null;
+        errors.firstName = null;
       }
     }
 
     //Last Name
     if (fields.lastNameActive) {
       if (fields.lastName === "") {
-        errors["lastName"] = "Cannot be empty";
-      } else if (!fields["lastName"].match(/^[a-zA-Z\s]+$/)) {
-        errors["lastName"] = "Only letters are allowed";
+        errors.lastName = "Cannot be empty";
+      } else if (!fields.lastName.match(/^[a-zA-Z\s]+$/)) {
+        errors.lastName = "Only letters are allowed";
       } else {
-        errors["lastName"] = null;
+        errors.lastName = null;
       }
     }
 
     //DOB
     if (fields.dobActive) {
       if (fields.dob === "") {
-        errors["dob"] = "Cannot be empty";
-      } else if (!fields["dob"].match(/^[a-zA-Z\s]+$/)) {
-        errors["dob"] = "Only letters";
+        errors.dob = "Cannot be empty";
       } else {
-        errors["dob"] = null;
+        errors.dob = null;
       }
     }
 
     //phone
     if (fields.phoneActive) {
       if (fields.phone === "") {
-        errors["phone"] = "Cannot be empty";
-      } else if (!fields["phone"].match(/^[0-9]*$/)) {
-        errors["phone"] = "Only numbers";
+        errors.phone = "Cannot be empty";
+      } else if (!fields.phone.match(/^[0-9]*$/)) {
+        errors.phone = "Only numbers";
       } else {
-        errors["phone"] = null;
+        errors.phone = null;
       }
     }
 
     //Email
     if (fields.emailActive) {
       if (fields.email === "") {
-        errors["email"] = "Cannot be empty";
+        errors.email = "Cannot be empty";
       } else {
-        let lastAtPos = fields["email"].lastIndexOf("@");
-        let lastDotPos = fields["email"].lastIndexOf(".");
+        let lastAtPos = fields.email.lastIndexOf("@");
+        let lastDotPos = fields.email.lastIndexOf(".");
 
         if (
           !(
             lastAtPos < lastDotPos &&
             lastAtPos > 0 &&
-            fields["email"].indexOf("@@") == -1 &&
+            fields.email.indexOf("@@") == -1 &&
             lastDotPos > 2 &&
-            fields["email"].length - lastDotPos > 2
+            fields.email.length - lastDotPos > 2
           )
         ) {
-          errors["email"] = "Email is not valid";
+          errors.email = "Email is not valid";
         } else {
-          errors["email"] = null;
+          errors.email = null;
         }
       }
     }
@@ -153,8 +176,7 @@ const PersonalDetails = ({ navigation }) => {
     fieldsCopy[field] = e.nativeEvent.text;
     fieldsCopy[`${field}Active`] = true;
     setFields({ ...fieldsCopy });
-    console.log(handleValidation());
-    console.log(errors);
+    handleValidation()
   };
 
   if (!fontsLoaded) return <AppLoading />;
@@ -173,37 +195,11 @@ const PersonalDetails = ({ navigation }) => {
               }
             />
           </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Personal Details
-              </Text>
-              <Text
-                fontSize="xl"
-                color="#ccc"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Next: Questions & Answers
-              </Text>
-            </Box>
-            <Center
-              borderColor="#a6dfd2"
-              borderWidth="6"
-              borderRadius="full"
-              height="20"
-              width="20"
-            >
-              <Text color="white">3 of 5</Text>
-            </Center>
-          </Stack>
+          <StepHeader
+            title="Personal Details"
+            nextTitle="Next: Questions & Answers"
+            step="3"
+          />
         </Box>
         <Box
           backgroundColor="white"
@@ -258,15 +254,63 @@ const PersonalDetails = ({ navigation }) => {
               />
 
               {/* date of birth */}
-              <InputFields
-                fields={fields}
-                title={"Date of Birth"}
-                errors={errors}
-                name={"dob"}
-                placeholder={"Enter your date of birth"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
+              <Box>
+                <Text
+                  ml={12}
+                  pl={3}
+                  position="relative"
+                  top={8}
+                  color={errors?.dob ? "red.500" : "#13B995"}
+                >
+                  Date of Birth
+                </Text>
+                <Pressable onPress={() => showMode('date')} _pressed={{backgroundColor: "gray.50"}}>
+                <Input
+                  variant="unstyled"
+                  size="xl"
+                  isReadOnly
+                  placeholder="Enter Date of Birth"
+                  color="black"
+                  placeholderTextColor="#ccc"
+                  value={fields?.dob}
+                  type="button"
+                  InputRightElement={
+                    <>
+                      {errors?.dob ? (
+                        <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
+                      ) : fields?.dobActive ? (
+                        <CheckIcon
+                          size="5"
+                          mt="0.5"
+                          color="emerald.500"
+                          mr="4"
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  }
+                  InputLeftElement={<Box pl="5"><MaterialIcons name="credit-card" size={23} color="black" /></Box>}
+                  pb={3}
+                  pt={7}
+                  px={4}
+                  borderColor={errors?.dob ? "red.500" : "#a4ffc8"}
+                  borderRadius="lg"
+                  borderWidth={1}
+                  // "#13B995"
+                  _focus={{
+                    borderColor: `${
+                      errors?.dob ? "red.500" : "#13B995"
+                    }`,
+                  }}
+                />
+                </Pressable>
+                {errors?.dob && (
+                  <Text color="red.500" mt={2} ml={5}>
+                    {errors?.dob}
+                  </Text>
+                )}
+              </Box>
 
               {/* phone number */}
               <InputFields
@@ -278,6 +322,9 @@ const PersonalDetails = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
+              <Text color="emerald.500" mt={2} ml={5} textAlign="center">
+                    Number format: 03xxxxxxxxx
+                  </Text>
             </Box>
           </ScrollView>
         </Box>
@@ -315,14 +362,15 @@ const PersonalDetails = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                // navigation.navigate("VerifyOTP")
-                submitForm()
+                navigation.navigate("Q/A")
+                // submitForm()
               }
             >
               CONFIRM
             </Button>
           </Stack>
         </Box>
+        {show && <DateTimePicker testID="dateTimePicker" value={date} mode={mode} display="default" onChange={addDate} />}
       </Box>
     );
 };

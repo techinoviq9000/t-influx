@@ -35,6 +35,7 @@ import { Collapse } from "native-base";
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
 import { flushSync } from "react-dom";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const QuestionsAndAnswers = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -158,37 +159,7 @@ const QuestionsAndAnswers = ({ navigation }) => {
               }
             />
           </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Personal Details
-              </Text>
-              <Text
-                fontSize="xl"
-                color="#ccc"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Next: Questions & Answers
-              </Text>
-            </Box>
-            <Center
-              borderColor="#a6dfd2"
-              borderWidth="6"
-              borderRadius="full"
-              height="20"
-              width="20"
-            >
-              <Text color="white">3 of 5</Text>
-            </Center>
-          </Stack>
+          <StepHeader title="Questions & Answers" nextTitle="Next: Product Selection" step="4" />
         </Box>
         <Box
           backgroundColor="white"
@@ -232,7 +203,7 @@ const QuestionsAndAnswers = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.navigate("Product Selection")
               }
             >
               I NEED HELP
@@ -249,7 +220,7 @@ const QuestionsAndAnswers = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.navigate("Product Selection")
               }
             >
               CONFIRM

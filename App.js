@@ -24,6 +24,8 @@ import BeginDocumentSubmission from "./app/screens/BeginDocumentSubmission";
 import EligibiltyCheck from "./app/screens/EligibiltyCheck";
 import VerifyOTP from "./app/screens/VerifyOTP";
 import PersonalDetails from "./app/screens/PersonalDetails";
+import QuestionsAndAnswers from "./app/screens/QuestionsAndAnswers";
+import ProductSelection from "./app/screens/ProductSelection";
 
 const Stack = createStackNavigator();
 
@@ -44,7 +46,7 @@ export default function App() {
            screenOptions={{
             headerShown: false,
           }}
-          initialRouteName="Personal Details"
+          initialRouteName="Welcome"
           >
             <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
           ...TransitionPresets.SlideFromRightIOS,
@@ -68,6 +70,12 @@ export default function App() {
           ...TransitionPresets.SlideFromRightIOS,
         }}/>
         <Stack.Screen name="Personal Details" component={PersonalDetails}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="Q/A" component={QuestionsAndAnswers}  options={{
+          ...TransitionPresets.SlideFromRightIOS,
+        }}/>
+        <Stack.Screen name="Product Selection" component={ProductSelection}  options={{
           ...TransitionPresets.SlideFromRightIOS,
         }}/>
           </Stack.Navigator>
