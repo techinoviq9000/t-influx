@@ -8,8 +8,11 @@ import {
   Center,
   Button,
 } from "native-base";
-import { NavigationContainer, DefaultTheme  } from "@react-navigation/native";
-import { createStackNavigator, TransitionPresets  } from '@react-navigation/stack';;
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { enableScreens } from "react-native-screens";
 import React from "react";
@@ -33,51 +36,134 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: 'transparent',
+    background: "transparent",
   },
 };
+
+const ExistingCustomerStack = createStackNavigator();
+const NewCustomerStack = createStackNavigator();
+
+const NewCustomerStackScreen = () => (
+  <NewCustomerStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <NewCustomerStack.Screen name="Get Started" component={GetStarted} />
+  </NewCustomerStack.Navigator>
+);
+
+const ExistingCustomerStackScreen = () => (
+  <ExistingCustomerStack.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}
+  >
+    <ExistingCustomerStack.Screen
+      name="EligibiltyCheck"
+      component={EligibiltyCheck}
+      options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    />
+    <ExistingCustomerStack.Screen
+      name="VerifyOTP"
+      component={VerifyOTP}
+      options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    />
+    <ExistingCustomerStack.Screen
+      name="Continue Application"
+      component={ContinueRegistration}
+      options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    />
+  </ExistingCustomerStack.Navigator>
+);
 
 export default function App() {
   return (
     <NativeBaseProvider>
       <Background>
-        <NavigationContainer  theme={MyTheme}>
+        <NavigationContainer theme={MyTheme}>
           <Stack.Navigator
-           screenOptions={{
-            headerShown: false,
-          }}
-          initialRouteName="Welcome"
+            screenOptions={{
+              headerShown: false,
+            }}
+            initialRouteName="Welcome"
           >
-            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-            <Stack.Screen name="Get Started" component={GetStarted}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-            <Stack.Screen name="Continue Registration" component={ContinueRegistration}  options={{
-          ...TransitionPresets.RevealFromBottomAndroid,
-        }}/>
-        <Stack.Screen name="Upload Documents" component={UploadDocuments}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="Begin Document Submission" component={BeginDocumentSubmission}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="EligibiltyCheck" component={EligibiltyCheck}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="VerifyOTP" component={VerifyOTP}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="Personal Details" component={PersonalDetails}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="Q/A" component={QuestionsAndAnswers}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
-        <Stack.Screen name="Product Selection" component={ProductSelection}  options={{
-          ...TransitionPresets.SlideFromRightIOS,
-        }}/>
+            <Stack.Screen
+              name="Welcome"
+              component={WelcomeScreen}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="RegisterRoute"
+              component={NewCustomerStackScreen}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="LoginRoute"
+              component={ExistingCustomerStackScreen}
+              options={{
+                ...TransitionPresets.RevealFromBottomAndroid,
+              }}
+            />
+            <Stack.Screen
+              name="Upload Documents"
+              component={UploadDocuments}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Begin Document Submission"
+              component={BeginDocumentSubmission}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="EligibiltyCheck"
+              component={EligibiltyCheck}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Continue Application"
+              component={ContinueRegistration}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Personal Details"
+              component={PersonalDetails}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Q/A"
+              component={QuestionsAndAnswers}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
+            <Stack.Screen
+              name="Product Selection"
+              component={ProductSelection}
+              options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Background>

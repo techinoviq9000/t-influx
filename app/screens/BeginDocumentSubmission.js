@@ -29,6 +29,7 @@ import { Collapse } from "native-base";
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const BeginDocumentSubmission = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -75,6 +76,7 @@ const BeginDocumentSubmission = ({ navigation }) => {
         borderWidth={1}
         shadow={4}
         mb={4}
+        width={{base: "100%", md: "md"}}
       >
         <Box flex={1}>
           <Text color="#13B995">{title}</Text>
@@ -90,32 +92,20 @@ const BeginDocumentSubmission = ({ navigation }) => {
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Upload Documents
-              </Text>
-            </Box>
-          </Stack>
+      <Box flex={1} minHeight="100%" safeAreaTop={5}>
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
+        </Box>
+        <Box alignItems="center">
+          <StepHeader title="Upload Documents" />
         </Box>
         <Box
           backgroundColor="white"
@@ -127,10 +117,12 @@ const BeginDocumentSubmission = ({ navigation }) => {
           mt={5}
           px={6}
         >
-          <ScrollView _contentContainerStyle={{
-              flexGrow: 1
-            }}>
-            <Box flex={1}>
+          <ScrollView
+            _contentContainerStyle={{
+              flexGrow: 1,
+            }}
+          >
+            <Box flex={1} alignItems={{md: "center"}}>
               {list.map((item) => (
                 <Uploader
                   key={item.id}
@@ -150,10 +142,14 @@ const BeginDocumentSubmission = ({ navigation }) => {
                 borderWidth={1}
                 shadow={4}
                 mb={4}
+                width={{base: "100%", md: "md"}}
               >
-                  <Box flex={1} alignItems="center">
-                  <Text color="blue.600" fontWeight="bold"><MaterialIcons name="add" size={15} color="blue" />Additional Documents</Text>
-                  </Box>
+                <Box flex={1} alignItems="center">
+                  <Text color="blue.600" fontWeight="bold">
+                    <MaterialIcons name="add" size={15} color="blue" />
+                    Additional Documents
+                  </Text>
+                </Box>
               </Stack>
             </Box>
             <Box flex={1} justifyContent="flex-end">
@@ -165,7 +161,7 @@ const BeginDocumentSubmission = ({ navigation }) => {
                 borderWidth="1"
                 borderColor="white"
                 //mb={25}
-               // shadow={5}
+                // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
                   navigation.navigate("EligibiltyCheck")

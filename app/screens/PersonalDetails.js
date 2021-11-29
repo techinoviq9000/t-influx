@@ -63,25 +63,29 @@ const PersonalDetails = ({ navigation }) => {
     setShow(Platform.OS === "ios");
     setDate(currentDate);
     let tempDate = new Date(currentDate);
-    let fDate = tempDate.getDate() + '/' + (tempDate.getMonth() + 1) + '/' + tempDate.getFullYear();
+    let fDate =
+      tempDate.getDate() +
+      "/" +
+      (tempDate.getMonth() + 1) +
+      "/" +
+      tempDate.getFullYear();
     let fieldsCopy = fields;
     fieldsCopy.dob = fDate;
     fieldsCopy.dobActive = true;
     setFields({ ...fieldsCopy });
-    handleValidation()
-  }
+    handleValidation();
+  };
 
   const showMode = (currentMode) => {
     setShow(true);
-    setMode(currentMode)
-  }
+    setMode(currentMode);
+  };
 
   const [errors, setErrors] = useState({});
 
   const handleValidation = () => {
     //First Name
     if (fields.firstNameActive) {
-     
       if (fields.firstName === "") {
         errors.firstName = "Cannot be empty";
       } else if (!fields.firstName.match(/^[a-zA-Z\s]+$/)) {
@@ -176,25 +180,25 @@ const PersonalDetails = ({ navigation }) => {
     fieldsCopy[field] = e.nativeEvent.text;
     fieldsCopy[`${field}Active`] = true;
     setFields({ ...fieldsCopy });
-    handleValidation()
+    handleValidation();
   };
 
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
+        </Box>
+        <Box alignItems="center">
           <StepHeader
             title="Personal Details"
             nextTitle="Next: Questions & Answers"
@@ -264,46 +268,55 @@ const PersonalDetails = ({ navigation }) => {
                 >
                   Date of Birth
                 </Text>
-                <Pressable onPress={() => showMode('date')} _pressed={{backgroundColor: "gray.50"}}>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  isReadOnly
-                  placeholder="Enter Date of Birth"
-                  color="black"
-                  placeholderTextColor="#ccc"
-                  value={fields?.dob}
-                  type="button"
-                  InputRightElement={
-                    <>
-                      {errors?.dob ? (
-                        <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-                      ) : fields?.dobActive ? (
-                        <CheckIcon
-                          size="5"
-                          mt="0.5"
-                          color="emerald.500"
-                          mr="4"
+                <Pressable
+                  onPress={() => showMode("date")}
+                  _pressed={{ backgroundColor: "gray.50" }}
+                >
+                  <Input
+                    variant="unstyled"
+                    size="xl"
+                    isReadOnly
+                    placeholder="Enter Date of Birth"
+                    color="black"
+                    placeholderTextColor="#ccc"
+                    value={fields?.dob}
+                    type="button"
+                    InputRightElement={
+                      <>
+                        {errors?.dob ? (
+                          <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
+                        ) : fields?.dobActive ? (
+                          <CheckIcon
+                            size="5"
+                            mt="0.5"
+                            color="emerald.500"
+                            mr="4"
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </>
+                    }
+                    InputLeftElement={
+                      <Box pl="5">
+                        <MaterialIcons
+                          name="credit-card"
+                          size={23}
+                          color="black"
                         />
-                      ) : (
-                        <></>
-                      )}
-                    </>
-                  }
-                  InputLeftElement={<Box pl="5"><MaterialIcons name="credit-card" size={23} color="black" /></Box>}
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor={errors?.dob ? "red.500" : "#a4ffc8"}
-                  borderRadius="lg"
-                  borderWidth={1}
-                  // "#13B995"
-                  _focus={{
-                    borderColor: `${
-                      errors?.dob ? "red.500" : "#13B995"
-                    }`,
-                  }}
-                />
+                      </Box>
+                    }
+                    pb={3}
+                    pt={7}
+                    px={4}
+                    borderColor={errors?.dob ? "red.500" : "#a4ffc8"}
+                    borderRadius="lg"
+                    borderWidth={1}
+                    // "#13B995"
+                    _focus={{
+                      borderColor: `${errors?.dob ? "red.500" : "#13B995"}`,
+                    }}
+                  />
                 </Pressable>
                 {errors?.dob && (
                   <Text color="red.500" mt={2} ml={5}>
@@ -323,8 +336,8 @@ const PersonalDetails = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
               <Text color="emerald.500" mt={2} ml={5} textAlign="center">
-                    Number format: 03xxxxxxxxx
-                  </Text>
+                Number format: 03xxxxxxxxx
+              </Text>
             </Box>
           </ScrollView>
         </Box>
@@ -360,9 +373,10 @@ const PersonalDetails = ({ navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("Q/A")
+              onPress={
+                () =>
+                  // navigation.goBack()
+                  navigation.navigate("Q/A")
                 // submitForm()
               }
             >
@@ -370,7 +384,15 @@ const PersonalDetails = ({ navigation }) => {
             </Button>
           </Stack>
         </Box>
-        {show && <DateTimePicker testID="dateTimePicker" value={date} mode={mode} display="default" onChange={addDate} />}
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            display="default"
+            onChange={addDate}
+          />
+        )}
       </Box>
     );
 };

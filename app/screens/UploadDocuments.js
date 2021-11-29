@@ -27,6 +27,7 @@ import { Collapse } from "native-base";
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const UploadDocuments = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -36,32 +37,20 @@ const UploadDocuments = ({ navigation }) => {
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Upload Documents
-              </Text>
-            </Box>
-          </Stack>
+      <Box flex={1} minHeight="100%" safeAreaTop={5}>
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
+        </Box>
+        <Box alignItems="center">
+          <StepHeader title="Upload Documents" />
         </Box>
         <Box
           backgroundColor="white"
@@ -73,9 +62,11 @@ const UploadDocuments = ({ navigation }) => {
           mt={5}
           px={6}
         >
-          <ScrollView _contentContainerStyle={{
-              flexGrow: 1
-            }}>
+          <ScrollView
+            _contentContainerStyle={{
+              flexGrow: 1,
+            }}
+          >
             <Box flex={1} mb={5}>
               <Text color="#317F6E" fontSize="lg" fontWeight="bold" mb={5}>
                 Please Make sure you have the following documents ready.
@@ -120,7 +111,7 @@ const UploadDocuments = ({ navigation }) => {
                 borderWidth="1"
                 borderColor="white"
                 //mb={25}
-               // shadow={5}
+                // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
                   navigation.navigate("Begin Document Submission")

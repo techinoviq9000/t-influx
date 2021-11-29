@@ -25,7 +25,7 @@ const GetStarted = ({ navigation }) => {
         />
         <Text fontSize="3xl" color="white" fontWeight="bold">Before you get started</Text>
         <Text fontSize="2xl" mx={5} mt={1} textAlign="center" color="white" fontWeight="thin">You should have the following documents</Text>
-        <Box backgroundColor="white" rounded="lg" p={8} width="100%" mt={10}>
+        <Box backgroundColor="white" rounded="lg" p={8} width={{base: "100%", md: "md"}} mt={10}>
         <HStack space={2}>
           <CheckIcon size="5" mt="0.5" color="emerald.500" />
           <Text color="#414141" fontSize="md" fontWeight="medium">Active Mobile number & Email ID</Text>
@@ -48,7 +48,7 @@ const GetStarted = ({ navigation }) => {
         </HStack>          
           
         </Box>
-        <Box flex={1} width="100%" justifyContent="flex-end" mt={6} mb={5}>
+        <Box flex={1} width={{base: "100%", md:"md"}}  justifyContent="flex-end" mt={6} mb={5}>
           <Button
             size="md"
             rounded="md"

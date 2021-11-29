@@ -31,6 +31,7 @@ import { Collapse } from "native-base";
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const EligibiltyCheck = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
@@ -56,49 +57,23 @@ const EligibiltyCheck = ({ navigation }) => {
   else
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Eligibilty Check
-              </Text>
-              <Text
-                fontSize="xl"
-                color="#ccc"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Next: OTP Verification
-              </Text>
-            </Box>
-            <Center
-              borderColor="#a6dfd2"
-              borderWidth="6"
-              borderRadius="full"
-              height="20"
-              width="20"
-            >
-              <Text color="white">1 of 5</Text>
-            </Center>
-          </Stack>
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
+        </Box>
+        <Box alignItems="center">
+          <StepHeader
+            title="Eligibilty Check"
+            nextTitle="Next: OTP Verification"
+            step="1"
+          />
         </Box>
         <Box
           backgroundColor="white"
@@ -115,17 +90,15 @@ const EligibiltyCheck = ({ navigation }) => {
               flexGrow: 1,
             }}
           >
-            <Box>
+            <Box alignItems={{ md: "center" }}>
               {/* First name */}
-              <Box flex={1}>
+              <Box flex={1} width={{ base: "100%", md: "md" }}>
                 <Text
                   ml={12}
                   pl={3}
                   position="relative"
                   top={8}
-                  color={
-                    getColor(firstName, "#13B995")
-                  }
+                  color={getColor(firstName, "#13B995")}
                 >
                   First Name
                 </Text>
@@ -164,22 +137,18 @@ const EligibiltyCheck = ({ navigation }) => {
                   pb={3}
                   pt={7}
                   px={4}
-                  borderColor={
-                    getColor(firstName, "#a4ffc8")
-                  }
+                  borderColor={getColor(firstName, "#a4ffc8")}
                   borderRadius="lg"
                   borderWidth={1}
                   // "#13B995"
                   _focus={{
-                    borderColor: `${
-                     getColor(firstName, "#13B995")
-                    }`,
+                    borderColor: `${getColor(firstName, "#13B995")}`,
                   }}
                 />
               </Box>
 
               {/* Last Name */}
-              <Box flex={1}>
+              <Box flex={1} width={{ base: "100%", md: "md" }}>
                 <Text
                   ml={12}
                   pl={3}
@@ -216,7 +185,7 @@ const EligibiltyCheck = ({ navigation }) => {
               </Box>
 
               {/* CNIC NUMBER */}
-              <Box flex={1}>
+              <Box flex={1} width={{ base: "100%", md: "md" }}>
                 <Text
                   ml={12}
                   pl={3}

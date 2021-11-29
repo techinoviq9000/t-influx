@@ -11,7 +11,7 @@ import React, { useState } from "react";
 
 const StepHeader = ({title, nextTitle, step}) => {
   return (
-    <Stack direction="row" px={6} alignItems="center">
+    <Stack direction="row" px={6} width={{base: "100%", md: "md"}} alignItems="center" flex={1}>
     <Box flex={1}>
       <Text
         fontSize="2xl"
@@ -19,6 +19,7 @@ const StepHeader = ({title, nextTitle, step}) => {
         fontWeight="medium"
         lineHeight="xs"
         mt={2}
+        textAlign={nextTitle ? "left" : "center"}
       >
         {title}
       </Text>
@@ -32,7 +33,7 @@ const StepHeader = ({title, nextTitle, step}) => {
         {nextTitle}
       </Text>}
     </Box>
-    <Center
+    {step && <Center
       borderColor="#a6dfd2"
       borderWidth="6"
       borderRadius="full"
@@ -40,7 +41,7 @@ const StepHeader = ({title, nextTitle, step}) => {
       width="20"
     >
       <Text color="white">{step} of 5</Text>
-    </Center>
+    </Center>}
   </Stack>
   );
 };

@@ -40,7 +40,7 @@ const WelcomeScreen = ({ navigation }) => {
           resizeMode="contain"
         />
         </AnimatableBox>
-        <AnimatableBox flex={1} width="100%" justifyContent="flex-end" px={3} mb={5} >
+        <Box flex={1} width={{base: "100%", md:"md"}} justifyContent="flex-end" px={3} mb={5} >
           <Button
             size="md"
             rounded="md"
@@ -51,7 +51,7 @@ const WelcomeScreen = ({ navigation }) => {
             mb={5}
             shadow={5}
             onPress={() =>
-              navigation.navigate("Get Started")
+              navigation.navigate("LoginRoute")
             }
           >
             LOGIN
@@ -64,10 +64,13 @@ const WelcomeScreen = ({ navigation }) => {
             _text={{
               color: "#414141",
             }}
+            onPress={() =>
+              navigation.navigate("RegisterRoute")
+            }
           >
             REGISTER
           </Button>
-        </AnimatableBox>
+        </Box>
     </Box>
   );
 }

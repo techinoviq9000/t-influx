@@ -75,8 +75,8 @@ const VerifyOTP = ({ navigation }) => {
         }
       })
     );
-    if(inputValue.length == 1) {
-      secondRef?.current.focus()
+    if (inputValue.length == 1) {
+      secondRef?.current.focus();
     }
   };
   let finalOTP = otp.map((otpItem) => otpItem.value).join("");
@@ -85,19 +85,23 @@ const VerifyOTP = ({ navigation }) => {
   else
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
-          <StepHeader title="Verify OTP" nextTitle="Next: Personal Details" step="2" />
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
+        </Box>
+        <Box alignItems="center">
+          <StepHeader
+            title="Verify OTP"
+            nextTitle="Next: Personal Details"
+            step="2"
+          />
         </Box>
         <Box
           backgroundColor="white"
@@ -125,11 +129,18 @@ const VerifyOTP = ({ navigation }) => {
                 mb={5}
               >
                 {otpArrayFields.map((item, index) => {
-                  const nextRef = otpArrayFields[index+1]
+                  const nextRef = otpArrayFields[index + 1];
                   if (nextRef) {
                     return (
-                      <OtpFields otpRef={item} secondRef={nextRef} otp={otp} handleChange={handleChange} key={index} index={index} />
-                      )
+                      <OtpFields
+                        otpRef={item}
+                        secondRef={nextRef}
+                        otp={otp}
+                        handleChange={handleChange}
+                        key={index}
+                        index={index}
+                      />
+                    );
                   }
                 })}
                 {/* <Input
@@ -214,7 +225,7 @@ const VerifyOTP = ({ navigation }) => {
                   }}
                 /> */}
                 <Input
-                ref={fourthOTP}
+                  ref={fourthOTP}
                   variant="unstyled"
                   value={otp[3].value}
                   onChange={(e) => handleChange(e.nativeEvent.text, otp[3].id)}
@@ -281,7 +292,7 @@ const VerifyOTP = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("Personal Details")
+                navigation.navigate("Continue Application")
               }
             >
               RESEND OTP
@@ -296,10 +307,9 @@ const VerifyOTP = ({ navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              onPress={
-                () => 
+              onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("Personal Details")
+                navigation.navigate("Continue Application")
               }
             >
               CONFIRM

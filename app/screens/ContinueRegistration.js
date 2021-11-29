@@ -27,33 +27,71 @@ import { Collapse } from "native-base";
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
+import StepHeader from "../CustomComponents/StepsHeader";
 
 const ContinueRegistration = ({ navigation }) => {
-
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
 
   const [list, setList] = useState([
-    {id: 0, title: "Eligibilty Check", status: true, description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn", collapsed: false},
-    {id: 1, title: "OTP Verification", status: true, description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn", collapsed: true},
-    {id: 2, title: "Personal Details", status: false, description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn", collapsed: false},
-    {id: 3, title: "Questions and Answers", status: false, description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn", collapsed: false},
-    {id: 4, title: "Product Selection", status: false, description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn", collapsed: false}
-  ])
+    {
+      id: 0,
+      title: "Eligibilty Check",
+      status: true,
+      description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn",
+      collapsed: false,
+    },
+    {
+      id: 1,
+      title: "OTP Verification",
+      status: true,
+      description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn",
+      collapsed: true,
+    },
+    {
+      id: 2,
+      title: "Personal Details",
+      status: false,
+      description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn",
+      collapsed: false,
+    },
+    {
+      id: 3,
+      title: "Questions and Answers",
+      status: false,
+      description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn",
+      collapsed: false,
+    },
+    {
+      id: 4,
+      title: "Product Selection",
+      status: false,
+      description: "Candy canesasdsa ofjsa isauf njkasfiuasf asfn",
+      collapsed: false,
+    },
+  ]);
 
   const toggleExpanded = (id) => {
-    setList(list.map(item => {
-      if(item.id == id) {
-        return {...item, collapsed: !item.collapsed}
-      } else {
-        return {...item, collapsed: false}
-      }
-    }))
-  }
-  console.log(list)
-  const CheckList = ({id, title, status, description, collapsed, toggleExpanded}) => {
-    
+    setList(
+      list.map((item) => {
+        if (item.id == id) {
+          return { ...item, collapsed: !item.collapsed };
+        } else {
+          return { ...item, collapsed: false };
+        }
+      })
+    );
+  };
+  console.log(list);
+  const CheckList = ({
+    id,
+    title,
+    status,
+    description,
+    collapsed,
+    toggleExpanded,
+  }) => {
     return (
       <Stack direction="row" mb={5}>
         <Box mr={3}>
@@ -69,16 +107,17 @@ const ContinueRegistration = ({ navigation }) => {
             >
               {title}
             </Text>
-            {status ? <Text color="#13B995" fontSize="sm">
-              Completed
-            </Text> : 
-            <Text color="#ccc" fontSize="sm">
-              Pending
-            </Text> }
+            {status ? (
+              <Text color="#13B995" fontSize="sm">
+                Completed
+              </Text>
+            ) : (
+              <Text color="#ccc" fontSize="sm">
+                Pending
+              </Text>
+            )}
             <Collapse isOpen={collapsed}>
-              <Box>
-              {description}
-              </Box>
+              <Box>{description}</Box>
             </Collapse>
           </VStack>
         </Box>
@@ -97,32 +136,21 @@ const ContinueRegistration = ({ navigation }) => {
   else
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
-         <Box>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
-          </Box>
-          <Stack direction="row" px={6} alignItems="center">
-            <Box flex={1}>
-              <Text
-                fontSize="2xl"
-                color="white"
-                fontWeight="medium"
-                lineHeight="xs"
-                mt={2}
-              >
-                Continue Filling Your Application
-              </Text>
-            </Box>
-          </Stack>
+        <Box alignItems="flex-start" px={6} mt={6}>
+          <Ionicons
+            name="arrow-back-circle-sharp"
+            size={36}
+            color="white"
+            onPress={
+              () => navigation.goBack()
+              // navigation.navigate("Welcome")
+            }
+          />
         </Box>
+        <Box alignItems="center">
+          <StepHeader title="Continue Filling Your Application" />
+        </Box>
+
         <Box
           backgroundColor="white"
           rounded="xl"
@@ -133,12 +161,23 @@ const ContinueRegistration = ({ navigation }) => {
           mt={5}
           px={6}
         >
-          <ScrollView  _contentContainerStyle={{
-              flexGrow: 1
-            }}>
+          <ScrollView
+            _contentContainerStyle={{
+              flexGrow: 1,
+            }}
+          >
             <Box flex={1}>
-              {list.map(item => (
-                <CheckList key={item.id} id={item.id} title={item.title} status={item.status} description={item.description} collapsed={item.collapsed} toggleExpanded={toggleExpanded} k/>
+              {list.map((item) => (
+                <CheckList
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  status={item.status}
+                  description={item.description}
+                  collapsed={item.collapsed}
+                  toggleExpanded={toggleExpanded}
+                  k
+                />
               ))}
             </Box>
             <Box flex={1} justifyContent="flex-end">
@@ -150,13 +189,13 @@ const ContinueRegistration = ({ navigation }) => {
                 borderWidth="1"
                 borderColor="white"
                 //mb={25}
-               // shadow={5}
+                // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
                   navigation.navigate("Upload Documents")
                 }
               >
-                CONFIRM
+                CONTINUE REGISTRATION
               </Button>
             </Box>
           </ScrollView>
