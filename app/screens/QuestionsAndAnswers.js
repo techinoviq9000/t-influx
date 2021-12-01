@@ -201,10 +201,10 @@ const QuestionsAndAnswers = ({ navigation }) => {
               }}
               //mb={25}
               // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("Product Selection")
-              }
+              // onPress={() =>
+              //   // navigation.goBack()
+              //   navigation.navigate("Product Selection")
+              // }
             >
               I NEED HELP
             </Button>

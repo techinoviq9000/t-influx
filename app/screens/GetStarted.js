@@ -60,7 +60,7 @@ const GetStarted = ({ navigation }) => {
             mb={5}
             onPress={() =>
               // navigation.goBack()
-              navigation.navigate("Continue Registration")
+              navigation.navigate("Registration")
             }
           >
             I'M READY

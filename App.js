@@ -29,6 +29,10 @@ import VerifyOTP from "./app/screens/VerifyOTP";
 import PersonalDetails from "./app/screens/PersonalDetails";
 import QuestionsAndAnswers from "./app/screens/QuestionsAndAnswers";
 import ProductSelection from "./app/screens/ProductSelection";
+import Login from "./app/screens/Login";
+import Registration from "./app/screens/Registration";
+import VerifyOTPRegister from "./app/screens/VerifyOTPRegister";
+import ApplicationID from "./app/screens/ApplicationID";
 
 const Stack = createStackNavigator();
 
@@ -45,23 +49,55 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
+    initialRouteName="Application ID Screen"
     screenOptions={{
       headerShown: false,
     }}
   >
     <NewCustomerStack.Screen name="Get Started" component={GetStarted} />
+    <NewCustomerStack.Screen name="Registration" component={Registration} />
+    <NewCustomerStack.Screen
+      name="VerifyOTPRegister"
+      component={VerifyOTPRegister}
+    />
+    <NewCustomerStack.Screen
+      name="Application ID Screen"
+      component={ApplicationID}
+    />
+    <NewCustomerStack.Screen
+      name="ExistingCustomer"
+      component={ExistingCustomerStackScreen}
+    />
+    <NewCustomerStack.Screen
+      name="Personal Details"
+      component={PersonalDetails}
+    />
+    <NewCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
+    <NewCustomerStack.Screen
+      name="Product Selection"
+      component={ProductSelection}
+    />
+     <NewCustomerStack.Screen
+      name="Upload Documents"
+      component={UploadDocuments}
+    />
+    <NewCustomerStack.Screen
+      name="Begin Document Submission"
+      component={BeginDocumentSubmission}
+    />
   </NewCustomerStack.Navigator>
 );
 
 const ExistingCustomerStackScreen = () => (
   <ExistingCustomerStack.Navigator
+  initialRouteName="Login"
     screenOptions={{
       headerShown: false,
     }}
   >
     <ExistingCustomerStack.Screen
-      name="EligibiltyCheck"
-      component={EligibiltyCheck}
+      name="Login"
+      component={Login}
       options={{
         ...TransitionPresets.SlideFromRightIOS,
       }}
@@ -79,6 +115,23 @@ const ExistingCustomerStackScreen = () => (
       options={{
         ...TransitionPresets.SlideFromRightIOS,
       }}
+    />
+    <ExistingCustomerStack.Screen
+      name="Personal Details"
+      component={PersonalDetails}
+    />
+    <ExistingCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
+    <ExistingCustomerStack.Screen
+      name="Product Selection"
+      component={ProductSelection}
+    />
+    <ExistingCustomerStack.Screen
+      name="Upload Documents"
+      component={UploadDocuments}
+    />
+    <ExistingCustomerStack.Screen
+      name="Begin Document Submission"
+      component={BeginDocumentSubmission}
     />
   </ExistingCustomerStack.Navigator>
 );
@@ -113,55 +166,6 @@ export default function App() {
               component={ExistingCustomerStackScreen}
               options={{
                 ...TransitionPresets.RevealFromBottomAndroid,
-              }}
-            />
-            <Stack.Screen
-              name="Upload Documents"
-              component={UploadDocuments}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="Begin Document Submission"
-              component={BeginDocumentSubmission}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="EligibiltyCheck"
-              component={EligibiltyCheck}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="Continue Application"
-              component={ContinueRegistration}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="Personal Details"
-              component={PersonalDetails}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="Q/A"
-              component={QuestionsAndAnswers}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="Product Selection"
-              component={ProductSelection}
-              options={{
-                ...TransitionPresets.SlideFromRightIOS,
               }}
             />
           </Stack.Navigator>

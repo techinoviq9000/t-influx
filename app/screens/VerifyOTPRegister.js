@@ -12,6 +12,8 @@ import {
   Center,
   Input,
   Pressable,
+  Modal,
+  FormControl,
 } from "native-base";
 import React, { useRef, useState } from "react";
 import {
@@ -34,12 +36,13 @@ import { boxShadow } from "styled-system";
 import OtpFields from "../CustomComponents/OtpFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 
-const VerifyOTP = ({ route, navigation }) => {
-  console.log(route.params)
+const VerifyOTPRegister = ({ route, navigation }) => {
+  console.log(route.params);
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
 
+  const [showModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState([
     {
       id: 0,
@@ -58,6 +61,12 @@ const VerifyOTP = ({ route, navigation }) => {
       value: "",
     },
   ]);
+
+  const applicationID = [
+    { id: 0, value: "124ewdq32t", description: "This is 1" },
+    { id: 1, value: "3dsfrq23r32af", description: "This is 2" },
+    { id: 2, value: "31r8rufjwe283", description: "This is 3" },
+  ];
 
   const firstOTP = useRef();
   const secondOTP = useRef();
@@ -82,6 +91,42 @@ const VerifyOTP = ({ route, navigation }) => {
   };
   let finalOTP = otp.map((otpItem) => otpItem.value).join("");
 
+  const ModalOverlay = () => {
+    return (
+      <Modal isOpen={showModal}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Your Previous ApplicationID</Modal.Header>
+          <Modal.Body>{applicationID.map(item => (<Box><Text>{item.value}</Text></Box>))}</Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setShowModal(false);
+                }}
+              >
+                Continue Previous
+              </Button>
+              <Button
+                onPress={() => {
+                  setShowModal(false);
+                  // onPress={() =>
+              //   // navigation.goBack()
+                navigation.navigate("Application ID Screen")
+              // }
+                }}
+              >
+                New Application
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    );
+  };
+
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
@@ -98,12 +143,15 @@ const VerifyOTP = ({ route, navigation }) => {
           />
         </Box>
         <Box alignItems="center">
-          {route.params.fromLogin ? <StepHeader title="Verify OTP" /> : 
-          <StepHeader
-            title="Verify OTP"
-            nextTitle="Next: Personal Details"
-            step="2"
-          />}
+          {route.params.fromRegister ? (
+            <StepHeader title="Verify OTP" />
+          ) : (
+            <StepHeader
+              title="Verify OTP"
+              nextTitle="Next: Personal Details"
+              step="2"
+            />
+          )}
         </Box>
         <Box
           backgroundColor="white"
@@ -145,87 +193,6 @@ const VerifyOTP = ({ route, navigation }) => {
                     );
                   }
                 })}
-                {/* <Input
-                  ref={firstOTP}
-                  returnKeyType="next"
-                  onSubmitEditing={() => {secondOTP.current.focus()}}
-                  variant="unstyled"
-                  value={otp[0].value}
-                  onChange={(e) => handleChange(e.nativeEvent.text, otp[0].id, secondOTP)}
-                  size="xl"
-                  py={5}
-                  // px={6}
-                  textAlign="center"
-                  borderColor={otp[0].value ? "#13B995" : "white"}
-                  backgroundColor="white"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  color="black"
-                  width={16}
-                  shadow={4}
-                  mb={4}
-                  maxLength={1}
-                  fontSize="4xl"
-                  keyboardType="numeric"
-                  type="text"
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-                <Input
-                 ref={secondOTP}
-                 returnKeyType="next"
-                 onSubmitEditing={() => {thirdOTP.current.focus()}}
-                  variant="unstyled"
-                  value={otp[1].value}
-                  onChange={(e) => handleChange(e.nativeEvent.text, otp[1].id, secondOTP, thirdOTP)}
-                  size="xl"
-                  py={5}
-                  // px={6}
-                  textAlign="center"
-                  borderColor={otp[1].value ? "#13B995" : "white"}
-                  backgroundColor="white"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  color="black"
-                  width={16}
-                  shadow={4}
-                  mb={4}
-                  maxLength={1}
-                  fontSize="4xl"
-                  keyboardType="numeric"
-                  type="text"
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-                <Input
-                ref={thirdOTP}
-                returnKeyType="next"
-                onSubmitEditing={() => {fourthOTP.current.focus()}}
-                  variant="unstyled"
-                  value={otp[2].value}
-                  onChange={(e) => handleChange(e.nativeEvent.text, otp[2].id, thirdOTP, fourthOTP)}
-                  size="xl"
-                  py={5}
-                  // px={6}
-                  textAlign="center"
-                  borderColor={otp[2].value ? "#13B995" : "white"}
-                  backgroundColor="white"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  color="black"
-                  width={16}
-                  shadow={4}
-                  mb={4}
-                  maxLength={1}
-                  fontSize="4xl"
-                  keyboardType="numeric"
-                  type="text"
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                /> */}
                 <Input
                   ref={fourthOTP}
                   variant="unstyled"
@@ -309,15 +276,17 @@ const VerifyOTP = ({ route, navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("Continue Application")
-              }
+              // onPress={() =>
+              //   // navigation.goBack()
+              //   navigation.navigate("Application ID Screen")
+              // }
+              onPress={() => setShowModal(true)}
             >
               CONFIRM
             </Button>
           </Stack>
         </Box>
+        <ModalOverlay />
       </Box>
     );
 };
@@ -328,4 +297,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VerifyOTP;
+export default VerifyOTPRegister;

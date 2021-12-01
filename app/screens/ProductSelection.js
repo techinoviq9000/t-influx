@@ -251,7 +251,7 @@ const ProductSelection = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.push("Upload Documents")
               }
             >
               CONFIRM
