@@ -1,14 +1,26 @@
 import { Box, Button, Image, Text } from "native-base";
 import React from "react";
-import { ImageBackground, Share, StyleSheet, View } from "react-native";
-import { SharedElement } from "react-navigation-shared-element";
-import Background from "../CustomComponents/Background";
 import * as Animatable from 'react-native-animatable';
+
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
+
+const GET_TODOS = gql`
+query MyQuery {
+  todo {
+    id
+    created_at
+    name
+    is_completed
+  }
+}
+
+`;
+
 const AnimatableBox = Animatable.createAnimatableComponent(Box);
-const AnimatableButton = Animatable.createAnimatableComponent(Button);
 
 
 const WelcomeScreen = ({ navigation }) => {
+  const { data, loading } = useQuery(GET_TODOS);
   const slideOut = {
     0: {
       transform: [
@@ -33,7 +45,7 @@ const WelcomeScreen = ({ navigation }) => {
         </Text>
         <AnimatableBox >
         <Image
-          source={require("../assets/undraw_on_the_office_fbfs.png")}
+          source={require("../../assets/undraw_on_the_office_fbfs.png")}
           alt="Alternate Text"
           size="2xl"
           mt={24}

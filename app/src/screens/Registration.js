@@ -33,7 +33,19 @@ import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
+
+const GET_TODOS = gql`
+query MyQuery {
+  users {
+    display_name
+  }
+}
+`;
+
+
 const Registration = ({ navigation }) => {
+  const { data, loading } = useQuery(GET_TODOS);
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
@@ -201,10 +213,11 @@ const Registration = ({ navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("VerifyOTPRegister", { fromRegister: true })
-              }
+              // onPress={() =>
+              //   // navigation.goBack()
+              //   // getUser()
+              //   // navigation.navigate("VerifyOTPRegister", { fromRegister: true })
+              // }
             >
               CONFIRM
             </Button>

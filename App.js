@@ -13,26 +13,30 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
-import { createSharedElementStackNavigator } from "react-navigation-shared-element";
-import { enableScreens } from "react-native-screens";
+
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
-import GetStarted from "./app/screens/GetStarted";
-import ContinueRegistration from "./app/screens/ContinueRegistration";
-import Background from "./app/CustomComponents/Background";
+import WelcomeScreen from "./app/src/screens/WelcomeScreen";
+import GetStarted from "./app/src/screens/GetStarted";
+import ContinueRegistration from "./app/src/screens/ContinueRegistration";
+import Background from "./app/src/CustomComponents/Background";
 import Animated from "react-native-reanimated";
-import UploadDocuments from "./app/screens/UploadDocuments";
-import BeginDocumentSubmission from "./app/screens/BeginDocumentSubmission";
-import EligibiltyCheck from "./app/screens/EligibiltyCheck";
-import VerifyOTP from "./app/screens/VerifyOTP";
-import PersonalDetails from "./app/screens/PersonalDetails";
-import QuestionsAndAnswers from "./app/screens/QuestionsAndAnswers";
-import ProductSelection from "./app/screens/ProductSelection";
-import Login from "./app/screens/Login";
-import Registration from "./app/screens/Registration";
-import VerifyOTPRegister from "./app/screens/VerifyOTPRegister";
-import ApplicationID from "./app/screens/ApplicationID";
+import UploadDocuments from "./app/src/screens/UploadDocuments";
+import BeginDocumentSubmission from "./app/src/screens/BeginDocumentSubmission";
+import EligibiltyCheck from "./app/src/screens/EligibiltyCheck";
+import VerifyOTP from "./app/src/screens/VerifyOTP";
+import PersonalDetails from "./app/src/screens/PersonalDetails";
+import QuestionsAndAnswers from "./app/src/screens/QuestionsAndAnswers";
+import ProductSelection from "./app/src/screens/ProductSelection";
+import Login from "./app/src/screens/Login";
+import Registration from "./app/src/screens/Registration";
+import VerifyOTPRegister from "./app/src/screens/VerifyOTPRegister";
+import ApplicationID from "./app/src/screens/ApplicationID";
+
+import { ENDPOINT } from "./app/src/config";
+import { NhostApolloProvider } from "@nhost/react-apollo";
+import { NhostAuthProvider } from "@nhost/react-auth";
+import { auth } from "./app/src/utils/nhost";
 
 const Stack = createStackNavigator();
 
@@ -49,7 +53,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="Application ID Screen"
+    initialRouteName="Get Started"
     screenOptions={{
       headerShown: false,
     }}
@@ -138,6 +142,8 @@ const ExistingCustomerStackScreen = () => (
 
 export default function App() {
   return (
+    <NhostAuthProvider auth={auth}>
+    <NhostApolloProvider auth={auth} gqlEndpoint={ENDPOINT}>
     <NativeBaseProvider>
       <Background>
         <NavigationContainer theme={MyTheme}>
@@ -172,6 +178,8 @@ export default function App() {
         </NavigationContainer>
       </Background>
     </NativeBaseProvider>
+    </NhostApolloProvider>
+    </NhostAuthProvider>
   );
 }
 
