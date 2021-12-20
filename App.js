@@ -36,7 +36,7 @@ import ApplicationID from "./app/src/screens/ApplicationID";
 import { ENDPOINT } from "./app/src/config";
 import { NhostApolloProvider } from "@nhost/react-apollo";
 import { NhostAuthProvider } from "@nhost/react-auth";
-import { auth } from "./app/src/utils/nhost";
+import { nhost } from "./app/src/utils/nhost";
 
 const Stack = createStackNavigator();
 
@@ -142,8 +142,8 @@ const ExistingCustomerStackScreen = () => (
 
 export default function App() {
   return (
-    <NhostAuthProvider auth={auth}>
-    <NhostApolloProvider auth={auth} gqlEndpoint={ENDPOINT}>
+    <NhostAuthProvider nhost={nhost}>
+    <NhostApolloProvider nhost={nhost}>
     <NativeBaseProvider>
       <Background>
         <NavigationContainer theme={MyTheme}>

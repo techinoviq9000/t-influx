@@ -1,12 +1,8 @@
-import { createClient } from "nhost-js-sdk";
+import { NhostClient } from '@nhost/nhost-js'
 import { HASURA } from "../config";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const nhostClient = createClient({
-  baseURL: HASURA,
-  clientStorage: AsyncStorage,
-  clientStorageType: "react-native",
+const nhost = new NhostClient({
+  backendUrl: HASURA
 })
-const { auth, storage } = nhostClient;
 
-export { auth, storage };
+export { nhost };

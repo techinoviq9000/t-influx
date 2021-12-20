@@ -5,7 +5,7 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 export default function Background(props) {
   return (
   <View style={styles.container}>
-    <ImageBackground source={require('../../assets/background.jpg')} resizeMode="cover" style={styles.image}>
+    <ImageBackground source={require('../assets/background.jpg')} resizeMode="cover" style={styles.image}>
       {/* <Text style={styles.text}>Inside</Text> */}
       {props.children}
     </ImageBackground>

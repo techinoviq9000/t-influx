@@ -17,7 +17,7 @@ const GetStarted = ({ navigation }) => {
   return (
     <Box flex={1} alignItems="center" minHeight="100%" px={3}>
         <Image
-          source={require("../../assets/Get_started.png")}
+          source={require("../assets/Get_started.png")}
           alt="Alternate Text"
           size="2xl"
           mt={10}

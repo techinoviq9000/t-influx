@@ -21,22 +21,8 @@ const AnimatableBox = Animatable.createAnimatableComponent(Box);
 
 const WelcomeScreen = ({ navigation }) => {
   const { data, loading } = useQuery(GET_TODOS);
-  const slideOut = {
-    0: {
-      transform: [
-        {
-          translateX: 0,
-        },
-      ],
-    },
-    1: {
-      transform: [
-        {
-          translateX: -400,
-        },
-      ],
-    },
-  };
+  console.log(data?.todo)
+  console.log(loading)
 
   return (
     <Box alignItems="center" width="100%" minHeight="100%" safeAreaTop={5}>
@@ -45,7 +31,7 @@ const WelcomeScreen = ({ navigation }) => {
         </Text>
         <AnimatableBox >
         <Image
-          source={require("../../assets/undraw_on_the_office_fbfs.png")}
+          source={require("../assets/undraw_on_the_office_fbfs.png")}
           alt="Alternate Text"
           size="2xl"
           mt={24}
