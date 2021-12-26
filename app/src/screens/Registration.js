@@ -211,13 +211,13 @@ const Registration = ({ navigation }) => {
               border={1}
               borderWidth="1"
               borderColor="white"
-              //mb={25}
-              // shadow={5}
-              // onPress={() =>
-              //   // navigation.goBack()
-              //   // getUser()
-              //   // navigation.navigate("VerifyOTPRegister", { fromRegister: true })
-              // }
+              mb={25}
+              shadow={5}
+              onPress={() =>
+                // navigation.goBack()
+                // getUser()
+                navigation.navigate("VerifyOTPRegister", { fromRegister: true })
+              }
             >
               CONFIRM
             </Button>
