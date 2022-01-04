@@ -44,41 +44,42 @@ const WelcomeScreen = ({ navigation }) => {
   };
 
   const __retakePicture = () => {
-    setCapturedImage(null)
-    setPreviewVisible(false)
-    __startCamera()
-  }
+    setCapturedImage(null);
+    setPreviewVisible(false);
+    __startCamera();
+  };
 
   const CameraPreview = ({ photo }) => {
     return (
       <View
-      style={{
-        backgroundColor: 'transparent',
-        flex: 1,
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <ImageBackground
-        source={{uri: photo && photo.uri}}
         style={{
-          flex: 1
+          backgroundColor: "transparent",
+          flex: 1,
+          width: "100%",
+          height: "100%",
         }}
-      />
-       <Pressable onPressOut={__retakePicture}>
-            {({ isHovered, isFocused, isPressed }) => {
-              return (
-                  <Text  bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
-                  borderWidth="2"
-                  borderColor={isPressed ? "white" : "black"}
-                  mb="2">
-                                        Retake
-                  </Text>
-              );
-            }}
-            </Pressable>
-    </View>
-
+      >
+        <ImageBackground
+          source={{ uri: photo && photo.uri }}
+          style={{
+            flex: 1,
+          }}
+        />
+        <Pressable onPressOut={__retakePicture}>
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Text
+                bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                borderWidth="2"
+                borderColor={isPressed ? "white" : "black"}
+                mb="2"
+              >
+                Retake
+              </Text>
+            );
+          }}
+        </Pressable>
+      </View>
     );
   };
 
@@ -129,7 +130,7 @@ const WelcomeScreen = ({ navigation }) => {
           >
             REGISTER
           </Button>
-          <Button
+          {/* <Button
             size="md"
             rounded="md"
             shadow={5}
@@ -140,19 +141,21 @@ const WelcomeScreen = ({ navigation }) => {
             onPress={() => __startCamera()}
           >
             Open Camera
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     );
   }
   if (previewVisible && capturedImage) {
-    return <CameraPreview photo={capturedImage} retakePicture={__retakePicture}/>;
+    return (
+      <CameraPreview photo={capturedImage} retakePicture={__retakePicture} />
+    );
   } else {
     return (
       <Camera
         style={{ flex: 1, width: "100%" }}
         ref={(r) => {
-          camera = r
+          camera = r;
         }}
       >
         <Box
@@ -166,12 +169,14 @@ const WelcomeScreen = ({ navigation }) => {
           <Pressable onPressOut={__retakePicture}>
             {({ isHovered, isFocused, isPressed }) => {
               return (
-                  <Text  bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                <Text
+                  bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
                   borderWidth="2"
                   borderColor={isPressed ? "white" : "black"}
-                  mb="2">
-                                        Retake
-                  </Text>
+                  mb="2"
+                >
+                  Retake
+                </Text>
               );
             }}
           </Pressable>

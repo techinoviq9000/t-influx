@@ -14,7 +14,7 @@ import {
   Pressable,
   CloseIcon,
   FormControl,
-  Switch
+  Switch,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -38,11 +38,15 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const PersonalDetails = ({ navigation }) => {
+const BasicAccountDetails = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
-  const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
+
+  const [chequeBookShow, setChequeBookShow] = useState(false);
+  const [atmCardShow, setAtmCardShow] = useState(false);
+  const [zakatExemption, setzakatExemption] = useState(false);
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -202,9 +206,9 @@ const PersonalDetails = ({ navigation }) => {
         </Box>
         <Box alignItems="center">
           <StepHeader
-            title="Personal Details"
-            nextTitle="Next: Questions & Answers"
-            step="3"
+            title="Basic Account Details"
+            nextTitle="Next: Type of account"
+            step="1"
           />
         </Box>
         <Box
@@ -224,194 +228,129 @@ const PersonalDetails = ({ navigation }) => {
             }}
           >
             <Box>
-              {/* First name */}
-              <InputFields
+              {/* City name */}
+              <SelectField
                 fields={fields}
-                title={"Customer Name as per CNIC"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Customer Name as per CNIC"}
+                title={"City"}
+                name={"city"}
+                placeholder={"Select City"}
                 handleChange={handleChange}
+                selectValue={[
+                  "Karachi",
+                  "Peshawar",
+                  "Sialkot",
+                  "Islamabad",
+                  "Rawalpindi",
+                  "Lahore",
+                  "Faislabad",
+                  "Gujranwala",
+                  "Multan",
+                  "Quetta",
+                  "Gwadar",
+                ]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-              {/* last name */}
-              <InputFields
+              <SelectField
                 fields={fields}
-                title={"Mother's Madien name"}
-                errors={errors}
-                name={"lastName"}
-                placeholder={"Mother's Madien name"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-<SelectField
-                fields={fields}
-                title={"Place of Birth"}
+                title={"Branch Name"}
                 name={"branchName"}
-                placeholder={"Place of Birth"}
-                handleChange={handleChange}
-                selectValue={["Pakistan, India, America"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-              {/* email */}
-              <InputFields
-                fields={fields}
-                title={"Email ID"}
-                errors={errors}
-                name={"email"}
-                placeholder={"Enter your email id"}
-                handleChange={handleChange}
-                icon={
-                  <MaterialIcons name="credit-card" size={23} color="black" />
-                }
-              />
- <SelectField
-                fields={fields}
-                title={"Other Nationality if any"}
-                name={"branchName"}
-                placeholder={"Other Nationality if any"}
+                placeholder={"Select Branch Name"}
                 handleChange={handleChange}
                 selectValue={["Area Names"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-              {/* date of birth */}
-              {/* <Box>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color={errors?.dob ? "red.500" : "#13B995"}
-                >
-                  Date of Birth
-                </Text>
-                <Pressable
-                  onPress={() => showMode("date")}
-                  _pressed={{ backgroundColor: "gray.50" }}
-                >
-                  <Input
-                    variant="unstyled"
-                    size="xl"
-                    isReadOnly
-                    placeholder="Enter Date of Birth"
-                    color="black"
-                    placeholderTextColor="#ccc"
-                    value={fields?.dob}
-                    type="button"
-                    InputRightElement={
-                      <>
-                        {errors?.dob ? (
-                          <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-                        ) : fields?.dobActive ? (
-                          <CheckIcon
-                            size="5"
-                            mt="0.5"
-                            color="emerald.500"
-                            mr="4"
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    }
-                    InputLeftElement={
-                      <Box pl="5">
-                        <MaterialIcons
-                          name="credit-card"
-                          size={23}
-                          color="black"
-                        />
-                      </Box>
-                    }
-                    pb={3}
-                    pt={7}
-                    px={4}
-                    borderColor={errors?.dob ? "red.500" : "#a4ffc8"}
-                    borderRadius="lg"
-                    borderWidth={1}
-                    // "#13B995"
-                    _focus={{
-                      borderColor: `${errors?.dob ? "red.500" : "#13B995"}`,
-                    }}
-                  />
-                </Pressable>
-                {errors?.dob && (
-                  <Text color="red.500" mt={2} ml={5}>
-                    {errors?.dob}
-                  </Text>
-                )}
-              </Box> */}
-
-              {/* phone number */}
-              <InputFields
-                fields={fields}
-                title={"Phone number"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Enter your phone number"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <Text color="emerald.500" mt={2} ml={5} textAlign="center">
-                Number format: 03xxxxxxxxx
-              </Text>
 
               <SelectField
                 fields={fields}
-                title={"SMS Alert"}
-                name={"branchName"}
-                placeholder={"SMS Alert"}
+                title={"Customer's Relationship"}
+                name={"custRel"}
+                placeholder={"Select Relationship"}
                 handleChange={handleChange}
-                selectValue={["Yes", "No"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              
-              <InputFields
-                fields={fields}
-                title={"Residence/ Correspondence (Mailing) Address"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Residence/ Correspondence (Mailing) Address"}
-                handleChange={handleChange}
+                selectValue={[
+                  "Individual (Single)",
+                  "Joint (Either/Survivor)",
+                  "Minor (Joint)",
+                ]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-<InputFields
+              <SelectField
                 fields={fields}
-                title={"Permanant Address"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Permanant Address"}
+                title={"Purpose of Account"}
+                name={"purposeOfAcc"}
+                placeholder={"Select Purpose of Account"}
                 handleChange={handleChange}
+                selectValue={[
+                  "Salary Transfer",
+                  "Savings",
+                  "Business",
+                  "Consumer Loans",
+                  "Investment",
+                  "Others",
+                ]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-<SelectField
-                fields={fields}
-                title={"Preferred Postal Communication"}
-                name={"branchName"}
-                placeholder={"Preferred Postal Communication"}
-                handleChange={handleChange}
-                selectValue={["Residence Address", "Permanent Address"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-<Text mt={2} mb={2}>
-Communication via Email
+              <Text mt={2} mb={2}>
+                Cheque Book Required?
               </Text>
               <Switch
                 size="sm"
                 mb={0}  
-                isChecked={communicateViaEmail}
+                isChecked={chequeBookShow}
                 onToggle={() => {
-                  console.log(communicateViaEmail);
-                  setcommunicateViaEmail(!communicateViaEmail);
+                  console.log(chequeBookShow);
+                  setChequeBookShow(!chequeBookShow);
                 }}
               />
+              <SelectField
+                isDisabled={!chequeBookShow}
+                fields={fields}
+                title={"Cheque Book Leafs"}
+                name={"purposeOfAcc"}
+                placeholder={"Select Cheque Book Leafs"}
+                handleChange={handleChange}
+                selectValue={["25", "50", "100"]}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
+              <Text mt={2} mb={2}>
+                ATM/Debit Card Required?
+              </Text>
+              <Switch
+                size="sm"
+                mb={0}
+                isChecked={atmCardShow}
+                onToggle={() => {
+                  console.log(atmCardShow);
+                  setAtmCardShow(!atmCardShow);
+                }}
+              />
+              <SelectField
+                isDisabled={!atmCardShow}
+                fields={fields}
+                title={"ATM / Debit Card"}
+                name={"purposeOfAcc"}
+                placeholder={"Select ATM / Debit Card"}
+                handleChange={handleChange}
+                selectValue={["Master Card", "Paypak"]}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+<Text mt={2} mb={2}>
+Zakaat Exemption (If yes please upload zakat Affidavit)
+              </Text>
+              <Switch
+                size="sm"
+                mb={0}
+                isChecked={zakatExemption}
+                onToggle={() => {
+                  console.log(zakatExemption);
+                  setzakatExemption(!zakatExemption);
+                }}
+              />
+           
             </Box>
           </ScrollView>
         </Box>
@@ -450,7 +389,7 @@ Communication via Email
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Upload Documents")
+                  navigation.navigate("Type Of Account")
                 // submitForm()
               }
             >
@@ -458,15 +397,6 @@ Communication via Email
             </Button>
           </Stack>
         </Box>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            display="default"
-            onChange={addDate}
-          />
-        )}
       </Box>
     );
 };
@@ -477,4 +407,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PersonalDetails;
+export default BasicAccountDetails;

@@ -178,6 +178,48 @@ const Registration = ({ navigation }) => {
                   }}
                 />
               </Box>
+
+              {/* Email  */}
+              <Box flex={1} width={{ base: "100%", md: "md" }}>
+                <Text
+                  ml={12}
+                  pl={3}
+                  position="relative"
+                  top={8}
+                  color="#13B995"
+                >
+                  Email ID
+                </Text>
+                <Input
+                  variant="unstyled"
+                  size="xl"
+                  placeholder="example@email.com"
+                  color="black"
+                  placeholderTextColor="#ccc"
+                  InputRightElement={
+                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
+                    <></>
+                  }
+                  InputLeftElement={
+                    <Box pl="5">
+                      <MaterialIcons
+                        name="email"
+                        size={23}
+                        color="black"
+                      />
+                    </Box>
+                  }
+                  pb={3}
+                  pt={7}
+                  px={4}
+                  borderColor="#a4ffc8"
+                  borderRadius="lg"
+                  borderWidth={1}
+                  _focus={{
+                    borderColor: "#13B995",
+                  }}
+                />
+              </Box>
             </Box>
           </ScrollView>
         </Box>

@@ -55,6 +55,18 @@ const BeginDocumentSubmission = ({ navigation }) => {
       status: false,
       description: "certificte.pdf",
     },
+    {
+      id: 3,
+      title: "Upload Signature on White Paper",
+      status: false,
+      description: "signature.jpg",
+    },
+    {
+      id: 3,
+      title: "Zakaat Affidavit - If Applicable",
+      status: false,
+      description: "zakaat.pdf",
+    },
   ]);
 
   const Uploader = ({
@@ -164,7 +176,7 @@ const BeginDocumentSubmission = ({ navigation }) => {
                 // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
-                  navigation.navigate("EligibiltyCheck")
+                  navigation.navigate("Foreign Tax")
                 }
               >
                 CONFIRM

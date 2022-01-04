@@ -37,6 +37,11 @@ import { ENDPOINT } from "./app/src/config";
 import { NhostApolloProvider } from "@nhost/react-apollo";
 import { NhostAuthProvider } from "@nhost/react-auth";
 import { nhost } from "./app/src/utils/nhost";
+import BasicAccountDetails from "./app/src/screens/BasicAccountDetails";
+import TypeOfAccount from "./app/src/screens/TypeOfAccount";
+import Profession from "./app/src/screens/Profession";
+import ForeignTax from "./app/src/screens/ForeignTax";
+import NextOfKin from "./app/src/screens/NextOfKin";
 
 const Stack = createStackNavigator();
 
@@ -53,7 +58,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="Get Started"
+    initialRouteName="Begin Document Submission"
     screenOptions={{
       headerShown: false,
     }}
@@ -73,8 +78,20 @@ const NewCustomerStackScreen = () => (
       component={ExistingCustomerStackScreen}
     />
     <NewCustomerStack.Screen
+      name="Basic Account Details"
+      component={BasicAccountDetails}
+    />
+    <NewCustomerStack.Screen
+      name="Type Of Account"
+      component={TypeOfAccount}
+    />
+    <NewCustomerStack.Screen
       name="Personal Details"
       component={PersonalDetails}
+    />
+    <NewCustomerStack.Screen
+      name="Profession"
+      component={Profession}
     />
     <NewCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
     <NewCustomerStack.Screen
@@ -88,6 +105,14 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="Begin Document Submission"
       component={BeginDocumentSubmission}
+    />
+        <NewCustomerStack.Screen
+      name="Foreign Tax"
+      component={ForeignTax}
+    />
+     <NewCustomerStack.Screen
+      name="Next Of Kin"
+      component={NextOfKin}
     />
   </NewCustomerStack.Navigator>
 );

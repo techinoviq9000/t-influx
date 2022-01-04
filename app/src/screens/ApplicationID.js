@@ -153,7 +153,7 @@ const ApplicationID = ({ navigation }) => {
                 // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
-                  navigation.navigate("Personal Details")
+                  navigation.navigate("Basic Account Details")
                 }
               >
                 NEW APPLICATION

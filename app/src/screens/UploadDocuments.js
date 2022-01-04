@@ -101,6 +101,18 @@ const UploadDocuments = ({ navigation }) => {
                   Active Filer
                 </Text>
               </HStack>
+              <HStack space={2} mt={2}>
+                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <Text color="#414141" fontSize="md" fontWeight="medium">
+               Signature on White Paper
+                </Text>
+              </HStack>
+              <HStack space={2} mt={2}>
+                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <Text color="#414141" fontSize="md" fontWeight="medium">
+                Zakaat Affidavit - If Applicable
+                </Text>
+              </HStack>
             </Box>
             <Box flex={1} justifyContent="flex-end">
               <Button
