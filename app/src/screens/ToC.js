@@ -15,6 +15,8 @@ import {
   CloseIcon,
   FormControl,
   Switch,
+  Radio,
+  Checkbox,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -38,10 +40,11 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const NextOfKin = ({ navigation }) => {
+const ToC = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
+  const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -201,9 +204,9 @@ const NextOfKin = ({ navigation }) => {
         </Box>
         <Box alignItems="center">
           <StepHeader
-            title="Next Of Kin Details"
-            nextTitle="Next: PEP"
-            step="5"
+            title="Terms and Conditons"
+            // nextTitle="Next: Terms and Conditons"
+            step="8"
           />
         </Box>
         <Box
@@ -223,27 +226,58 @@ const NextOfKin = ({ navigation }) => {
             }}
           >
             <Box>
-              {/* First name */}
-              <InputFields
-                  fields={fields}
-                  title={"Name"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Name"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              <ScrollView
+                maxHeight="150px"
+                mb={10}
+                _contentContainerStyle={{
+                  px: "20px",
+                  py: "10px",
+                  backgroundColor: "#eee",
+                  // mb: "5",
+                  minW: "72",
+                }}
+              >
+                <Text>
+                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                  accusantium doloremque laudantium, totam rem aperiam, eaque
+                  ipsa quae ab illo inventore veritatis et quasi architecto
+                  beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem
+                  quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                  consequuntur magni dolores eos qui ratione voluptatem sequi
+                  nesciunt. Neque porro quisquam est, qui dolorem ipsum quia
+                  dolor sit amet, consectetur, adipisci velit, sed quia non
+                  numquam eius modi tempora incidunt ut labore et dolore magnam
+                  aliquam quaerat voluptatem. Ut enim ad minima veniam, quis
+                  nostrum exercitationem ullam corporis suscipit laboriosam,
+                  nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum
+                  iure reprehenderit qui in ea voluptate velit esse quam nihil
+                  molestiae consequatur, vel illum qui dolorem eum fugiat quo
+                  voluptas nulla pariatur?
+                </Text>
+              </ScrollView>
+              <Text color={"#13B995"} zIndex={10} pb={2}>
+              1. I / We hereby confirm that the information provided above is true and accurate to my / our information
 
-<InputFields
-                  fields={fields}
-                  title={"Telephone"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Telephone"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              </Text>
+              <Text color={"#13B995"} zIndex={10} pb={2}>
+              2. I / We hereby provide my online digital consent for account opening with Samba Bank Limited and authorize the usage of the information and documentation provided for due diligence and sharing with CDC (as applicable).
 
+              </Text>
+              <Text color={"#13B995"} zIndex={10} pb={2}>
+              3. The bank reserves the right to request me / us to furnish the source of funds and provide requisite documentation to validate the origination of funds and its respective usage
+
+              </Text>
+              <Text color={"#13B995"} zIndex={10} pb={2}>
+              4. I / We hereby authorize Samba Bank Limited to contact me / us for any further information as may be required by the bank from time to time.
+
+              </Text>
+              <Text color={"#13B995"} zIndex={10} pb={2}>
+              5. I / We hereby acknowledge that I / we have read and understood the Declaration, Key Fact Statement (KFS) of the Liability Products (available on the Website), the Terms and Conditions as may be amended from time to time along with the statements above. The submission of this Digital Account Opening Application will be as per Samba Bank Limited’s Privacy Policy available on the website.
+
+              </Text>
+
+              <Checkbox value="one" accessibilityLabel="This is a dummy checkbox">I / we hereby agree to the terms and conditions and declarations appended above
+</Checkbox>
             </Box>
           </ScrollView>
         </Box>
@@ -309,4 +343,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NextOfKin;
+export default ToC;

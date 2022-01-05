@@ -38,7 +38,7 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const NextOfKin = ({ navigation }) => {
+const PEP = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
@@ -201,9 +201,9 @@ const NextOfKin = ({ navigation }) => {
         </Box>
         <Box alignItems="center">
           <StepHeader
-            title="Next Of Kin Details"
-            nextTitle="Next: PEP"
-            step="5"
+            title="Politically Exposed Persons (PEP)"
+            nextTitle="Next: Declaration of beneficial Owner"
+            step="6"
           />
         </Box>
         <Box
@@ -223,27 +223,161 @@ const NextOfKin = ({ navigation }) => {
             }}
           >
             <Box>
-              {/* First name */}
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                A Politcally Exposed Persons (PEP) means:
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                1) Government Official in Grade 21 or above; OR Heads OR Senior
+                Executive of the state owned corporations / departments /
+                autonomous bodies.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                2) Judge of a High Court, Supreme Court or any other equivalent
+                court OR Maj. General or equivalent in Army or equivalent ranks
+                in other armed forces.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                3) Members of National/Provincial Assemblies & Senate, Head of
+                State or of Government, Provincial Governors, Ministers, Senior
+                Politicians, Important Political Party Officials
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                4) Linked to the Beneficial ownership of a legal person / legal
+                arrangement which is known to have been set up for the benefit
+                of a PEP
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                5) Joint beneficial ownership of a legal person / legal
+                arrangement or any other close business relations with a PEP
+              </Text>
+
+              <Text mt={2} mb={2}>
+                Please select YES if you hold any of the following position(s)
+                OR if you are related (Spouse, Parent, Siblings, children, Grand
+                Parents, grandchildren, in-laws or any other person closely
+                associated) to someone holding any of the following position(s):
+              </Text>
+              <Switch
+                size="sm"
+                mb={0}
+                isChecked={true}
+                // onToggle={() => {
+                //   console.log(chequeBookShow);
+                //   setChequeBookShow(!chequeBookShow);
+                // }}
+              />
+
               <InputFields
-                  fields={fields}
-                  title={"Name"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Name"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+                fields={fields}
+                title={"Position"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"1) Senior Government Offical"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Name of the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Name of the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Your Relationship with the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Your Relationship with the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-<InputFields
-                  fields={fields}
-                  title={"Telephone"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Telephone"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              {/* <InputFields
+                fields={fields}
+                title={"Position"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"2) Senior Judicial"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Name of the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Name of the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Your Relationship with the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Your Relationship with the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
+              <InputFields
+                fields={fields}
+                title={"Position"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"3) Senior Political"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Name of the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Name of the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Your Relationship with the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Your Relationship with the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              <InputFields
+                fields={fields}
+                title={"Position"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"4) Person closely associated"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Name of the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Name of the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Your Relationship with the person"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Your Relationship with the person"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              /> */}
             </Box>
           </ScrollView>
         </Box>
@@ -282,7 +416,7 @@ const NextOfKin = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("PEP")
+                  navigation.navigate("Declaration")
                 // submitForm()
               }
             >
@@ -309,4 +443,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NextOfKin;
+export default PEP;

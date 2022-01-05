@@ -15,6 +15,7 @@ import {
   CloseIcon,
   FormControl,
   Switch,
+  Radio,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -38,10 +39,11 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const NextOfKin = ({ navigation }) => {
+const Declaration = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
+  const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -201,9 +203,9 @@ const NextOfKin = ({ navigation }) => {
         </Box>
         <Box alignItems="center">
           <StepHeader
-            title="Next Of Kin Details"
-            nextTitle="Next: PEP"
-            step="5"
+            title="Declaration of beneficial Owner"
+            nextTitle="Next: Terms and Conditons"
+            step="7"
           />
         </Box>
         <Box
@@ -223,27 +225,89 @@ const NextOfKin = ({ navigation }) => {
             }}
           >
             <Box>
-              {/* First name */}
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                I / We, the owner(s) of the account, hereby declare that:
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                a. My / our declaration relates to the account as well as to all
+                other accounts maintained with Samba Limited in my/our name(s)
+                and which are linked to this account and also to accounts that
+                will be opened in future under my/our name(s) and which will be
+                linked to this account.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                b. My / our declaration applies only to the accounts which will
+                have identical ownerships to that of the account mentioned in
+                this form.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                c. There is/are NO beneficial owner(s) of the account apart from
+                the owner(s) of the account (i.e., accounts are operated in
+                my/our behalf and not on behalf of a third party).
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                d. There is/are a beneficial owner(s) of the account apart from
+                the owner(s) of the account (i.e., accounts are operated on
+                behalf of a third party whose details are as follows)
+              </Text>
+
+              <Radio.Group
+                name="myRadioGroup"
+                accessibilityLabel="favorite number"
+                value={value}
+                onChange={(nextValue) => {
+                  setValue(nextValue);
+                }}
+              >
+                <Radio value="one" my={1}>
+                  There is/are NO beneficial owner(s) of the account apart from
+                  the owner(s) of the account (i.e., accounts are operated in
+                  my/our behalf and not on behalf of a third party).
+                </Radio>
+                <Radio value="two" my={1}>
+                  There is/are a beneficial owner(s) of the account apart from
+                  the owner(s) of the account (i.e., accounts are operated on
+                  behalf of a third party whose details are as follows)
+                </Radio>
+              </Radio.Group>
+
               <InputFields
-                  fields={fields}
-                  title={"Name"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Name"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+                fields={fields}
+                title={"Full Name (as per document name)"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Full Name (as per document name)"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <InputFields
+                fields={fields}
+                title={"Legal ID Number"}
+                errors={errors}
+                name={"firstName"}
+                placeholder={"Legal ID Number"}
+                handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+              <SelectField
+                fields={fields}
+                title={"Country of Issuance"}
+                name={"purposeOfAcc"}
+                placeholder={"Select Country of Issuance"}
+                handleChange={handleChange}
+                selectValue={["List of Countries"]}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-<InputFields
-                  fields={fields}
-                  title={"Telephone"}
-                  errors={errors}
-                  name={"firstName"}
-                  placeholder={"Telephone"}
-                  handleChange={handleChange}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
-
+              <Text mt={2}>
+                I/We undertake to give Samba notice of any change in what has
+                been mentioned above. I/We am/are aware that submitting false
+                information, including omitting/neglecting to submit updated
+                information which must be declared, with the intention that no
+                declaration will be made or to cause incorrect declaration to be
+                made constitutes a violation of applicable regulations and I/we
+                shall solely be responsible for any and all consequences thereof
+              </Text>
             </Box>
           </ScrollView>
         </Box>
@@ -282,7 +346,7 @@ const NextOfKin = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("PEP")
+                  navigation.navigate("ToC")
                 // submitForm()
               }
             >
@@ -309,4 +373,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NextOfKin;
+export default Declaration;

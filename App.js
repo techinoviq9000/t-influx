@@ -42,6 +42,9 @@ import TypeOfAccount from "./app/src/screens/TypeOfAccount";
 import Profession from "./app/src/screens/Profession";
 import ForeignTax from "./app/src/screens/ForeignTax";
 import NextOfKin from "./app/src/screens/NextOfKin";
+import PEP from "./app/src/screens/PEP";
+import Declaration from "./app/src/screens/Declaration";
+import ToC from "./app/src/screens/ToC";
 
 const Stack = createStackNavigator();
 
@@ -58,7 +61,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="Begin Document Submission"
+    initialRouteName="ToC"
     screenOptions={{
       headerShown: false,
     }}
@@ -113,6 +116,18 @@ const NewCustomerStackScreen = () => (
      <NewCustomerStack.Screen
       name="Next Of Kin"
       component={NextOfKin}
+    />
+    <NewCustomerStack.Screen
+      name="PEP"
+      component={PEP}
+    />
+     <NewCustomerStack.Screen
+      name="Declaration"
+      component={Declaration}
+    />
+    <NewCustomerStack.Screen
+      name="ToC"
+      component={ToC}
     />
   </NewCustomerStack.Navigator>
 );
