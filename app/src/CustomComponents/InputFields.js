@@ -16,15 +16,16 @@ const InputFields = ({
         ml={12}
         pl={3}
         position="relative"
-        top={8}
+        top="25px"
         color={errors?.[name] ? "red.500" : "#13B995"}
+        fontSize="xs"
       >
         {title}
       </Text>
       <Input
         name={name}
         variant="unstyled"
-        size="xl"
+        size="md"
         placeholder={placeholder}
         color="black"
         placeholderTextColor="#ccc"
@@ -43,8 +44,9 @@ const InputFields = ({
           </>
         }
         InputLeftElement={<Box pl="5">{icon}</Box>}
-        pb={3}
-        pt={7}
+        pb={2}
+        // py={4}
+        pt={6}
         px={4}
         borderColor={errors?.[name] ? "red.500" : "#a4ffc8"}
         borderRadius="lg"
