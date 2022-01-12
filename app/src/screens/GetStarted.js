@@ -59,11 +59,11 @@ const GetStarted = ({ navigation }) => {
             shadow={5}
             mb={5}
             onPress={() =>
-              // navigation.goBack()
-              navigation.navigate("Registration")
+              navigation.goBack()
+              // navigation.navigate("Registration")
             }
           >
-            I'M READY
+            GO BACK
           </Button>
           <Button
             size="md"
@@ -77,10 +77,10 @@ const GetStarted = ({ navigation }) => {
               color: "#414141",
             }}
             onPress={() =>
-              navigation.goBack()
+              navigation.navigate("Registration")
             }
           >
-            GO BACK
+            I'M READY
           </Button>
         </Box>
     </Box>

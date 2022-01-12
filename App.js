@@ -20,7 +20,7 @@ import WelcomeScreen from "./app/src/screens/WelcomeScreen";
 import GetStarted from "./app/src/screens/GetStarted";
 import ContinueRegistration from "./app/src/screens/ContinueRegistration";
 import Background from "./app/src/CustomComponents/Background";
-import Animated from "react-native-reanimated";
+import Animated, { add } from "react-native-reanimated";
 import UploadDocuments from "./app/src/screens/UploadDocuments";
 import BeginDocumentSubmission from "./app/src/screens/BeginDocumentSubmission";
 import EligibiltyCheck from "./app/src/screens/EligibiltyCheck";
@@ -45,6 +45,8 @@ import NextOfKin from "./app/src/screens/NextOfKin";
 import PEP from "./app/src/screens/PEP";
 import Declaration from "./app/src/screens/Declaration";
 import ToC from "./app/src/screens/ToC";
+import Services from "./app/src/screens/Services";
+import Address from "./app/src/screens/Address";
 
 const Stack = createStackNavigator();
 
@@ -61,7 +63,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="ToC"
+    initialRouteName="Get Started"
     screenOptions={{
       headerShown: false,
     }}
@@ -84,9 +86,13 @@ const NewCustomerStackScreen = () => (
       name="Basic Account Details"
       component={BasicAccountDetails}
     />
+        <NewCustomerStack.Screen
+      name="Services"
+      component={Services}
+    />
     <NewCustomerStack.Screen
-      name="Type Of Account"
-      component={TypeOfAccount}
+      name="Address"
+      component={Address}
     />
     <NewCustomerStack.Screen
       name="Personal Details"

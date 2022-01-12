@@ -34,15 +34,15 @@ import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import InputFields from "../CustomComponents/InputFields";
 
 const GET_TODOS = gql`
-query MyQuery {
-  users {
-    display_name
+  query MyQuery {
+    users {
+      display_name
+    }
   }
-}
 `;
-
 
 const Registration = ({ navigation }) => {
   const { data, loading } = useQuery(GET_TODOS);
@@ -100,126 +100,39 @@ const Registration = ({ navigation }) => {
           >
             <Box alignItems={{ md: "center" }}>
               {/* Mobile Number */}
-              <Box flex={1} width={{ base: "100%", md: "md" }}>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color="#13B995"
-                >
-                  Mobile Number
-                </Text>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  placeholder="03XX-XXXXXX"
-                  color="black"
-                  type="number"
-                  placeholderTextColor="#ccc"
-                  // InputRightElement={
-                  //   <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
-                  // }
-                  InputLeftElement={
-                    <Box pl="5">
-                      <MaterialIcons name="person" size={23} color="black" />
-                    </Box>
-                  }
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor="#a4ffc8"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-              </Box>
+              <InputFields
+                // fields={fields}
+                title={"Mobile Number"}
+                // errors={errors}
+                name={"Mobile Number"}
+                placeholder={"03XX-XXXXXX"}
+                // handleChange={handleChange}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
               {/* CNIC NUMBER */}
-              <Box flex={1} width={{ base: "100%", md: "md" }}>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color="#13B995"
-                >
-                  CNIC Number
-                </Text>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  placeholder="XXXXX-XXXXXXX-X"
-                  color="black"
-                  placeholderTextColor="#ccc"
-                  InputRightElement={
-                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
-                    <></>
-                  }
-                  InputLeftElement={
-                    <Box pl="5">
-                      <MaterialIcons
-                        name="credit-card"
-                        size={23}
-                        color="black"
-                      />
-                    </Box>
-                  }
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor="#a4ffc8"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-              </Box>
+              <InputFields
+                // fields={fields}
+                title={"CNIC Number"}
+                // errors={errors}
+                name={"CNIC Number"}
+                placeholder={"XXXXX-XXXXXXX-X"}
+                // handleChange={handleChange}
+                icon={
+                  <MaterialIcons name="credit-card" size={23} color="black" />
+                }
+              />
 
               {/* Email  */}
-              <Box flex={1} width={{ base: "100%", md: "md" }}>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color="#13B995"
-                >
-                  Email ID
-                </Text>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  placeholder="example@email.com"
-                  color="black"
-                  placeholderTextColor="#ccc"
-                  InputRightElement={
-                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
-                    <></>
-                  }
-                  InputLeftElement={
-                    <Box pl="5">
-                      <MaterialIcons
-                        name="email"
-                        size={23}
-                        color="black"
-                      />
-                    </Box>
-                  }
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor="#a4ffc8"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-              </Box>
+              <InputFields
+                // fields={fields}
+                title={"Email ID"}
+                // errors={errors}
+                name={"Email ID"}
+                placeholder={"example@email.com"}
+                // handleChange={handleChange}
+                icon={<MaterialIcons name="email" size={23} color="black" />}
+              />
             </Box>
           </ScrollView>
         </Box>
@@ -253,8 +166,6 @@ const Registration = ({ navigation }) => {
               border={1}
               borderWidth="1"
               borderColor="white"
-              mb={25}
-              shadow={5}
               onPress={() =>
                 // navigation.goBack()
                 // getUser()

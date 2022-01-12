@@ -42,6 +42,8 @@ const PEP = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
+  const [pep, setpep] = useState(false);
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -203,7 +205,7 @@ const PEP = ({ navigation }) => {
           <StepHeader
             title="Politically Exposed Persons (PEP)"
             nextTitle="Next: Declaration of beneficial Owner"
-            step="6"
+            step="8"
           />
         </Box>
         <Box
@@ -251,21 +253,25 @@ const PEP = ({ navigation }) => {
                 arrangement or any other close business relations with a PEP
               </Text>
 
-              <Text mt={2} mb={2}>
+              <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
                 Please select YES if you hold any of the following position(s)
                 OR if you are related (Spouse, Parent, Siblings, children, Grand
                 Parents, grandchildren, in-laws or any other person closely
                 associated) to someone holding any of the following position(s):
               </Text>
-              <Switch
-                size="sm"
-                mb={0}
-                isChecked={true}
-                // onToggle={() => {
-                //   console.log(chequeBookShow);
-                //   setChequeBookShow(!chequeBookShow);
-                // }}
-              />
+
+                <HStack alignItems="center" space={2}>
+                <Text color={pep ? "black" : "#13B995"}>No</Text>
+                <Switch
+                  size="sm"
+                  mb={0}
+                  isChecked={pep}
+                  onToggle={() => {
+                    setpep(!pep);
+                  }}
+                />
+                <Text color={pep ? "#13B995" : "black"}>Yes</Text>
+              </HStack>
 
               <InputFields
                 fields={fields}
@@ -294,90 +300,6 @@ const PEP = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-
-              {/* <InputFields
-                fields={fields}
-                title={"Position"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"2) Senior Judicial"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Name of the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Name of the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Your Relationship with the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Your Relationship with the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-              <InputFields
-                fields={fields}
-                title={"Position"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"3) Senior Political"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Name of the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Name of the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Your Relationship with the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Your Relationship with the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-              <InputFields
-                fields={fields}
-                title={"Position"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"4) Person closely associated"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Name of the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Name of the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Your Relationship with the person"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Your Relationship with the person"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              /> */}
             </Box>
           </ScrollView>
         </Box>

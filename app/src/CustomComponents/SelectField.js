@@ -31,7 +31,7 @@ const SelectField = ({
           borderColor: "#13B995",
         }}
       >
-        <Text ml={12} pl={3} position="relative" top={8} color={"#13B995"} zIndex={10}>
+        <Text ml={12} pl={3} position="relative" top="25px" fontSize="xs" color={"#13B995"} zIndex={10}>
           {title}
         </Text>
         <Select
@@ -44,12 +44,17 @@ const SelectField = ({
           fontSize="18px"
           accessibilityLabel={placeholder}
           placeholder={placeholder}
+          // placeholderTextColor="#ccc"
+          
           _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size={5} />,
+            fontSize: "xs"
           }}
-          pb={3}
-          pt={7}
+          pb={2}
+          style={{fontSize: "14px"}}
+          // py={4}
+          pt={6}
           px={4}
         >
           {selectValue.map(value => (

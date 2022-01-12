@@ -39,7 +39,7 @@ const BeginDocumentSubmission = ({ navigation }) => {
   const [list, setList] = useState([
     {
       id: 0,
-      title: "NADRA CNIC PASSPORT",
+      title: "NADRA CNIC",
       status: true,
       description: "CNIC junaid.png",
     },
@@ -117,7 +117,11 @@ const BeginDocumentSubmission = ({ navigation }) => {
           />
         </Box>
         <Box alignItems="center">
-          <StepHeader title="Upload Documents" />
+          <StepHeader
+            title="Upload Documents"
+            nextTitle="Next: Foreign Account Tax Compliance"
+            step="5"
+          />
         </Box>
         <Box
           backgroundColor="white"

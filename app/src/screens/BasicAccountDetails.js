@@ -207,7 +207,7 @@ const BasicAccountDetails = ({ navigation }) => {
         <Box alignItems="center">
           <StepHeader
             title="Basic Account Details"
-            nextTitle="Next: Type of account"
+            nextTitle="Next: Services"
             step="1"
           />
         </Box>
@@ -250,7 +250,15 @@ const BasicAccountDetails = ({ navigation }) => {
                 ]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-
+  <InputFields
+                // fields={fields}
+                title={"Email ID"}
+                // errors={errors}
+                name={"Email ID"}
+                placeholder={"example@email.com"}
+                // handleChange={handleChange}
+                icon={<MaterialIcons name="email" size={23} color="black" />}
+              />
               <SelectField
                 fields={fields}
                 title={"Branch Name"}
@@ -292,64 +300,76 @@ const BasicAccountDetails = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-              <Text mt={2} mb={2}>
-                Cheque Book Required?
-              </Text>
-              <Switch
-                size="sm"
-                mb={0}  
-                isChecked={chequeBookShow}
-                onToggle={() => {
-                  console.log(chequeBookShow);
-                  setChequeBookShow(!chequeBookShow);
-                }}
-              />
-              <SelectField
-                isDisabled={!chequeBookShow}
-                fields={fields}
-                title={"Cheque Book Leafs"}
-                name={"purposeOfAcc"}
-                placeholder={"Select Cheque Book Leafs"}
-                handleChange={handleChange}
-                selectValue={["25", "50", "100"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
+<SelectField
+                  fields={fields}
+                  title={"Account Type (1)"}
+                  name={"accType1"}
+                  placeholder={"Select Account Type (1)"}
+                  handleChange={handleChange}
+                  selectValue={[
+                    "PKR Current Account",
+                    "PKR Savings Account (Monthly)",
+                    "USD Current Account",
+                    "USD Savings Account (Monthly)",
+                    "AED Current Account",
+                    "AED Savings Account (Monthly)",
+                    "Euro Current Account",
+                    "Euro Savings Account (Monthly)",
+                    "SAR Current Account",
+                    "SAR Savings Account (Monthly)",
+                    "GBP Current Account",
+                    "GBP Savings Account (Monthly)"
+                  ]}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
 
-              <Text mt={2} mb={2}>
-                ATM/Debit Card Required?
-              </Text>
-              <Switch
-                size="sm"
-                mb={0}
-                isChecked={atmCardShow}
-                onToggle={() => {
-                  console.log(atmCardShow);
-                  setAtmCardShow(!atmCardShow);
-                }}
-              />
-              <SelectField
-                isDisabled={!atmCardShow}
-                fields={fields}
-                title={"ATM / Debit Card"}
-                name={"purposeOfAcc"}
-                placeholder={"Select ATM / Debit Card"}
-                handleChange={handleChange}
-                selectValue={["Master Card", "Paypak"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
+                 {/* Account Type (2)
+                 <SelectField
+                  fields={fields}
+                  title={"Account Type (2)"}
+                  name={"accType2"}
+                  placeholder={"Select Account Type (2)"}
+                  handleChange={handleChange}
+                  selectValue={[
+                    "PKR Current Account",
+                    "PKR Savings Account (Monthly)",
+                    "USD Current Account",
+                    "USD Savings Account (Monthly)",
+                    "AED Current Account",
+                    "AED Savings Account (Monthly)",
+                    "Euro Current Account",
+                    "Euro Savings Account (Monthly)",
+                    "SAR Current Account",
+                    "SAR Savings Account (Monthly)",
+                    "GBP Current Account",
+                    "GBP Savings Account (Monthly)"
+                  ]}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                /> */}
 
-<Text mt={2} mb={2}>
-Zakaat Exemption (If yes please upload zakat Affidavit)
-              </Text>
-              <Switch
-                size="sm"
-                mb={0}
-                isChecked={zakatExemption}
-                onToggle={() => {
-                  console.log(zakatExemption);
-                  setzakatExemption(!zakatExemption);
-                }}
-              />
+                 {/* Account Type (3) */}
+                 {/* <SelectField
+                  fields={fields}
+                  title={"Account Type (3)"}
+                  name={"accType3"}
+                  placeholder={"Select Account Type (3)"}
+                  handleChange={handleChange}
+                  selectValue={[
+                    "PKR Current Account",
+                    "PKR Savings Account (Monthly)",
+                    "USD Current Account",
+                    "USD Savings Account (Monthly)",
+                    "AED Current Account",
+                    "AED Savings Account (Monthly)",
+                    "Euro Current Account",
+                    "Euro Savings Account (Monthly)",
+                    "SAR Current Account",
+                    "SAR Savings Account (Monthly)",
+                    "GBP Current Account",
+                    "GBP Savings Account (Monthly)"
+                  ]}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                /> */}
            
             </Box>
           </ScrollView>
@@ -389,7 +409,7 @@ Zakaat Exemption (If yes please upload zakat Affidavit)
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Type Of Account")
+                  navigation.navigate("Services")
                 // submitForm()
               }
             >

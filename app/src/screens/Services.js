@@ -15,7 +15,6 @@ import {
   CloseIcon,
   FormControl,
   Switch,
-  Select,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -39,11 +38,16 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const ForeignTax = ({ navigation }) => {
+const Services = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
-  const [foreignTax, setforeignTax] = useState(false);
+  const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
+  const [smsAlert, setsmsAlert] = useState(false);
+  const [chequeBookShow, setChequeBookShow] = useState(false);
+  const [atmCardShow, setAtmCardShow] = useState(false);
+  const [zakatExemption, setzakatExemption] = useState(false);
+
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -203,9 +207,9 @@ const ForeignTax = ({ navigation }) => {
         </Box>
         <Box alignItems="center">
           <StepHeader
-            title="Foreign Account Tax Compliance"
-            nextTitle="Next: Next Of Kin"
-            step="6"
+            title="Services"
+            nextTitle="Next: Personal Details"
+            step="2"
           />
         </Box>
         <Box
@@ -225,22 +229,110 @@ const ForeignTax = ({ navigation }) => {
             }}
           >
             <Box>
+              <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                Cheque Book Required?
+              </Text>
               <HStack alignItems="center" space={2}>
-                <Text color={foreignTax ? "black" : "#13B995"}>No</Text>
+                <Text color={chequeBookShow ? "black" : "#13B995"}>No</Text>
                 <Switch
                   size="sm"
                   mb={0}
-                  isChecked={foreignTax}
+                  isChecked={chequeBookShow}
                   onToggle={() => {
-                    console.log(foreignTax);
-                    setforeignTax(!foreignTax);
+                    setChequeBookShow(!chequeBookShow);
                   }}
                 />
-                <Text color={foreignTax ? "#13B995" : "black"}>Yes</Text>
+                <Text color={chequeBookShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
-              <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
-                If Yes, option to download W9 Form and then can upload it
+              <SelectField
+                isDisabled={!chequeBookShow}
+                fields={fields}
+                title={"Cheque Book Leafs"}
+                name={"purposeOfAcc"}
+                placeholder={"Select Cheque Book Leafs"}
+                handleChange={handleChange}
+                selectValue={["25", "50", "100"]}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              <Text mt={4} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                ATM/Debit Card Required?
               </Text>
+              <HStack alignItems="center" space={2}>
+                <Text color={atmCardShow ? "black" : "#13B995"}>No</Text>
+                <Switch
+                  size="sm"
+                  mb={0}
+                  isChecked={atmCardShow}
+                  onToggle={() => {
+                    setAtmCardShow(!atmCardShow);
+                  }}
+                />
+                <Text color={atmCardShow ? "#13B995" : "black"}>Yes</Text>
+              </HStack>
+              <SelectField
+                isDisabled={!atmCardShow}
+                fields={fields}
+                title={"ATM / Debit Card"}
+                name={"purposeOfAcc"}
+                placeholder={"Select ATM / Debit Card"}
+                handleChange={handleChange}
+                selectValue={["Master Card", "Paypak"]}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
+
+              <Text mt={4} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                Zakaat Exemption (If yes please upload zakat Affidavit)
+              </Text>
+              <HStack alignItems="center" space={2}>
+                <Text color={zakatExemption ? "black" : "#13B995"}>No</Text>
+
+                <Switch
+                  size="sm"
+                  mb={0}
+                  isChecked={zakatExemption}
+                  onToggle={() => {
+                    setzakatExemption(!zakatExemption);
+                  }}
+                />
+                <Text color={zakatExemption ? "#13B995" : "black"}>Yes</Text>
+              </HStack>
+
+              <Text mt={4} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                SMS Alert
+              </Text>
+              <HStack alignItems="center" space={2}>
+                <Text color={smsAlert ? "black" : "#13B995"}>No</Text>
+                <Switch
+                  size="sm"
+                  mb={0}
+                  isChecked={smsAlert}
+                  onToggle={() => {
+                    setsmsAlert(!smsAlert);
+                  }}
+                />
+                <Text color={smsAlert ? "#13B995" : "black"}>Yes</Text>
+              </HStack>
+              <Text mt={4} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                Communication via Email
+              </Text>
+              <HStack alignItems="center" space={2}>
+                <Text color={communicateViaEmail ? "black" : "#13B995"}>
+                  No
+                </Text>
+                <Switch
+                  size="sm"
+                  mb={0}
+                  isChecked={communicateViaEmail}
+                  onToggle={() => {
+                    console.log(communicateViaEmail);
+                    setcommunicateViaEmail(!communicateViaEmail);
+                  }}
+                />
+                <Text color={communicateViaEmail ? "#13B995" : "black"}>
+                  Yes
+                </Text>
+              </HStack>
             </Box>
           </ScrollView>
         </Box>
@@ -279,7 +371,7 @@ const ForeignTax = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Next Of Kin")
+                  navigation.navigate("Personal Details")
                 // submitForm()
               }
             >
@@ -287,15 +379,6 @@ const ForeignTax = ({ navigation }) => {
             </Button>
           </Stack>
         </Box>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            display="default"
-            onChange={addDate}
-          />
-        )}
       </Box>
     );
 };
@@ -306,4 +389,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForeignTax;
+export default Services;

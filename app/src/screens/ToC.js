@@ -206,7 +206,7 @@ const ToC = ({ navigation }) => {
           <StepHeader
             title="Terms and Conditons"
             // nextTitle="Next: Terms and Conditons"
-            step="8"
+            step="10"
           />
         </Box>
         <Box
@@ -260,7 +260,7 @@ const ToC = ({ navigation }) => {
 
               </Text>
               <Text color={"#13B995"} zIndex={10} pb={2}>
-              2. I / We hereby provide my online digital consent for account opening with Samba Bank Limited and authorize the usage of the information and documentation provided for due diligence and sharing with CDC (as applicable).
+              2. I / We hereby provide my online digital consent for account opening with T-Influx and authorize the usage of the information and documentation provided for due diligence and sharing with CDC (as applicable).
 
               </Text>
               <Text color={"#13B995"} zIndex={10} pb={2}>
@@ -268,11 +268,11 @@ const ToC = ({ navigation }) => {
 
               </Text>
               <Text color={"#13B995"} zIndex={10} pb={2}>
-              4. I / We hereby authorize Samba Bank Limited to contact me / us for any further information as may be required by the bank from time to time.
+              4. I / We hereby authorize T-Influx to contact me / us for any further information as may be required by the bank from time to time.
 
               </Text>
               <Text color={"#13B995"} zIndex={10} pb={2}>
-              5. I / We hereby acknowledge that I / we have read and understood the Declaration, Key Fact Statement (KFS) of the Liability Products (available on the Website), the Terms and Conditions as may be amended from time to time along with the statements above. The submission of this Digital Account Opening Application will be as per Samba Bank Limited’s Privacy Policy available on the website.
+              5. I / We hereby acknowledge that I / we have read and understood the Declaration, Key Fact Statement (KFS) of the Liability Products (available on the Website), the Terms and Conditions as may be amended from time to time along with the statements above. The submission of this Digital Account Opening Application will be as per T-Influx’s Privacy Policy available on the website.
 
               </Text>
 

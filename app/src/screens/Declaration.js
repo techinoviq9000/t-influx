@@ -205,7 +205,7 @@ const Declaration = ({ navigation }) => {
           <StepHeader
             title="Declaration of beneficial Owner"
             nextTitle="Next: Terms and Conditons"
-            step="7"
+            step="9"
           />
         </Box>
         <Box
@@ -230,7 +230,7 @@ const Declaration = ({ navigation }) => {
               </Text>
               <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
                 a. My / our declaration relates to the account as well as to all
-                other accounts maintained with Samba Limited in my/our name(s)
+                other accounts maintained with T-Influx in my/our name(s)
                 and which are linked to this account and also to accounts that
                 will be opened in future under my/our name(s) and which will be
                 linked to this account.
@@ -299,8 +299,8 @@ const Declaration = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-              <Text mt={2}>
-                I/We undertake to give Samba notice of any change in what has
+              <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+                I/We undertake to give T-Influx notice of any change in what has
                 been mentioned above. I/We am/are aware that submitting false
                 information, including omitting/neglecting to submit updated
                 information which must be declared, with the intention that no

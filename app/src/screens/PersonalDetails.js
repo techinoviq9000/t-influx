@@ -14,7 +14,7 @@ import {
   Pressable,
   CloseIcon,
   FormControl,
-  Switch
+  Switch,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -42,7 +42,6 @@ const PersonalDetails = ({ navigation }) => {
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
-  const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -203,7 +202,7 @@ const PersonalDetails = ({ navigation }) => {
         <Box alignItems="center">
           <StepHeader
             title="Personal Details"
-            nextTitle="Next: Questions & Answers"
+            nextTitle="Next: Address"
             step="3"
           />
         </Box>
@@ -246,7 +245,7 @@ const PersonalDetails = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-<SelectField
+              <SelectField
                 fields={fields}
                 title={"Place of Birth"}
                 name={"branchName"}
@@ -256,19 +255,7 @@ const PersonalDetails = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
-              {/* email */}
-              <InputFields
-                fields={fields}
-                title={"Email ID"}
-                errors={errors}
-                name={"email"}
-                placeholder={"Enter your email id"}
-                handleChange={handleChange}
-                icon={
-                  <MaterialIcons name="credit-card" size={23} color="black" />
-                }
-              />
- <SelectField
+              <SelectField
                 fields={fields}
                 title={"Other Nationality if any"}
                 name={"branchName"}
@@ -277,141 +264,6 @@ const PersonalDetails = ({ navigation }) => {
                 selectValue={["Area Names"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-              {/* date of birth */}
-              {/* <Box>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color={errors?.dob ? "red.500" : "#13B995"}
-                >
-                  Date of Birth
-                </Text>
-                <Pressable
-                  onPress={() => showMode("date")}
-                  _pressed={{ backgroundColor: "gray.50" }}
-                >
-                  <Input
-                    variant="unstyled"
-                    size="xl"
-                    isReadOnly
-                    placeholder="Enter Date of Birth"
-                    color="black"
-                    placeholderTextColor="#ccc"
-                    value={fields?.dob}
-                    type="button"
-                    InputRightElement={
-                      <>
-                        {errors?.dob ? (
-                          <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-                        ) : fields?.dobActive ? (
-                          <CheckIcon
-                            size="5"
-                            mt="0.5"
-                            color="emerald.500"
-                            mr="4"
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    }
-                    InputLeftElement={
-                      <Box pl="5">
-                        <MaterialIcons
-                          name="credit-card"
-                          size={23}
-                          color="black"
-                        />
-                      </Box>
-                    }
-                    pb={3}
-                    pt={7}
-                    px={4}
-                    borderColor={errors?.dob ? "red.500" : "#a4ffc8"}
-                    borderRadius="lg"
-                    borderWidth={1}
-                    // "#13B995"
-                    _focus={{
-                      borderColor: `${errors?.dob ? "red.500" : "#13B995"}`,
-                    }}
-                  />
-                </Pressable>
-                {errors?.dob && (
-                  <Text color="red.500" mt={2} ml={5}>
-                    {errors?.dob}
-                  </Text>
-                )}
-              </Box> */}
-
-              {/* phone number */}
-              <InputFields
-                fields={fields}
-                title={"Phone number"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Enter your phone number"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <Text color="emerald.500" mt={2} ml={5} textAlign="center">
-                Number format: 03xxxxxxxxx
-              </Text>
-
-              <SelectField
-                fields={fields}
-                title={"SMS Alert"}
-                name={"branchName"}
-                placeholder={"SMS Alert"}
-                handleChange={handleChange}
-                selectValue={["Yes", "No"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              
-              <InputFields
-                fields={fields}
-                title={"Residence/ Correspondence (Mailing) Address"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Residence/ Correspondence (Mailing) Address"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-<InputFields
-                fields={fields}
-                title={"Permanant Address"}
-                errors={errors}
-                name={"phone"}
-                placeholder={"Permanant Address"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-<SelectField
-                fields={fields}
-                title={"Preferred Postal Communication"}
-                name={"branchName"}
-                placeholder={"Preferred Postal Communication"}
-                handleChange={handleChange}
-                selectValue={["Residence Address", "Permanent Address"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-<Text mt={2} mb={2}>
-Communication via Email
-              </Text>
-              <Switch
-                size="sm"
-                mb={0}  
-                isChecked={communicateViaEmail}
-                onToggle={() => {
-                  console.log(communicateViaEmail);
-                  setcommunicateViaEmail(!communicateViaEmail);
-                }}
-              />
-
             </Box>
           </ScrollView>
         </Box>
@@ -450,7 +302,7 @@ Communication via Email
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Upload Documents")
+                  navigation.navigate("Address")
                 // submitForm()
               }
             >

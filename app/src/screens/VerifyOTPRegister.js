@@ -114,7 +114,7 @@ const VerifyOTPRegister = ({ route, navigation }) => {
                   setShowModal(false);
                   // onPress={() =>
               //   // navigation.goBack()
-                navigation.navigate("Application ID Screen")
+              navigation.navigate("Basic Account Details")
               // }
                 }}
               >
@@ -276,11 +276,11 @@ const VerifyOTPRegister = ({ route, navigation }) => {
               borderColor="white"
               //mb={25}
               // shadow={5}
-              // onPress={() =>
-              //   // navigation.goBack()
-              //   navigation.navigate("Application ID Screen")
-              // }
-              onPress={() => setShowModal(true)}
+              onPress={() =>
+                // navigation.goBack()
+                navigation.navigate("Basic Account Details")
+              }
+              // onPress={() => setShowModal(true)}
             >
               CONFIRM
             </Button>
