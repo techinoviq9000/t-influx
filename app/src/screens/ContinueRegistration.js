@@ -137,15 +137,21 @@ const ContinueRegistration = ({ navigation }) => {
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
+        <Pressable>
+      {({ isHovered, isFocused, isPressed }) => {
+        return (
           <Ionicons
-            name="arrow-back-circle-sharp"
-            size={36}
-            color="white"
-            onPress={
-              () => navigation.goBack()
-              // navigation.navigate("Welcome")
-            }
-          />
+          name="arrow-back-circle-sharp"
+          size={36}
+          color={isFocused ? "#87e3ff" : "white"}
+          onPress={
+            () => navigation.goBack()
+            // navigation.navigate("Welcome")
+          }
+        />
+        )
+      }}
+    </Pressable>
         </Box>
         <Box alignItems="center">
           <StepHeader title="Continue Filling Your Application" />

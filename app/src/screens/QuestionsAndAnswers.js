@@ -149,15 +149,21 @@ const QuestionsAndAnswers = ({ navigation }) => {
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box>
           <Box alignItems="flex-start" px={6} mt={6}>
-            <Ionicons
-              name="arrow-back-circle-sharp"
-              size={36}
-              color="white"
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("Welcome")
-              }
-            />
+          <Pressable>
+      {({ isHovered, isFocused, isPressed }) => {
+        return (
+          <Ionicons
+          name="arrow-back-circle-sharp"
+          size={36}
+          color={isFocused ? "#87e3ff" : "white"}
+          onPress={
+            () => navigation.goBack()
+            // navigation.navigate("Welcome")
+          }
+        />
+        )
+      }}
+    </Pressable>
           </Box>
           <StepHeader title="Questions & Answers" nextTitle="Next: Product Selection" step="4" />
         </Box>

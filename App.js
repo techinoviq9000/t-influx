@@ -68,72 +68,108 @@ const NewCustomerStackScreen = () => (
       headerShown: false,
     }}
   >
-    <NewCustomerStack.Screen name="Get Started" component={GetStarted} />
-    <NewCustomerStack.Screen name="Registration" component={Registration} />
+    <NewCustomerStack.Screen name="Get Started" component={GetStarted}  options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}/>
+    <NewCustomerStack.Screen name="Registration" component={Registration}  options={{
+                ...TransitionPresets.SlideFromRightIOS,
+              }}/>
     <NewCustomerStack.Screen
       name="VerifyOTPRegister"
-      component={VerifyOTPRegister}
+      component={VerifyOTPRegister} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Application ID Screen"
-      component={ApplicationID}
+      component={ApplicationID} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="ExistingCustomer"
-      component={ExistingCustomerStackScreen}
+      component={ExistingCustomerStackScreen} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Basic Account Details"
-      component={BasicAccountDetails}
+      component={BasicAccountDetails} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
         <NewCustomerStack.Screen
       name="Services"
-      component={Services}
+      component={Services} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Address"
-      component={Address}
+      component={Address} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Personal Details"
-      component={PersonalDetails}
+      component={PersonalDetails} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Profession"
-      component={Profession}
+      component={Profession} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
     <NewCustomerStack.Screen
       name="Product Selection"
-      component={ProductSelection}
+      component={ProductSelection} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
      <NewCustomerStack.Screen
       name="Upload Documents"
-      component={UploadDocuments}
+      component={UploadDocuments} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="Begin Document Submission"
-      component={BeginDocumentSubmission}
+      component={BeginDocumentSubmission} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
         <NewCustomerStack.Screen
       name="Foreign Tax"
-      component={ForeignTax}
+      component={ForeignTax} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
      <NewCustomerStack.Screen
       name="Next Of Kin"
-      component={NextOfKin}
+      component={NextOfKin} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="PEP"
-      component={PEP}
+      component={PEP} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
      <NewCustomerStack.Screen
       name="Declaration"
-      component={Declaration}
+      component={Declaration} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
     <NewCustomerStack.Screen
       name="ToC"
-      component={ToC}
+      component={ToC} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
     />
   </NewCustomerStack.Navigator>
 );
