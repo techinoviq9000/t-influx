@@ -7,9 +7,15 @@ const InputFields = ({
   title,
   name,
   placeholder,
-  handleChange,
+  handleChange = null,
   icon,
+  onChangeText,
+  onBlur,
+  value,
+  touched
 }) => {
+  console.log(touched['mobile_number'])
+  console.log(errors['mobile_number'])
   return (
     <Box>
       <Text
@@ -17,7 +23,7 @@ const InputFields = ({
         pl={3}
         position="relative"
         top="25px"
-        color={errors?.[name] ? "red.500" : "#13B995"}
+        color={touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}
         fontSize="xs"
       >
         {title}
@@ -31,12 +37,15 @@ const InputFields = ({
         placeholderTextColor="#ccc"
         value={fields?.name}
         type="text"
-        onChange={(e) => handleChange(name, e)}
+        onChange={onChangeText}
+        onBlur={onBlur}
+        value={value}
+        // onChange={(e) => handleChange(name, e)}
         InputRightElement={
           <>
-            {errors?.[name] ? (
+            {touched?.[name] && errors?.[name] ? (
               <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-            ) : fields?.[`${name}Active`] ? (
+            ) : touched?.[name] ? (
               <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
             ) : (
               <></>
@@ -48,15 +57,15 @@ const InputFields = ({
         // py={4}
         pt={6}
         px={4}
-        borderColor={errors?.[name] ? "red.500" : "#a4ffc8"}
+        borderColor={touched?.[name] && errors?.[name] ? "red.500" : "#a4ffc8"}
         borderRadius="lg"
         borderWidth={1}
         // "#13B995"
         _focus={{
-          borderColor: `${errors?.[name] ? "red.500" : "#13B995"}`,
+          borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}`,
         }}
       />
-      {errors?.[name] && (
+      {touched?.[name] && errors?.[name] && (
         <Text color="red.500" mt={2} ml={5}>
           {errors?.[name]}
         </Text>
