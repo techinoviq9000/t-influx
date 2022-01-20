@@ -30,6 +30,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Collapse } from "native-base";
 import { Formik } from "formik";
 import * as yup from 'yup'
+import { getAuth, RecaptchaVerifier } from "firebase/auth";
 
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
@@ -61,8 +62,26 @@ const GET_APPLICANT = gql`
 `;
 
 const Registration = ({ navigation }) => {
+  const phoneNumber = "03222681575";
+  const appVerifier = window.recaptchaVerifier;
+  const auth = getAuth();
+
   const [getApplicant, { data, loading }] = useLazyQuery(GET_APPLICANT, {
     onCompleted: (data) => {
+      console.log("data")
+      // configureCaptcha();
+    //   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+    // .then((confirmationResult) => {
+    //   // SMS sent. Prompt user to type the code from the message, then sign the
+    //   // user in with confirmationResult.confirm(code).
+    //   window.confirmationResult = confirmationResult;
+    //   console.log("OTP SENT")
+    //   // ...
+    // }).catch((error) => {
+    //   // Error; SMS not sent
+    //   console.log(error)
+    //   // ...
+    // });
       if (data.applicants.length == 0) {
         console.log("No user found");
       } else {
@@ -70,6 +89,29 @@ const Registration = ({ navigation }) => {
       }
     },
   });
+
+  const configureCaptcha = () => {
+    console.log("inside captcha")
+    const auth = getAuth();
+    
+    console.log(auth)
+    window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': (response) => {
+        console.log("resolived")
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        console.log(response)
+        getApplicant({
+          variables: {
+            cnic: values.cnic,
+            email: values.email,
+            mobile_number: values.mobile_number,
+          },
+        });
+      }
+    }, auth);
+
+  }
   let [fontsLoaded] = useFonts({
     Inter_900Black,
   });
@@ -85,7 +127,7 @@ const Registration = ({ navigation }) => {
       .required('cnic is required'),
     mobile_number: yup
     .string()
-    .min(12, ({ min }) => `Mobile must be at least ${min} characters`)
+    .min(11, ({ min }) => `Mobile must be at least ${min} characters`)
     .required('Mobile Number is required'),
   })
 
@@ -93,6 +135,7 @@ const Registration = ({ navigation }) => {
   else
     return (
       <Formik
+      id="sign-in-button"
         initialValues={{ email: "", mobile_number: "", cnic: "" }}
         validationSchema={registerValidationSchema}
         onSubmit={(values) => console.log(values)}
@@ -213,6 +256,7 @@ const Registration = ({ navigation }) => {
                 >
                   I NEED HELP
                 </Button>
+                {/* <Box id="sign-in-button"/> */}
                 <Button
                   flex={1}
                   size="md"
@@ -223,14 +267,8 @@ const Registration = ({ navigation }) => {
                   borderColor="white"
                   onPress={
                     () => {
-                      getApplicant({
-                        variables: {
-                          cnic: values.cnic,
-                          email: values.email,
-                          mobile_number: values.mobile_number,
-                        },
-                      });
                       handleSubmit();
+                      configureCaptcha();
                     }
                     
                     // navigation.goBack()

@@ -3,26 +3,23 @@ import React, { useState } from "react";
 
 const InputFields = ({
   errors,
-  fields,
   title,
   name,
   placeholder,
-  handleChange = null,
   icon,
   onChangeText,
   onBlur,
   value,
   touched
 }) => {
-  console.log(touched['mobile_number'])
-  console.log(errors['mobile_number'])
   return (
-    <Box>
+    <Box width={{md: "400px"}}>
       <Text
         ml={12}
         pl={3}
         position="relative"
         top="25px"
+        zIndex={10}
         color={touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}
         fontSize="xs"
       >
@@ -35,12 +32,10 @@ const InputFields = ({
         placeholder={placeholder}
         color="black"
         placeholderTextColor="#ccc"
-        value={fields?.name}
         type="text"
         onChange={onChangeText}
         onBlur={onBlur}
         value={value}
-        // onChange={(e) => handleChange(name, e)}
         InputRightElement={
           <>
             {touched?.[name] && errors?.[name] ? (
@@ -54,13 +49,11 @@ const InputFields = ({
         }
         InputLeftElement={<Box pl="5">{icon}</Box>}
         pb={2}
-        // py={4}
         pt={6}
         px={4}
         borderColor={touched?.[name] && errors?.[name] ? "red.500" : "#a4ffc8"}
         borderRadius="lg"
         borderWidth={1}
-        // "#13B995"
         _focus={{
           borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}`,
         }}
