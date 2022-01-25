@@ -34,9 +34,9 @@ import VerifyOTPRegister from "./app/src/screens/VerifyOTPRegister";
 import ApplicationID from "./app/src/screens/ApplicationID";
 
 import { ENDPOINT } from "./app/src/config";
-import { NhostApolloProvider } from "@nhost/react-apollo";
-import { NhostAuthProvider } from "@nhost/react-auth";
-import { nhost } from "./app/src/utils/nhost";
+// import { NhostApolloProvider } from "@nhost/react-apollo";
+// import { NhostAuthProvider } from "@nhost/react-auth";
+// import { nhost } from "./app/src/utils/nhost";
 import BasicAccountDetails from "./app/src/screens/BasicAccountDetails";
 import TypeOfAccount from "./app/src/screens/TypeOfAccount";
 import Profession from "./app/src/screens/Profession";
@@ -48,26 +48,28 @@ import ToC from "./app/src/screens/ToC";
 import Services from "./app/src/screens/Services";
 import Address from "./app/src/screens/Address";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+import Scanner from "./app/src/screens/Scanner";
+// import Environment from "./app/src/utils/environment";
+// // TODO: Add SDKs for Firebase products that you want to use
+// // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAiHLDJiK_HqWOkwIYrEK_nGJTFd2tr8sU",
-  authDomain: "t-influx.firebaseapp.com",
-  projectId: "t-influx",
-  storageBucket: "t-influx.appspot.com",
-  messagingSenderId: "475280789142",
-  appId: "1:475280789142:web:bbf1107f5dd5a533c27cb7",
-  measurementId: "G-ZCQLXY5PTN"
-};
+// // Your web app's Firebase configuration
+// // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// const firebaseConfig = {
+//   apiKey: Environment["FIREBASE_API_KEY"],
+//   authDomain: Environment["FIREBASE_AUTH_DOMAIN"],
+//   projectId: Environment["FIREBASE_PROJECT_ID"],
+//   storageBucket: Environment["FIREBASE_STORAGE_BUCKET"],
+//   messagingSenderId: Environment["FIREBASE_MESSAGING_SENDER_ID"],
+//   appId: "1:475280789142:web:bbf1107f5dd5a533c27cb7",
+//   measurementId: "G-ZCQLXY5PTN"
+// };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
 const Stack = createStackNavigator();
 
@@ -84,7 +86,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="Get Started"
+    initialRouteName="Scanner"
     screenOptions={{
       headerShown: false,
     }}
@@ -98,6 +100,12 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="VerifyOTPRegister"
       component={VerifyOTPRegister} options={{
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    />
+    <NewCustomerStack.Screen
+      name="Scanner"
+      component={Scanner} options={{
         ...TransitionPresets.SlideFromRightIOS,
       }}
     />
@@ -245,8 +253,8 @@ const ExistingCustomerStackScreen = () => (
 
 export default function App() {
   return (
-    <NhostAuthProvider nhost={nhost}>
-    <NhostApolloProvider nhost={nhost}>
+    // <NhostAuthProvider nhost={nhost}>
+    // <NhostApolloProvider nhost={nhost}>
     <NativeBaseProvider>
       <Background>
         <NavigationContainer theme={MyTheme}>
@@ -281,8 +289,8 @@ export default function App() {
         </NavigationContainer>
       </Background>
     </NativeBaseProvider>
-    </NhostApolloProvider>
-    </NhostAuthProvider>
+    // </NhostApolloProvider>
+    // </NhostAuthProvider>
   );
 }
 

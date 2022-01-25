@@ -1,0 +1,7 @@
+export const FIREBASE_API_KEY = "AIzaSyAiHLDJiK_HqWOkwIYrEK_nGJTFd2tr8sU"
+export const FIREBASE_DATABASE_URL = ""
+export const FIREBASE_PROJECT_ID = "t-influx"
+export const FIREBASE_MESSAGING_SENDER_ID = "475280789142"
+export const FIREBASE_AUTH_DOMAIN = "t-influx.firebaseapp.com"
+export const FIREBASE_STORAGE_BUCKET = "t-influx.appspot.com"
+export const GOOGLE_CLOUD_VISION_API_KEY= "IzaSyB_1Ih40EcsKzJyePG8nqVYIQjJjvIdPkE"
