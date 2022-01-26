@@ -82,11 +82,11 @@ const Registration = ({ navigation }) => {
     //   console.log(error)
     //   // ...
     // });
-      if (data.applicants.length == 0) {
-        console.log("No user found");
-      } else {
+      // if (data.applicants.length == 0) {
+        // console.log("No user found");
+      // } else {
         navigation.navigate("VerifyOTPRegister", { fromRegister: true });
-      }
+      // }
     },
   });
 
@@ -136,7 +136,7 @@ const Registration = ({ navigation }) => {
     return (
       <Formik
       id="sign-in-button"
-        initialValues={{ email: "", mobile_number: "", cnic: "" }}
+        initialValues={{ email: "example@gmail.com", mobile_number: "03332222222", cnic: "423016111121119" }}
         validationSchema={registerValidationSchema}
         onSubmit={(values) => console.log(values)}
       >
@@ -267,8 +267,16 @@ const Registration = ({ navigation }) => {
                   borderColor="white"
                   onPress={
                     () => {
+                      getApplicant({
+                        variables: {
+                          cnic: values.cnic,
+                          email: values.email,
+                          mobile_number: values.mobile_number,
+                        },
+                      });
                       handleSubmit();
-                      configureCaptcha();
+                      // configureCaptcha();
+                      
                     }
                     
                     // navigation.goBack()

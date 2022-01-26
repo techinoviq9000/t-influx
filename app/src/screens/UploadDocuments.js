@@ -59,7 +59,7 @@ const UploadDocuments = ({ navigation }) => {
         <Box alignItems="center">
           <StepHeader
             title="Upload Documents"
-            step="5"
+            step="4"
           />
         </Box>
         <Box

@@ -15,6 +15,7 @@ import {
   CloseIcon,
   FormControl,
   Switch,
+  Divider,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -208,7 +209,7 @@ const PersonalDetails = ({ navigation }) => {
         <Box alignItems="center">
           <StepHeader
             title="Personal Details"
-            nextTitle="Next: Address"
+            nextTitle="Next: Upload Documents"
             step="3"
           />
         </Box>
@@ -270,6 +271,37 @@ const PersonalDetails = ({ navigation }) => {
                 selectValue={["Area Names"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
+              <Divider mt="4" mb="2" bgColor="#c7c7c7" />
+              <Text fontSize="2xl" fontWeight="bold">Address</Text>
+              <InputFields
+                  fields={fields}
+                  title={"Residence/ Correspondence (Mailing) Address"}
+                  errors={errors}
+                  name={"phone"}
+                  placeholder={"Residence/ Correspondence (Mailing) Address"}
+                  handleChange={handleChange}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
+  
+                <InputFields
+                  fields={fields}
+                  title={"Permanant Address"}
+                  errors={errors}
+                  name={"phone"}
+                  placeholder={"Permanant Address"}
+                  handleChange={handleChange}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
+  
+                <SelectField
+                  fields={fields}
+                  title={"Preferred Postal Communication"}
+                  name={"branchName"}
+                  placeholder={"Preferred Postal Communication"}
+                  handleChange={handleChange}
+                  selectValue={["Residence Address", "Permanent Address"]}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
             </Box>
           </ScrollView>
         </Box>
@@ -308,7 +340,7 @@ const PersonalDetails = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Address")
+                  navigation.navigate("Upload Documents")
                 // submitForm()
               }
             >

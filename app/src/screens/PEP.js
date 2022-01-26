@@ -15,6 +15,7 @@ import {
   CloseIcon,
   FormControl,
   Switch,
+  Collapse,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -47,7 +48,7 @@ const PEP = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-
+  const [collapsed, setCollapsed] = useState(false);
   const [fields, setFields] = useState({
     firstName: "",
     firstNameActive: false,
@@ -191,21 +192,21 @@ const PEP = ({ navigation }) => {
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
-        <Pressable>
-      {({ isHovered, isFocused, isPressed }) => {
-        return (
-          <Ionicons
-          name="arrow-back-circle-sharp"
-          size={36}
-          color={isFocused ? "#87e3ff" : "white"}
-          onPress={
-            () => navigation.goBack()
-            // navigation.navigate("Welcome")
-          }
-        />
-        )
-      }}
-    </Pressable>
+          <Pressable>
+            {({ isHovered, isFocused, isPressed }) => {
+              return (
+                <Ionicons
+                  name="arrow-back-circle-sharp"
+                  size={36}
+                  color={isFocused ? "#87e3ff" : "white"}
+                  onPress={
+                    () => navigation.goBack()
+                    // navigation.navigate("Welcome")
+                  }
+                />
+              );
+            }}
+          </Pressable>
         </Box>
         <Box alignItems="center">
           <StepHeader
@@ -231,42 +232,13 @@ const PEP = ({ navigation }) => {
             }}
           >
             <Box>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                A Politcally Exposed Persons (PEP) means:
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                1) Government Official in Grade 21 or above; OR Heads OR Senior
-                Executive of the state owned corporations / departments /
-                autonomous bodies.
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                2) Judge of a High Court, Supreme Court or any other equivalent
-                court OR Maj. General or equivalent in Army or equivalent ranks
-                in other armed forces.
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                3) Members of National/Provincial Assemblies & Senate, Head of
-                State or of Government, Provincial Governors, Ministers, Senior
-                Politicians, Important Political Party Officials
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                4) Linked to the Beneficial ownership of a legal person / legal
-                arrangement which is known to have been set up for the benefit
-                of a PEP
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                5) Joint beneficial ownership of a legal person / legal
-                arrangement or any other close business relations with a PEP
-              </Text>
-
               <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
                 Please select YES if you hold any of the following position(s)
                 OR if you are related (Spouse, Parent, Siblings, children, Grand
                 Parents, grandchildren, in-laws or any other person closely
                 associated) to someone holding any of the following position(s):
               </Text>
-
-                <HStack alignItems="center" space={2}>
+              <HStack alignItems="center" space={2}>
                 <Text color={pep ? "black" : "#13B995"}>No</Text>
                 <Switch
                   size="sm"
@@ -306,6 +278,46 @@ const PEP = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
+              <Stack direction="row" width={{base: "100%", md: "md"}} mt={4} alignItems="center" flex={1} >
+                <Text flex={1} >Click here to view more details about PEP</Text>
+                <Box>
+                  <Ionicons
+                    name={`chevron-${collapsed ? "up" : "down"}-circle-outline`}
+                    size={24}
+                    color="#13b995"
+                    onPress={() => setCollapsed(!collapsed)}
+                  />
+                </Box>
+              </Stack>
+              <Collapse isOpen={collapsed}>
+                <Text pl={3} mt={2} color={"#13B995"} zIndex={10} pb={2}>
+                  A Politcally Exposed Persons (PEP) means:
+                </Text>
+                <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                  1) Government Official in Grade 21 or above; OR Heads OR
+                  Senior Executive of the state owned corporations / departments
+                  / autonomous bodies.
+                </Text>
+                <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                  2) Judge of a High Court, Supreme Court or any other
+                  equivalent court OR Maj. General or equivalent in Army or
+                  equivalent ranks in other armed forces.
+                </Text>
+                <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                  3) Members of National/Provincial Assemblies & Senate, Head of
+                  State or of Government, Provincial Governors, Ministers,
+                  Senior Politicians, Important Political Party Officials
+                </Text>
+                <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                  4) Linked to the Beneficial ownership of a legal person /
+                  legal arrangement which is known to have been set up for the
+                  benefit of a PEP
+                </Text>
+                <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                  5) Joint beneficial ownership of a legal person / legal
+                  arrangement or any other close business relations with a PEP
+                </Text>
+              </Collapse>
             </Box>
           </ScrollView>
         </Box>

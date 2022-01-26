@@ -16,6 +16,7 @@ import {
   FormControl,
   Switch,
   Radio,
+  Collapse,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -47,6 +48,7 @@ const Declaration = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const [fields, setFields] = useState({
     firstName: "",
@@ -231,32 +233,7 @@ const Declaration = ({ navigation }) => {
             }}
           >
             <Box>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                I / We, the owner(s) of the account, hereby declare that:
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                a. My / our declaration relates to the account as well as to all
-                other accounts maintained with T-Influx in my/our name(s)
-                and which are linked to this account and also to accounts that
-                will be opened in future under my/our name(s) and which will be
-                linked to this account.
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                b. My / our declaration applies only to the accounts which will
-                have identical ownerships to that of the account mentioned in
-                this form.
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                c. There is/are NO beneficial owner(s) of the account apart from
-                the owner(s) of the account (i.e., accounts are operated in
-                my/our behalf and not on behalf of a third party).
-              </Text>
-              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
-                d. There is/are a beneficial owner(s) of the account apart from
-                the owner(s) of the account (i.e., accounts are operated on
-                behalf of a third party whose details are as follows)
-              </Text>
-
+            
               <Radio.Group
                 name="myRadioGroup"
                 accessibilityLabel="favorite number"
@@ -305,6 +282,19 @@ const Declaration = ({ navigation }) => {
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
+           
+              <Stack direction="row" width={{base: "100%", md: "md"}} mt={4} alignItems="center" flex={1} >
+                <Text flex={1} >Please read the Terms & Conditions</Text>
+                <Box>
+                  <Ionicons
+                    name={`chevron-${collapsed ? "up" : "down"}-circle-outline`}
+                    size={24}
+                    color="#13b995"
+                    onPress={() => setCollapsed(!collapsed)}
+                  />
+                </Box>
+              </Stack>
+              <Collapse isOpen={collapsed}>
               <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
                 I/We undertake to give T-Influx notice of any change in what has
                 been mentioned above. I/We am/are aware that submitting false
@@ -314,6 +304,33 @@ const Declaration = ({ navigation }) => {
                 made constitutes a violation of applicable regulations and I/we
                 shall solely be responsible for any and all consequences thereof
               </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                I / We, the owner(s) of the account, hereby declare that:
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                a. My / our declaration relates to the account as well as to all
+                other accounts maintained with T-Influx in my/our name(s)
+                and which are linked to this account and also to accounts that
+                will be opened in future under my/our name(s) and which will be
+                linked to this account.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                b. My / our declaration applies only to the accounts which will
+                have identical ownerships to that of the account mentioned in
+                this form.
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                c. There is/are NO beneficial owner(s) of the account apart from
+                the owner(s) of the account (i.e., accounts are operated in
+                my/our behalf and not on behalf of a third party).
+              </Text>
+              <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
+                d. There is/are a beneficial owner(s) of the account apart from
+                the owner(s) of the account (i.e., accounts are operated on
+                behalf of a third party whose details are as follows)
+              </Text>
+
+              </Collapse>
             </Box>
           </ScrollView>
         </Box>

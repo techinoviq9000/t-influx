@@ -40,7 +40,7 @@ const StepHeader = ({title, nextTitle, step}) => {
       height="20"
       width="20"
     >
-      <Text color="white">{step} of 10</Text>
+      <Text color="white">{step} of 9</Text>
     </Center>}
   </Stack>
   );
