@@ -30,7 +30,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Collapse } from "native-base";
 import { Formik } from "formik";
 import * as yup from 'yup'
-import { getAuth, RecaptchaVerifier } from "firebase/auth";
+// import { getAuth, RecaptchaVerifier } from "firebase/auth";
 
 //import for the collapsible/Expandable view
 import Collapsible from "react-native-collapsible";
