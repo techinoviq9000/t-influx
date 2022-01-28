@@ -37,38 +37,38 @@ import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+// import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import InputFields from "../CustomComponents/InputFields";
 
-const GET_APPLICANT = gql`
-  query MyQuery(
-    $email: String
-    $mobile_number: String
-    $cnic: String
-  ) {
-    applicants(
-      where: {
-        email: { _eq: $email }
-        mobile_number: { _eq: $mobile_number }
-        cnic: { _eq: $cnic }
-      }
-    ) {
-      cnic
-      email
-      id
-      mobile_number
-    }
-  }
-`;
+// const GET_APPLICANT = gql`
+//   query MyQuery(
+//     $email: String
+//     $mobile_number: String
+//     $cnic: String
+//   ) {
+//     applicants(
+//       where: {
+//         email: { _eq: $email }
+//         mobile_number: { _eq: $mobile_number }
+//         cnic: { _eq: $cnic }
+//       }
+//     ) {
+//       cnic
+//       email
+//       id
+//       mobile_number
+//     }
+//   }
+// `;
 
 const Registration = ({ navigation }) => {
   const phoneNumber = "03222681575";
   const appVerifier = window.recaptchaVerifier;
   const auth = getAuth();
 
-  const [getApplicant, { data, loading }] = useLazyQuery(GET_APPLICANT, {
-    onCompleted: (data) => {
-      console.log("data")
+  // const [getApplicant, { data, loading }] = useLazyQuery(GET_APPLICANT, {
+    // onCompleted: (data) => {
+      // console.log("data")
       // configureCaptcha();
     //   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
     // .then((confirmationResult) => {
@@ -85,10 +85,10 @@ const Registration = ({ navigation }) => {
       // if (data.applicants.length == 0) {
         // console.log("No user found");
       // } else {
-        navigation.navigate("VerifyOTPRegister", { fromRegister: true });
+        // navigation.navigate("VerifyOTPRegister", { fromRegister: true });
       // }
-    },
-  });
+    // },
+  // });
 
   const configureCaptcha = () => {
     console.log("inside captcha")
@@ -267,13 +267,13 @@ const Registration = ({ navigation }) => {
                   borderColor="white"
                   onPress={
                     () => {
-                      getApplicant({
-                        variables: {
-                          cnic: values.cnic,
-                          email: values.email,
-                          mobile_number: values.mobile_number,
-                        },
-                      });
+                      // getApplicant({
+                      //   variables: {
+                      //     cnic: values.cnic,
+                      //     email: values.email,
+                      //     mobile_number: values.mobile_number,
+                      //   },
+                      // });
                       handleSubmit();
                       // configureCaptcha();
                       

@@ -3,25 +3,25 @@ import React from "react";
 import * as Animatable from "react-native-animatable";
 import { Camera } from "expo-camera";
 
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+// import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { ImageBackground, View } from "react-native";
 
-const GET_TODOS = gql`
-  query MyQuery {
-    todo {
-      id
-      created_at
-      name
-      is_completed
-    }
-  }
-`;
+// const GET_TODOS = gql`
+//   query MyQuery {
+//     todo {
+//       id
+//       created_at
+//       name
+//       is_completed
+//     }
+//   }
+// `;
 
 const AnimatableBox = Animatable.createAnimatableComponent(Box);
 
 const WelcomeScreen = ({ navigation }) => {
   let camera;
-  const { data, loading } = useQuery(GET_TODOS);
+  // const { data, loading } = useQuery(GET_TODOS);
   const [startCamera, setStartCamera] = React.useState(false);
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const [capturedImage, setCapturedImage] = React.useState(null);

@@ -29,9 +29,12 @@ import {
   ScrollView,
   SafeAreaViewBase,
   Platform,
+  Text
 } from "react-native";
 import Clipboard from '@react-native-community/clipboard';
 import AppLoading from "expo-app-loading";
+import { Camera } from "expo-camera";
+
 import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
 import { Ionicons } from "@expo/vector-icons";
 import {
@@ -44,12 +47,15 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
-import { ImagePicker, Permissions } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
 // import { nanoid } from 'nanoid'
 // import firebase from '../utils/firebase';
 import Environment from "../utils/environment";
 
 const Scanner = ({ navigation }) => {
+	const [meow, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+	console.log(Environment["GOOGLE_CLOUD_VISION_API_KEY"])
+// console.log(meow)
 
   const [state, setState] = useState({
     image: null,
@@ -84,13 +90,15 @@ const Scanner = ({ navigation }) => {
 					<ActivityIndicator color="#fff" animating size="large" />
 				</View>
 			);
+		} else {
+			return <></>
 		}
 	};
 
 	const _maybeRenderImage = () => {
 		let { image, googleResponse } = state;
 		if (!image) {
-			return;
+			return <></>
 		}
 
 		return (
@@ -104,7 +112,7 @@ const Scanner = ({ navigation }) => {
 			>
 				<Button
 					style={{ marginBottom: 10 }}
-					onPress={() => submitToGoogle()}
+					onPress={submitToGoogle}
 					title="Analyze!"
 				/>
 
@@ -166,17 +174,21 @@ const Scanner = ({ navigation }) => {
 			allowsEditing: true,
 			aspect: [4, 3]
 		});
-
 		_handleImagePicked(pickerResult);
+		
 	};
 
 	const _pickImage = async () => {
-		let pickerResult = await ImagePicker.launchImageLibraryAsync({
-			allowsEditing: true,
-			aspect: [4, 3]
-		});
+		console.log("meow")
+		let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-		_handleImagePicked(pickerResult);
+		_handleImagePicked(result);
+		// console.log(result)
 	};
 
 	const _handleImagePicked = async pickerResult => {
@@ -185,13 +197,14 @@ const Scanner = ({ navigation }) => {
 
 			if (!pickerResult.cancelled) {
 				// uploadUrl = await uploadImageAsync(pickerResult.uri);
-				setState({ ...state,  image: "abc" });
+				setState({ ...state,  image: pickerResult.uri, uploading: false });
 			}
 		} catch (e) {
 			console.log(e);
 			alert('Upload failed, sorry :(');
 		} finally {
-			setState({ ...state,  uploading: false });
+			console.log(state)
+			// setState({ ...state,  uploading: false });
 		}
 	};
 
@@ -246,8 +259,11 @@ const Scanner = ({ navigation }) => {
 	};
 
   useEffect(async () => {
-    await Permissions.askAsync(Permissions.CAMERA_ROLL);
-		await Permissions.askAsync(Permissions.CAMERA);
+    // await Permissions.askAsync(Permissions.CAMERA_ROLL);
+		// await Permissions.askAsync(Permissions.CAMERA);
+		requestPermission();
+		const { status } = await Camera.requestCameraPermissionsAsync();
+		// console.log(status)
   }, []);
   
 
@@ -265,7 +281,7 @@ const Scanner = ({ navigation }) => {
 
 					<View style={styles.helpContainer}>
 						<Button
-							onPress={ () => _pickImage}
+							onPress={_pickImage}
 							title="Pick an image from camera roll"
 						/>
 
@@ -278,8 +294,8 @@ const Scanner = ({ navigation }) => {
 								renderItem={({ item }) => <Text>Item: {item.description}</Text>}
 							/>
 						)}
-						{_maybeRenderImage()}
-						{_maybeRenderUploadingOverlay()}
+						<_maybeRenderImage />
+						<_maybeRenderUploadingOverlay />
 					</View>
 				</ScrollView>
 			</View>
