@@ -12,6 +12,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPresets,
+  CardStyleInterpolators
 } from "@react-navigation/stack";
 
 import React from "react";
@@ -34,9 +35,9 @@ import VerifyOTPRegister from "./app/src/screens/VerifyOTPRegister";
 import ApplicationID from "./app/src/screens/ApplicationID";
 
 import { ENDPOINT } from "./app/src/config";
-// import { NhostApolloProvider } from "@nhost/react-apollo";
+import { NhostApolloProvider } from "@nhost/react-apollo";
 // import { NhostAuthProvider } from "@nhost/react-auth";
-// import { nhost } from "./app/src/utils/nhost";
+import { nhost } from "./app/src/utils/nhost";
 import BasicAccountDetails from "./app/src/screens/BasicAccountDetails";
 import TypeOfAccount from "./app/src/screens/TypeOfAccount";
 import Profession from "./app/src/screens/Profession";
@@ -92,112 +93,114 @@ const NewCustomerStackScreen = () => (
     }}
   >
     <NewCustomerStack.Screen name="Get Started" component={GetStarted}  options={{
-                ...TransitionPresets.SlideFromRightIOS,
+                //...TransitionPresets.SlideFromRightIOS,
               }}/>
     <NewCustomerStack.Screen name="Registration" component={Registration}  options={{
-                ...TransitionPresets.SlideFromRightIOS,
+                ...TransitionPresets.FadeFromBottomAndroid,
               }}/>
     <NewCustomerStack.Screen
       name="VerifyOTPRegister"
       component={VerifyOTPRegister} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        cardOverlayEnabled: false,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        // ...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Scanner"
       component={Scanner} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Application ID Screen"
       component={ApplicationID} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="ExistingCustomer"
       component={ExistingCustomerStackScreen} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Basic Account Details"
       component={BasicAccountDetails} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
         <NewCustomerStack.Screen
       name="Services"
       component={Services} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Address"
       component={Address} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Personal Details"
       component={PersonalDetails} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Profession"
       component={Profession} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
     <NewCustomerStack.Screen
       name="Product Selection"
       component={ProductSelection} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
      <NewCustomerStack.Screen
       name="Upload Documents"
       component={UploadDocuments} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="Begin Document Submission"
       component={BeginDocumentSubmission} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
         <NewCustomerStack.Screen
       name="Foreign Tax"
       component={ForeignTax} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
      <NewCustomerStack.Screen
       name="Next Of Kin"
       component={NextOfKin} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="PEP"
       component={PEP} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
      <NewCustomerStack.Screen
       name="Declaration"
       component={Declaration} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <NewCustomerStack.Screen
       name="ToC"
       component={ToC} options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
   </NewCustomerStack.Navigator>
@@ -214,21 +217,21 @@ const ExistingCustomerStackScreen = () => (
       name="Login"
       component={Login}
       options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <ExistingCustomerStack.Screen
       name="VerifyOTP"
       component={VerifyOTP}
       options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <ExistingCustomerStack.Screen
       name="Continue Application"
       component={ContinueRegistration}
       options={{
-        ...TransitionPresets.SlideFromRightIOS,
+        //...TransitionPresets.SlideFromRightIOS,
       }}
     />
     <ExistingCustomerStack.Screen
@@ -268,14 +271,14 @@ export default function App() {
               name="Welcome"
               component={WelcomeScreen}
               options={{
-                ...TransitionPresets.SlideFromRightIOS,
+                //...TransitionPresets.SlideFromRightIOS,
               }}
             />
             <Stack.Screen
               name="RegisterRoute"
               component={NewCustomerStackScreen}
               options={{
-                ...TransitionPresets.SlideFromRightIOS,
+                //...TransitionPresets.SlideFromRightIOS,
               }}
             />
             <Stack.Screen
