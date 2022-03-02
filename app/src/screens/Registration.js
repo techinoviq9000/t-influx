@@ -1,40 +1,17 @@
 import {
   Box,
   Button,
-  CloseIcon,
-  HStack,
-  Image,
-  Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
-  Input,
-  CheckIcon,
   Pressable,
 } from "native-base";
 import React, { useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  SafeAreaViewBase,
-} from "react-native";
-import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Collapse } from "native-base";
 import { Formik } from "formik";
 import * as yup from 'yup'
-// import { getAuth, RecaptchaVerifier } from "firebase/auth";
 
-//import for the collapsible/Expandable view
-import Collapsible from "react-native-collapsible";
-import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 // import { gql, useQuery, useLazyQuery } from "@apollo/client";
@@ -62,59 +39,6 @@ import InputFields from "../CustomComponents/InputFields";
 // `;
 
 const Registration = ({ navigation }) => {
-  const phoneNumber = "03222681575";
-  const appVerifier = window.recaptchaVerifier;
-  const auth = getAuth();
-
-  // const [getApplicant, { data, loading }] = useLazyQuery(GET_APPLICANT, {
-    // onCompleted: (data) => {
-      // console.log("data")
-      // configureCaptcha();
-    //   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-    // .then((confirmationResult) => {
-    //   // SMS sent. Prompt user to type the code from the message, then sign the
-    //   // user in with confirmationResult.confirm(code).
-    //   window.confirmationResult = confirmationResult;
-    //   console.log("OTP SENT")
-    //   // ...
-    // }).catch((error) => {
-    //   // Error; SMS not sent
-    //   console.log(error)
-    //   // ...
-    // });
-      // if (data.applicants.length == 0) {
-        // console.log("No user found");
-      // } else {
-        // navigation.navigate("VerifyOTPRegister", { fromRegister: true });
-      // }
-    // },
-  // });
-
-  const configureCaptcha = () => {
-    console.log("inside captcha")
-    const auth = getAuth();
-    
-    console.log(auth)
-    window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
-      'size': 'invisible',
-      'callback': (response) => {
-        console.log("resolived")
-        // reCAPTCHA solved, allow signInWithPhoneNumber.
-        console.log(response)
-        getApplicant({
-          variables: {
-            cnic: values.cnic,
-            email: values.email,
-            mobile_number: values.mobile_number,
-          },
-        });
-      }
-    }, auth);
-
-  }
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
 
   const registerValidationSchema = yup.object().shape({
     email: yup
@@ -131,14 +55,14 @@ const Registration = ({ navigation }) => {
     .required('Mobile Number is required'),
   })
 
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
+  
     return (
       <Formik
       id="sign-in-button"
         initialValues={{ email: "example@gmail.com", mobile_number: "03332222222", cnic: "423016111121119" }}
         validationSchema={registerValidationSchema}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => navigation.navigate("VerifyOTPRegister", { fromRegister: true })}
       >
         {({ handleChange, handleBlur, handleSubmit, values, errors, touched, isValid }) => (
           <Box flex={1} minHeight="100%" safeAreaTop={5}>
@@ -161,6 +85,7 @@ const Registration = ({ navigation }) => {
             </Box>
             <Box alignItems="center">
               <StepHeader title="Registration" />
+              {/* <Text>ASD</Text> */}
             </Box>
             <Box
               backgroundColor="white"
@@ -180,7 +105,6 @@ const Registration = ({ navigation }) => {
                 <Box alignItems={{ md: "center" }}>
                   {/* Mobile Number */}
                   <InputFields
-                    // fields={fields}
                     title={"Mobile Number"}
                     name={"mobile_number"}
                     errors={errors}
@@ -197,7 +121,6 @@ const Registration = ({ navigation }) => {
 
                   {/* CNIC NUMBER */}
                   <InputFields
-                    // fields={fields}
                     title={"CNIC Number"}
                     errors={errors}
                     touched={touched}
@@ -217,7 +140,6 @@ const Registration = ({ navigation }) => {
 
                   {/* Email  */}
                   <InputFields
-                    // fields={fields}
                     title={"Email ID"}
                     errors={errors}
                     touched={touched}
@@ -274,9 +196,7 @@ const Registration = ({ navigation }) => {
                       //     mobile_number: values.mobile_number,
                       //   },
                       // });
-                      handleSubmit();
-                      // configureCaptcha();
-                      
+                      handleSubmit();                      
                     }
                     
                     // navigation.goBack()
@@ -295,10 +215,5 @@ const Registration = ({ navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
 
 export default Registration;

@@ -10,6 +10,7 @@ import {
   Wrap,
   Stack,
   Center,
+  Pressable,
 } from "native-base";
 import React, { useState } from "react";
 import {
@@ -19,7 +20,7 @@ import {
   SafeAreaViewBase,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Collapse } from "native-base";
@@ -30,9 +31,7 @@ import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const ContinueRegistration = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
 
   const [list, setList] = useState([
     {
@@ -132,8 +131,7 @@ const ContinueRegistration = ({ navigation }) => {
       </Stack>
     );
   };
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>

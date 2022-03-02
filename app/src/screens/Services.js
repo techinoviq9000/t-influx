@@ -1,198 +1,59 @@
 import {
   Box,
   Button,
-  CheckIcon,
   HStack,
-  Image,
   Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
-  Input,
   Pressable,
-  CloseIcon,
-  FormControl,
   Switch,
 } from "native-base";
 import React, { useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  SafeAreaViewBase,
-  Platform,
-} from "react-native";
-import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
+import { Formik } from "formik";
+import * as yup from 'yup'
 import { Ionicons } from "@expo/vector-icons";
 import {
-  MaterialCommunityIcons,
   MaterialIcons,
-  FontAwesome,
-  Feather,
 } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
 const Services = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
   const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
   const [smsAlert, setsmsAlert] = useState(false);
   const [chequeBookShow, setChequeBookShow] = useState(false);
   const [atmCardShow, setAtmCardShow] = useState(false);
   const [zakatExemption, setzakatExemption] = useState(false);
+  
+  const registerValidationSchema = yup.object().shape({
+    atmCard: yup
+      .string()
+      .required('Please Select'),
+    chequeBook: yup
+    .string()
+    .required('Please Select'),
+  })
 
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
-
-  const [fields, setFields] = useState({
-    firstName: "",
-    firstNameActive: false,
-    lastName: "",
-    lastNameActive: false,
-    email: "",
-    emailActive: false,
-    dob: "12/09/2021",
-    dobActive: false,
-    phone: "",
-    phoneActive: false,
-  });
-
-  const addDate = (e, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      "/" +
-      (tempDate.getMonth() + 1) +
-      "/" +
-      tempDate.getFullYear();
-    let fieldsCopy = fields;
-    fieldsCopy.dob = fDate;
-    fieldsCopy.dobActive = true;
-    setFields({ ...fieldsCopy });
-    handleValidation();
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const [errors, setErrors] = useState({});
-
-  const handleValidation = () => {
-    //First Name
-    if (fields.firstNameActive) {
-      if (fields.firstName === "") {
-        errors.firstName = "Cannot be empty";
-      } else if (!fields.firstName.match(/^[a-zA-Z\s]+$/)) {
-        errors.firstName = "Only letters are allowed";
-      } else {
-        errors.firstName = null;
-      }
-    }
-
-    //Last Name
-    if (fields.lastNameActive) {
-      if (fields.lastName === "") {
-        errors.lastName = "Cannot be empty";
-      } else if (!fields.lastName.match(/^[a-zA-Z\s]+$/)) {
-        errors.lastName = "Only letters are allowed";
-      } else {
-        errors.lastName = null;
-      }
-    }
-
-    //DOB
-    if (fields.dobActive) {
-      if (fields.dob === "") {
-        errors.dob = "Cannot be empty";
-      } else {
-        errors.dob = null;
-      }
-    }
-
-    //phone
-    if (fields.phoneActive) {
-      if (fields.phone === "") {
-        errors.phone = "Cannot be empty";
-      } else if (!fields.phone.match(/^[0-9]*$/)) {
-        errors.phone = "Only numbers";
-      } else {
-        errors.phone = null;
-      }
-    }
-
-    //Email
-    if (fields.emailActive) {
-      if (fields.email === "") {
-        errors.email = "Cannot be empty";
-      } else {
-        let lastAtPos = fields.email.lastIndexOf("@");
-        let lastDotPos = fields.email.lastIndexOf(".");
-
-        if (
-          !(
-            lastAtPos < lastDotPos &&
-            lastAtPos > 0 &&
-            fields.email.indexOf("@@") == -1 &&
-            lastDotPos > 2 &&
-            fields.email.length - lastDotPos > 2
-          )
-        ) {
-          errors.email = "Email is not valid";
-        } else {
-          errors.email = null;
-        }
-      }
-    }
-    setErrors({ ...errors });
-    let formIsValid = false;
-    for (var prop in errors) {
-      if (errors[prop] != null) {
-        formIsValid = false;
-        break;
-      } else {
-        formIsValid = true;
-      }
-    }
-    return formIsValid;
-  };
-
-  const submitForm = () => {
-    fields.firstNameActive = true;
-    fields.lastNameActive = true;
-    fields.emailActive = true;
-    fields.dobActive = true;
-    fields.phoneActive = true;
-    if (handleValidation()) {
-      alert("Form submitted");
-    } else {
-      alert("Make sure you have filled the form correctly!");
-    }
-  };
-
-  const handleChange = (field, e) => {
-    let fieldsCopy = fields;
-    fieldsCopy[field] = e.nativeEvent.text;
-    fieldsCopy[`${field}Active`] = true;
-    setFields({ ...fieldsCopy });
-    handleValidation();
-  };
-
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
     return (
+      <Formik
+      id="sign-in-button"
+      initialValues={{ atmCard: "", chequeBook: "No Chequebook"}}
+      validationSchema={registerValidationSchema}
+      onSubmit={(values) => navigation.navigate("Personal Details")}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        isValid,
+      }) => (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
         <Pressable>
@@ -235,7 +96,7 @@ const Services = ({ navigation }) => {
             }}
           >
             <Box>
-              <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
+              <Text mt={2} mb={1} fontSize={"sm"} fontWeight={"medium"}>
                 Cheque Book Required?
               </Text>
               <HStack alignItems="center" space={2}>
@@ -246,17 +107,19 @@ const Services = ({ navigation }) => {
                   isChecked={chequeBookShow}
                   onToggle={() => {
                     setChequeBookShow(!chequeBookShow);
+                    if(chequeBookShow) handleChange("chequeBook")(null)
                   }}
                 />
                 <Text color={chequeBookShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
               <SelectField
                 isDisabled={!chequeBookShow}
-                fields={fields}
                 title={"Cheque Book Leafs"}
-                name={"purposeOfAcc"}
+                name={"chequeBook"}
+                handleChange={handleChange("chequeBook")}
+                errors={errors}
+                touched={touched}
                 placeholder={"Select Cheque Book Leafs"}
-                handleChange={handleChange}
                 selectValue={["25", "50", "100"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
@@ -278,11 +141,12 @@ const Services = ({ navigation }) => {
               </HStack>
               <SelectField
                 isDisabled={!atmCardShow}
-                fields={fields}
                 title={"ATM / Debit Card"}
-                name={"purposeOfAcc"}
+                name={"atmCard"}
                 placeholder={"Select ATM / Debit Card"}
-                handleChange={handleChange}
+                handleChange={handleChange("atmCard")}
+                errors={errors}
+                touched={touched}
                 selectValue={["Master Card", "Paypak"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
@@ -359,7 +223,7 @@ const Services = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                handleSubmit()
               }
             >
               I NEED HELP
@@ -376,9 +240,8 @@ const Services = ({ navigation }) => {
               // shadow={5}
               onPress={
                 () =>
-                  // navigation.goBack()
-                  navigation.navigate("Personal Details")
-                // submitForm()
+
+                  handleSubmit()
               }
             >
               CONFIRM
@@ -386,13 +249,9 @@ const Services = ({ navigation }) => {
           </Stack>
         </Box>
       </Box>
-    );
+     )}
+     </Formik>
+   );
 };
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
 
 export default Services;

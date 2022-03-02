@@ -25,7 +25,7 @@ import {
     Platform,
   } from "react-native";
   import AppLoading from "expo-app-loading";
-  import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+  
   import { Ionicons } from "@expo/vector-icons";
   import {
     MaterialCommunityIcons,
@@ -39,9 +39,7 @@ import {
   import SelectField from "../CustomComponents/SelectField";
   
   const Address = ({ navigation }) => {
-    let [fontsLoaded] = useFonts({
-      Inter_900Black,
-    });
+    
     const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState("date");
@@ -185,8 +183,6 @@ import {
       handleValidation();
     };
   
-    if (!fontsLoaded) return <AppLoading />;
-    else
       return (
         <Box flex={1} minHeight="100%" safeAreaTop={5}>
           <Box alignItems="flex-start" px={6} mt={6}>

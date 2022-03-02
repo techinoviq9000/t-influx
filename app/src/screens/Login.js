@@ -21,7 +21,7 @@ import {
   SafeAreaViewBase,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -34,9 +34,7 @@ import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const Login = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
 
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -53,8 +51,7 @@ const Login = ({ navigation }) => {
       return color;
     }
   };
-  if (!fontsLoaded) return <AppLoading />;
-  else
+
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>

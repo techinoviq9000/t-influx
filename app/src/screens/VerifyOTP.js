@@ -21,7 +21,7 @@ import {
   SafeAreaViewBase,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -36,9 +36,7 @@ import StepHeader from "../CustomComponents/StepsHeader";
 
 const VerifyOTP = ({ route, navigation }) => {
   console.log(route.params)
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
 
   const [otp, setOtp] = useState([
     {
@@ -82,8 +80,8 @@ const VerifyOTP = ({ route, navigation }) => {
   };
   let finalOTP = otp.map((otpItem) => otpItem.value).join("");
 
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>

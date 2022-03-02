@@ -1,6 +1,5 @@
 import { Box, Button, Circle, Image, Pressable, Text } from "native-base";
 import React from "react";
-import * as Animatable from "react-native-animatable";
 import { Camera } from "expo-camera";
 
 // import { gql, useQuery, useLazyQuery } from "@apollo/client";
@@ -17,7 +16,7 @@ import { ImageBackground, View } from "react-native";
 //   }
 // `;
 
-const AnimatableBox = Animatable.createAnimatableComponent(Box);
+
 
 const WelcomeScreen = ({ navigation }) => {
   let camera;
@@ -65,6 +64,7 @@ const WelcomeScreen = ({ navigation }) => {
             flex: 1,
           }}
         />
+
         <Pressable onPressOut={__retakePicture}>
           {({ isHovered, isFocused, isPressed }) => {
             return (
@@ -89,7 +89,7 @@ const WelcomeScreen = ({ navigation }) => {
         <Text fontSize="7xl" color="white" zIndex={1} mt={6}>
           T Influx
         </Text>
-        <AnimatableBox>
+        <Box>
           <Image
             source={require("../assets/undraw_on_the_office_fbfs.png")}
             alt="Alternate Text"
@@ -97,7 +97,7 @@ const WelcomeScreen = ({ navigation }) => {
             mt={24}
             resizeMode="contain"
           />
-        </AnimatableBox>
+        </Box>
         <Box
           flex={1}
           width={{ base: "100%", md: "md" }}
@@ -159,14 +159,14 @@ const WelcomeScreen = ({ navigation }) => {
         }}
       >
         <Box
-          alignItems="end"
+          alignItems="flex-end"
           width="100%"
           minHeight="100%"
           flexDirection="row"
           justifyContent="space-between"
           px={10}
         >
-          <Pressable onPressOut={__retakePicture}>
+          {/* <Pressable onPressOut={__retakePicture}>
             {({ isHovered, isFocused, isPressed }) => {
               return (
                 <Text
@@ -207,7 +207,7 @@ const WelcomeScreen = ({ navigation }) => {
                 />
               );
             }}
-          </Pressable>
+          </Pressable> */}
         </Box>
       </Camera>
     );

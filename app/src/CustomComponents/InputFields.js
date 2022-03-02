@@ -28,12 +28,12 @@ const InputFields = ({
       <Input
         name={name}
         variant="unstyled"
-        size="md"
+        size="xl"
         placeholder={placeholder}
         color="black"
         placeholderTextColor="#ccc"
         type="text"
-        onChange={onChangeText}
+        onChangeText={onChangeText}
         onBlur={onBlur}
         value={value}
         InputRightElement={

@@ -1,19 +1,6 @@
 import { Box, Button, CheckIcon, HStack, Image, Text } from "native-base";
 import React from "react";
-import { ImageBackground, StyleSheet, View } from "react-native";
-import AppLoading from 'expo-app-loading';
-import {
-  useFonts,
-  Inter_900Black,
-} from '@expo-google-fonts/inter';
-
 const GetStarted = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
-  if (!fontsLoaded) 
-    return <AppLoading />;
-  else
   return (
     <Box flex={1} alignItems="center" minHeight="100%" px={3}>
         <Image
@@ -86,12 +73,5 @@ const GetStarted = ({ navigation }) => {
     </Box>
   );
 }
-
-
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
 
 export default GetStarted;

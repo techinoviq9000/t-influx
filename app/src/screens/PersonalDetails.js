@@ -26,7 +26,7 @@ import {
   Platform,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { Ionicons } from "@expo/vector-icons";
 import {
   MaterialCommunityIcons,
@@ -40,9 +40,7 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
 const PersonalDetails = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -185,8 +183,8 @@ const PersonalDetails = ({ navigation }) => {
     handleValidation();
   };
 
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
@@ -258,7 +256,7 @@ const PersonalDetails = ({ navigation }) => {
                 name={"branchName"}
                 placeholder={"Place of Birth"}
                 handleChange={handleChange}
-                selectValue={["Pakistan, India, America"]}
+                selectValue={["Pakistan", "United Arab Emirates", "India", "America"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -268,7 +266,7 @@ const PersonalDetails = ({ navigation }) => {
                 name={"branchName"}
                 placeholder={"Other Nationality if any"}
                 handleChange={handleChange}
-                selectValue={["Area Names"]}
+                selectValue={["United Arab Emirates", "India", "America", "None"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
               <Divider mt="4" mb="2" bgColor="#c7c7c7" />

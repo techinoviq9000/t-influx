@@ -86,7 +86,7 @@ const NewCustomerStack = createStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
-    initialRouteName="Scanner"
+    initialRouteName="Get Started"
     screenOptions={{
       headerShown: false,
     }}

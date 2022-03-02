@@ -11,7 +11,7 @@ import React, { useState } from "react";
 
 const StepHeader = ({title, nextTitle, step}) => {
   return (
-    <Stack direction="row" px={6} width={{base: "100%", md: "md"}} alignItems="center" flex={1}>
+    <Stack direction="row" px={6} width={{base: "100%", md: "md"}} alignItems="center">
     <Box flex={1}>
       <Text
         fontSize="2xl"

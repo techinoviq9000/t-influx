@@ -19,7 +19,7 @@ import {
   SafeAreaViewBase,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { Collapse } from "native-base";
@@ -30,9 +30,7 @@ import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const ApplicationID = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
 
   const [list, setList] = useState([
     {
@@ -95,8 +93,7 @@ const ApplicationID = ({ navigation }) => {
       </Stack>
     );
   };
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>

@@ -35,7 +35,7 @@ import Clipboard from '@react-native-community/clipboard';
 import AppLoading from "expo-app-loading";
 import { Camera } from "expo-camera";
 
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { Ionicons } from "@expo/vector-icons";
 import {
   MaterialCommunityIcons,

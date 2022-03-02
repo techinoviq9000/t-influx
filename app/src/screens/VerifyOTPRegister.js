@@ -1,46 +1,24 @@
 import {
   Box,
   Button,
-  CheckIcon,
-  HStack,
-  Image,
   Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
-  Input,
   Pressable,
   Modal,
-  FormControl,
+  Input,
 } from "native-base";
 import React, { useRef, useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  SafeAreaViewBase,
-} from "react-native";
-import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Collapse } from "native-base";
 
-//import for the collapsible/Expandable view
-import Collapsible from "react-native-collapsible";
-import { boxShadow } from "styled-system";
+
+import { Ionicons } from "@expo/vector-icons";
+
 import OtpFields from "../CustomComponents/OtpFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const VerifyOTPRegister = ({ route, navigation }) => {
   console.log(route.params);
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
 
   const [showModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState([
@@ -97,7 +75,7 @@ const VerifyOTPRegister = ({ route, navigation }) => {
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header>Your Previous ApplicationID</Modal.Header>
-          <Modal.Body>{applicationID.map(item => (<Box><Text>{item.value}</Text></Box>))}</Modal.Body>
+          <Modal.Body>{applicationID.map(item => (<Box key={item.id}><Text>{item.value}</Text></Box>))}</Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
               <Button
@@ -127,8 +105,8 @@ const VerifyOTPRegister = ({ route, navigation }) => {
     );
   };
 
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
@@ -297,10 +275,5 @@ const VerifyOTPRegister = ({ route, navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
 
 export default VerifyOTPRegister;

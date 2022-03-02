@@ -21,7 +21,7 @@ import {
   SafeAreaViewBase,
 } from "react-native";
 import AppLoading from "expo-app-loading";
-import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
+
 import { Ionicons } from "@expo/vector-icons";
 import {
   MaterialCommunityIcons,
@@ -39,9 +39,7 @@ import { flushSync } from "react-dom";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const ProductSelection = ({ navigation }) => {
-  let [fontsLoaded] = useFonts({
-    Inter_900Black,
-  });
+ 
   const [plan, setPlan] = useState("startup");
   const [groupOne, setGroupOne] = useState([
     {
@@ -171,8 +169,8 @@ const ProductSelection = ({ navigation }) => {
     );
   };
 
-  if (!fontsLoaded) return <AppLoading />;
-  else
+  
+  
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box>
