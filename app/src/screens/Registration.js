@@ -5,6 +5,7 @@ import {
   Stack,
   Pressable,
   PresenceTransition,
+  Text,
 } from "native-base";
 import React, { useState } from "react";
 
@@ -15,34 +16,94 @@ import * as yup from "yup";
 
 import StepHeader from "../CustomComponents/StepsHeader";
 
-// import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import InputFields from "../CustomComponents/InputFields";
 import LoadingModal from "../CustomComponents/LoadingModal";
 
-// const GET_APPLICANT = gql`
-//   query MyQuery(
-//     $email: String
-//     $mobile_number: String
-//     $cnic: String
-//   ) {
-//     applicants(
-//       where: {
-//         email: { _eq: $email }
-//         mobile_number: { _eq: $mobile_number }
-//         cnic: { _eq: $cnic }
-//       }
-//     ) {
-//       cnic
-//       email
-//       id
-//       mobile_number
-//     }
-//   }
-// `;
+const GET_APPLICANT = gql`
+  query MyQuery(
+    $mobile_number: String = ""
+    $cnic: String = ""
+    $email: String = ""
+  ) {
+    applicants(
+      where: {
+        _or: [
+          { mobile_number: { _eq: $mobile_number } }
+          { cnic: { _eq: $cnic } }
+          { email: { _eq: $email } }
+        ]
+      }
+    ) {
+      cnic
+      email
+      mobile_number
+      id
+    }
+  }
+`;
 
-const Registration = ({ navigation }) => {
-  const [isOpen, setIsOpen] = useState(true)
+const Registration = ({ route, navigation }) => {
+  const [isOpen, setIsOpen] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [formValues, setFormValues] = useState(
+    route?.params?.applicantData?.[0]
+  );
+  const [invalidInput, setInvalidInput] = useState({});
+
+  const validate = (data, formValues) => {
+    const errors = {};
+  
+    if (data.applicants[0]?.cnic === formValues.cnic) {
+      errors.cnic =  "Cnic Exists"
+    } else if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
+      errors.mobile_number =  "Mobile Exists" 
+    } else if (data.applicants[0]?.email === formValues.email) {
+      errors.email =  "Email Exists" 
+    } else {
+      return errors;
+    }  
+    return errors;
+  };
+
+  const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
+    GET_APPLICANT,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+      onCompleted: (data) => {
+        console.log(data);
+        console.log(formValues);
+        const errors = {}
+        if (data.applicants[0]?.cnic === formValues.cnic) {
+          setInvalidInput({ ...invalidInput, cnic: "Cnic Exists" });
+        } else if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
+          setInvalidInput({ ...invalidInput, mobile_number: "Mobile Exists" });
+        } else if (data.applicants[0]?.email === formValues.email) {
+          setInvalidInput({ ...invalidInput, email: "Email Exists" });
+        } else {
+          //add new entry
+          setIsOpen(false);
+          setShowModal(false);
+          navigation.navigate("VerifyOTPRegister", {
+            fromRegister: true,
+            data,
+          });
+          setTimeout(() => {
+            setIsOpen(true);
+          }, 500);
+        }
+        setShowModal(false);
+        console.log("close modal")
+        console.log(invalidInput);
+      },
+      onError: (error) => {
+        setShowModal(false);
+        console.log(error);
+      },
+    }
+  );
+console.log(loading)
   const registerValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -63,18 +124,22 @@ const Registration = ({ navigation }) => {
       id="sign-in-button"
       initialValues={{
         email: "example@gmail.com",
-        mobile_number: "03332222222",
+        mobile_number: "03222681575",
         cnic: "423016111121119",
       }}
       validationSchema={registerValidationSchema}
+      // validate={validate}
       onSubmit={(values) => {
-        setIsOpen(false)
-        setShowModal(false)
-        navigation.navigate("VerifyOTPRegister", { fromRegister: true });
-        setTimeout(() => {
-          setIsOpen(true)
-          
-        }, 500);
+        setShowModal(true)
+        setFormValues(values);
+        console.log("inside on submit")
+        getApplicant({
+          variables: {
+            cnic: values.cnic,
+            email: values.email,
+            mobile_number: values.mobile_number,
+          },
+        }).then(data => console.log("data")).catch(error => console.log("error"));
       }}
     >
       {({
@@ -180,6 +245,11 @@ const Registration = ({ navigation }) => {
                   icon={<MaterialIcons name="email" size={23} color="black" />}
                 />
               </Box>
+              <Box>
+                {Object.values(invalidInput).forEach(value => (
+                  <Text>{value}</Text>
+                ))}
+              </Box>
             </ScrollView>
           </Box>
           <Box justifyContent="flex-end">
@@ -215,18 +285,7 @@ const Registration = ({ navigation }) => {
                 borderColor="white"
                 onPress={
                   () => {
-                    // getApplicant({
-                    //   variables: {
-                    //     cnic: values.cnic,
-                    //     email: values.email,
-                    //     mobile_number: values.mobile_number,
-                    //   },
-                    // });
-                    setShowModal(true)
-                    setTimeout(() => {
-                      handleSubmit();
-                      
-                    }, 2000);
+                    handleSubmit();
                   }
 
                   // navigation.goBack()
@@ -242,7 +301,6 @@ const Registration = ({ navigation }) => {
           <LoadingModal showModal={showModal} />
         </Box>
       )}
-      
     </Formik>
   );
 };

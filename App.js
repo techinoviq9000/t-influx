@@ -36,7 +36,7 @@ import ApplicationID from "./app/src/screens/ApplicationID";
 
 import { ENDPOINT } from "./app/src/config";
 import { NhostApolloProvider } from "@nhost/react-apollo";
-// import { NhostAuthProvider } from "@nhost/react-auth";
+import { NhostAuthProvider } from "@nhost/react-auth";
 import { nhost } from "./app/src/utils/nhost";
 import BasicAccountDetails from "./app/src/screens/BasicAccountDetails";
 import TypeOfAccount from "./app/src/screens/TypeOfAccount";
@@ -256,8 +256,8 @@ const ExistingCustomerStackScreen = () => (
 
 export default function App() {
   return (
-    // <NhostAuthProvider nhost={nhost}>
-    // <NhostApolloProvider nhost={nhost}>
+    <NhostAuthProvider nhost={nhost}>
+    <NhostApolloProvider nhost={nhost}>
     <NativeBaseProvider>
       <Background>
         <NavigationContainer theme={MyTheme}>
@@ -292,8 +292,8 @@ export default function App() {
         </NavigationContainer>
       </Background>
     </NativeBaseProvider>
-    // </NhostApolloProvider>
-    // </NhostAuthProvider>
+    </NhostApolloProvider>
+    </NhostAuthProvider>
   );
 }
 

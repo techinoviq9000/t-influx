@@ -17,8 +17,6 @@ import OtpFields from "../CustomComponents/OtpFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 
 const VerifyOTPRegister = ({ route, navigation }) => {
-  console.log(route.params);
- 
 
   const [showModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState([
@@ -118,7 +116,12 @@ const VerifyOTPRegister = ({ route, navigation }) => {
           size={36}
           color={isFocused ? "#87e3ff" : "white"}
           onPress={
-            () => navigation.goBack()
+            () => {
+              navigation.navigate({
+                name: 'Registration',
+                params: route.params.data,
+              });
+            }
             // navigation.navigate("Welcome")
           }
         />
