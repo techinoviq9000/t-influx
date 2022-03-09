@@ -10,6 +10,7 @@ const InputFields = ({
   onChangeText,
   onBlur,
   value,
+  isValid,
   touched
 }) => {
   return (
@@ -40,7 +41,7 @@ const InputFields = ({
           <>
             {touched?.[name] && errors?.[name] ? (
               <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-            ) : touched?.[name] ? (
+            ) : !isValid ? (
               <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
             ) : (
               <></>

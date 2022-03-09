@@ -37,8 +37,8 @@ const BasicAccountDetails = ({ navigation }) => {
         touched,
         isValid,
       }) => (
-        <Box flex={1} minHeight="100%" safeAreaTop={5}>
-          <Box alignItems="flex-start" px={6} mt={6}>
+        <Box flex={1} minHeight="100%" safeAreaTop={10}>
+          {/* <Box alignItems="flex-start" px={6} mt={6}>
             <Pressable>
               {({ isHovered, isFocused, isPressed }) => {
                 return (
@@ -54,7 +54,7 @@ const BasicAccountDetails = ({ navigation }) => {
                 );
               }}
             </Pressable>
-          </Box>
+          </Box> */}
           <Box alignItems="center">
             <StepHeader
               title="Basic Account Details"
@@ -227,10 +227,10 @@ const BasicAccountDetails = ({ navigation }) => {
                 // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
-                  navigation.navigate("VerifyOTP")
+                  navigation.navigate("Welcome")
                 }
               >
-                I NEED HELP
+                SAVE & EXIT
               </Button>
               <Button
                 flex={1}

@@ -72,8 +72,8 @@ const SelectField = ({
           pt={6}
           px={4}
         >
-          {selectValue.map(value => (
-            <Select.Item key={value} label={value} value={value} />
+          {selectValue.map((value, index) => (
+            <Select.Item key={index} label={value} value={value} />
           ))}
         </Select>
       </FormControl>

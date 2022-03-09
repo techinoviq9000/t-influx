@@ -16,7 +16,7 @@ import * as yup from "yup";
 
 import StepHeader from "../CustomComponents/StepsHeader";
 
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import InputFields from "../CustomComponents/InputFields";
 import LoadingModal from "../CustomComponents/LoadingModal";
 
@@ -43,67 +43,48 @@ const GET_APPLICANT = gql`
   }
 `;
 
+const ADD_APPLICANT = gql`
+mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: String = "") {
+  insert_applicants_one(object: {cnic: $cnic, email: $email, mobile_number: $mobile_number}) {
+    id
+    email
+    mobile_number
+    cnic
+    otp
+    status
+  }
+}
+`;
+
 const Registration = ({ route, navigation }) => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [showModal, setShowModal] = useState(false);
-  const [formValues, setFormValues] = useState(
-    route?.params?.applicantData?.[0]
-  );
-  const [invalidInput, setInvalidInput] = useState({});
-
-  const validate = (data, formValues) => {
-    const errors = {};
-  
-    if (data.applicants[0]?.cnic === formValues.cnic) {
-      errors.cnic =  "Cnic Exists"
-    } else if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
-      errors.mobile_number =  "Mobile Exists" 
-    } else if (data.applicants[0]?.email === formValues.email) {
-      errors.email =  "Email Exists" 
-    } else {
-      return errors;
-    }  
-    return errors;
-  };
-
   const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
     GET_APPLICANT,
     {
       fetchPolicy: "network-only",
       nextFetchPolicy: "network-only",
-      onCompleted: (data) => {
-        console.log(data);
-        console.log(formValues);
-        const errors = {}
-        if (data.applicants[0]?.cnic === formValues.cnic) {
-          setInvalidInput({ ...invalidInput, cnic: "Cnic Exists" });
-        } else if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
-          setInvalidInput({ ...invalidInput, mobile_number: "Mobile Exists" });
-        } else if (data.applicants[0]?.email === formValues.email) {
-          setInvalidInput({ ...invalidInput, email: "Email Exists" });
-        } else {
-          //add new entry
-          setIsOpen(false);
-          setShowModal(false);
-          navigation.navigate("VerifyOTPRegister", {
-            fromRegister: true,
-            data,
-          });
-          setTimeout(() => {
-            setIsOpen(true);
-          }, 500);
-        }
-        setShowModal(false);
-        console.log("close modal")
-        console.log(invalidInput);
-      },
-      onError: (error) => {
-        setShowModal(false);
-        console.log(error);
-      },
     }
   );
-console.log(loading)
+
+  const [addApplicant, {data: addApplicantData}] = useMutation(ADD_APPLICANT, {
+    onCompleted: data => {
+      setIsOpen(false);
+      setShowModal(false);
+      navigation.navigate("VerifyOTPRegister", {
+        fromRegister: true,
+        data: data
+      });
+      setTimeout(() => {
+        setIsOpen(true);
+      }, 500);
+    }
+  })
+  const [isOpen, setIsOpen] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [formValues, setFormValues] = useState(
+    route?.params?.applicantData?.[0]
+  );
+  let submitForm = false
+
   const registerValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -112,34 +93,93 @@ console.log(loading)
     cnic: yup
       .string()
       .min(13, ({ min }) => `cnic must be at least ${min} characters`)
+      .max(13, ({ max }) => `Cnic must be at least ${max} characters`)
       .required("cnic is required"),
     mobile_number: yup
       .string()
       .min(11, ({ min }) => `Mobile must be at least ${min} characters`)
+      .max(11, ({ max }) => `Mobile must be at least ${max} characters`)
       .required("Mobile Number is required"),
   });
 
-  return (
-    <Formik
-      id="sign-in-button"
-      initialValues={{
-        email: "example@gmail.com",
-        mobile_number: "03222681575",
-        cnic: "423016111121119",
-      }}
-      validationSchema={registerValidationSchema}
-      // validate={validate}
-      onSubmit={(values) => {
-        setShowModal(true)
-        setFormValues(values);
-        console.log("inside on submit")
-        getApplicant({
+  const validate = async (values) => {
+    const errors = {}
+    console.log("inside validate")
+    try {
+      const res = await registerValidationSchema.validate(values, { abortEarly: false })
+      // setSubmitForm(true)
+      console.log(submitForm);
+    } catch (error) {
+      submitForm = false
+        error.inner.map(err => {
+          errors[err.path] = err.message
+        });
+        return errors
+    }
+  
+    if(submitForm) {
+    console.log("inside submitform loop")
+      setShowModal(true)
+      try {
+        const response = await getApplicant({
           variables: {
             cnic: values.cnic,
             email: values.email,
             mobile_number: values.mobile_number,
           },
-        }).then(data => console.log("data")).catch(error => console.log("error"));
+        });
+        console.log("hasura data")
+        return onCompleteGetApplicant(response.data, values);
+      } catch (e) {
+        setShowModal(false);
+        console.log(e);
+        return {};
+      }
+    } else {
+      return {}
+    }
+    
+  };
+
+  const onCompleteGetApplicant = (data, formValues) => {
+    const errors = {};
+    if (data.applicants[0]?.cnic === formValues.cnic) {
+      errors.cnic = "Cnic exists";
+    } 
+    if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
+      errors.mobile_number = "Mobile exists";
+    } 
+    if (data.applicants[0]?.email === formValues.email) {
+      errors.email = "Email Exists";
+    }
+    console.log("close modal");
+    setShowModal(false)
+    return errors;
+  };
+
+  return (
+    <Formik
+      id="sign-in-button"
+      initialValues={{
+        email: "salmanhanif133@gmail.com",
+        mobile_number: "03222681575",
+        cnic: "4230161551219",
+      }}
+      validateOnChange={false}
+      // validate
+      // validateOnBlur={false}
+      // validationSchema={registerValidationSchema}
+      validate={(values) => validate(values)}
+      onSubmit={(values) => {
+        //Register new user
+        addApplicant({
+          variables: {
+            email: values.email,
+            cnic: values.cnic,
+            mobile_number: values.mobile_number
+          }
+        
+        })
       }}
     >
       {({
@@ -212,7 +252,7 @@ console.log(loading)
                   onBlur={handleBlur("mobile_number")}
                   value={values.mobile_number}
                   placeholder={"03XX-XXXXXX"}
-                  // handleChange={handleChange}
+                  isValid={isValid}
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 />
 
@@ -226,6 +266,7 @@ console.log(loading)
                   onChangeText={handleChange("cnic")}
                   onBlur={handleBlur("cnic")}
                   value={values.cnic}
+                  isValid={isValid}
                   icon={
                     <MaterialIcons name="credit-card" size={23} color="black" />
                   }
@@ -238,18 +279,18 @@ console.log(loading)
                   touched={touched}
                   name={"email"}
                   placeholder={"example@email.com"}
-                  // handleChange={handleChange}
+                  isValid={isValid}
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   value={values.email}
                   icon={<MaterialIcons name="email" size={23} color="black" />}
                 />
               </Box>
-              <Box>
-                {Object.values(invalidInput).forEach(value => (
-                  <Text>{value}</Text>
-                ))}
-              </Box>
+              {/* <Box>
+                {Object.values(invalidInput).map((value, index) => {
+                  return <Text key={index}>{value}</Text>;
+                })}
+              </Box> */}
             </ScrollView>
           </Box>
           <Box justifyContent="flex-end">
@@ -285,7 +326,8 @@ console.log(loading)
                 borderColor="white"
                 onPress={
                   () => {
-                    handleSubmit();
+                    submitForm = true
+                      handleSubmit()
                   }
 
                   // navigation.goBack()

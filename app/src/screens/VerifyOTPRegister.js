@@ -9,14 +9,87 @@ import {
   Input,
 } from "native-base";
 import React, { useRef, useState } from "react";
-
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
 import { Ionicons } from "@expo/vector-icons";
 
 import OtpFields from "../CustomComponents/OtpFields";
 import StepHeader from "../CustomComponents/StepsHeader";
+import LoadingModal from "../CustomComponents/LoadingModal";
+
+const VERIFY_OTP = gql`
+  query verifyOTP($otp: String = "", $email: String = "") {
+    applicants(
+      where: { _and: [{ email: { _eq: $email } }, { otp: { _eq: $otp } }] }
+    ) {
+      cnic
+      email
+      mobile_number
+      id
+    }
+  }
+`;
+
+const UPDATE_STATUS = gql`
+  mutation updateStatus($status: String = "", $email: String = "") {
+    update_applicants(
+      where: { email: { _eq: $email } }
+      _set: { status: $status }
+    ) {
+      affected_rows
+    }
+  }
+`;
 
 const VerifyOTPRegister = ({ route, navigation }) => {
+  const data = route.params.data.insert_applicants_one;
+  const [otpError, setOtpError] = useState(null);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+
+  const [updateApplicantStatus] = useMutation(UPDATE_STATUS, {
+    notifyOnNetworkStatusChange: true,
+    nextFetchPolicy: "network-only",
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      setShowLoadingModal(false);
+      console.log(data);
+      navigation.navigate("Basic Account Details") //navigate if otp correct
+    },
+    onError: (error) => {
+      setShowLoadingModal(false);
+      console.log(error);
+      return setOtpError("Something went wrong");
+    },
+  });
+
+  const [verifyOTP, { data: verifyOTPData, loading }] = useLazyQuery(
+    VERIFY_OTP,
+    {
+      notifyOnNetworkStatusChange: true, 
+      nextFetchPolicy: "network-only",
+      fetchPolicy: "network-only",
+      onCompleted: (data) => {
+        if (data.applicants.length < 1) { //If otp does not exist in db
+          setShowLoadingModal(false);
+          return setOtpError("Invalid OTP"); //Set otp error
+        } else { //Otp exists
+          setOtpError(null);
+          updateApplicantStatus({ //Change status to approved
+            variables: {
+              email: data.applicants[0].email,
+              status: "Approved",
+            },
+          });
+          return console.log(data);
+        }
+      },
+      onError: (error) => {
+        setShowLoadingModal(false);
+        console.log(error);
+        return setOtpError("Something went wrong");
+      },
+    }
+  );
 
   const [showModal, setShowModal] = useState(false);
   const [otp, setOtp] = useState([
@@ -73,7 +146,13 @@ const VerifyOTPRegister = ({ route, navigation }) => {
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header>Your Previous ApplicationID</Modal.Header>
-          <Modal.Body>{applicationID.map(item => (<Box key={item.id}><Text>{item.value}</Text></Box>))}</Modal.Body>
+          <Modal.Body>
+            {applicationID.map((item) => (
+              <Box key={item.id}>
+                <Text>{item.value}</Text>
+              </Box>
+            ))}
+          </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
               <Button
@@ -89,9 +168,9 @@ const VerifyOTPRegister = ({ route, navigation }) => {
                 onPress={() => {
                   setShowModal(false);
                   // onPress={() =>
-              //   // navigation.goBack()
-              navigation.navigate("Basic Account Details")
-              // }
+                  //   // navigation.goBack()
+                  navigation.navigate("Basic Account Details");
+                  // }
                 }}
               >
                 New Application
@@ -103,180 +182,177 @@ const VerifyOTPRegister = ({ route, navigation }) => {
     );
   };
 
-  
-  
-    return (
-      <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box alignItems="flex-start" px={6} mt={6}>
+  return (
+    <Box flex={1} minHeight="100%" safeAreaTop={5}>
+      <Box alignItems="flex-start" px={6} mt={6}>
         <Pressable>
-      {({ isHovered, isFocused, isPressed }) => {
-        return (
-          <Ionicons
-          name="arrow-back-circle-sharp"
-          size={36}
-          color={isFocused ? "#87e3ff" : "white"}
-          onPress={
-            () => {
-              navigation.navigate({
-                name: 'Registration',
-                params: route.params.data,
-              });
-            }
-            // navigation.navigate("Welcome")
-          }
-        />
-        )
-      }}
-    </Pressable>
-        </Box>
-        <Box alignItems="center">
-          {route.params.fromRegister ? (
-            <StepHeader title="Verify OTP" />
-          ) : (
-            <StepHeader
-              title="Verify OTP"
-              nextTitle="Next: Personal Details"
-              step="2"
-            />
-          )}
-        </Box>
-        <Box
-          backgroundColor="white"
-          rounded="xl"
-          roundedBottom="none"
-          py={8}
-          flex={1}
-          // minHeight="100%"
-          mt={5}
-          px={6}
-        >
-          <ScrollView
-            _contentContainerStyle={{
-              flexGrow: 1,
-            }}
-            keyboardShouldPersistTaps="never"
-          >
-            <Box>
-              <Stack
-                direction="row"
-                space={5}
-                flex={1}
-                justifyContent="center"
-                mt={2}
-                mb={5}
-              >
-                {otpArrayFields.map((item, index) => {
-                  const nextRef = otpArrayFields[index + 1];
-                  if (nextRef) {
-                    return (
-                      <OtpFields
-                        otpRef={item}
-                        secondRef={nextRef}
-                        otp={otp}
-                        handleChange={handleChange}
-                        key={index}
-                        index={index}
-                      />
-                    );
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Ionicons
+                name="arrow-back-circle-sharp"
+                size={36}
+                color={isFocused ? "#87e3ff" : "white"}
+                onPress={
+                  () => {
+                    navigation.navigate({
+                      name: "Registration",
+                      params: route.params.data,
+                    });
                   }
-                })}
-                <Input
-                  ref={fourthOTP}
-                  variant="unstyled"
-                  value={otp[3].value}
-                  onChange={(e) => handleChange(e.nativeEvent.text, otp[3].id)}
-                  size="xl"
-                  py={5}
-                  // px={6}
-                  textAlign="center"
-                  borderColor={otp[3].value ? "#13B995" : "white"}
-                  backgroundColor="white"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  color="black"
-                  width={16}
-                  shadow={4}
-                  mb={4}
-                  maxLength={1}
-                  fontSize="4xl"
-                  keyboardType="numeric"
-                  type="text"
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
-                />
-              </Stack>
-              <Box>
-                <Text color="#13B995" fontSize="lg" textAlign="center">
-                  The OTP has been sent on your registered mobile number
-                  +92********75
-                </Text>
-                <Text
-                  color="red.500"
-                  fontSize="lg"
-                  fontWeight="bold"
-                  textAlign="center"
-                >
-                  OOPS! THE OTP SEEMS TO BE INCORRECT
-                </Text>
-                <Text
-                  color="red.500"
-                  fontSize="lg"
-                  fontWeight="bold"
-                  textAlign="center"
-                >
-                  {finalOTP}
-                </Text>
-              </Box>
-            </Box>
-          </ScrollView>
-        </Box>
-        <Box justifyContent="flex-end">
-          <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#f7f7f7"
-              border={1}
-              borderWidth="1"
-              borderColor="#f7f7f7"
-              _text={{
-                color: "#13B995",
-              }}
-              //mb={25}
-              // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("Continue Application")
-              }
-            >
-              RESEND OTP
-            </Button>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#317F6E"
-              border={1}
-              borderWidth="1"
-              borderColor="white"
-              //mb={25}
-              // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("Basic Account Details")
-              }
-              // onPress={() => setShowModal(true)}
-            >
-              CONFIRM
-            </Button>
-          </Stack>
-        </Box>
-        <ModalOverlay />
+                  // navigation.navigate("Welcome")
+                }
+              />
+            );
+          }}
+        </Pressable>
       </Box>
-    );
+      <Box alignItems="center">
+        {route.params.fromRegister ? (
+          <StepHeader title="Verify OTP" />
+        ) : (
+          <StepHeader
+            title="Verify OTP"
+            nextTitle="Next: Personal Details"
+            step="2"
+          />
+        )}
+      </Box>
+      <Box
+        backgroundColor="white"
+        rounded="xl"
+        roundedBottom="none"
+        py={8}
+        flex={1}
+        // minHeight="100%"
+        mt={5}
+        px={6}
+      >
+        <ScrollView
+          _contentContainerStyle={{
+            flexGrow: 1,
+          }}
+          keyboardShouldPersistTaps="never"
+        >
+          <Box>
+            <Stack
+              direction="row"
+              space={5}
+              flex={1}
+              justifyContent="center"
+              mt={2}
+              mb={5}
+            >
+              {otpArrayFields.map((item, index) => {
+                const nextRef = otpArrayFields[index + 1];
+                if (nextRef) {
+                  return (
+                    <OtpFields
+                      otpRef={item}
+                      secondRef={nextRef}
+                      otp={otp}
+                      handleChange={handleChange}
+                      key={index}
+                      index={index}
+                    />
+                  );
+                }
+              })}
+              <Input
+                ref={fourthOTP}
+                variant="unstyled"
+                value={otp[3].value}
+                onChange={(e) => handleChange(e.nativeEvent.text, otp[3].id)}
+                size="xl"
+                py={5}
+                // px={6}
+                textAlign="center"
+                borderColor={otp[3].value ? "#13B995" : "white"}
+                backgroundColor="white"
+                borderRadius="lg"
+                borderWidth={1}
+                color="black"
+                width={16}
+                shadow={4}
+                mb={4}
+                maxLength={1}
+                fontSize="4xl"
+                keyboardType="numeric"
+                type="text"
+                _focus={{
+                  borderColor: "#13B995",
+                }}
+              />
+            </Stack>
+            <Box>
+              <Text color="#13B995" fontSize="md" textAlign="center">
+                The OTP has been sent on your email address{" "}
+                <Text fontWeight="bold">{data?.email}</Text>
+              </Text>
+              {otpError && (
+                <Text
+                  color="red.500"
+                  fontSize="md"
+                  mt="2"
+                  fontWeight="bold"
+                  textAlign="center"
+                >
+                  Invalid OTP
+                </Text>
+              )}
+            </Box>
+          </Box>
+        </ScrollView>
+      </Box>
+      <Box justifyContent="flex-end">
+        <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+          <Button
+            flex={1}
+            size="md"
+            rounded="md"
+            backgroundColor="#f7f7f7"
+            border={1}
+            borderWidth="1"
+            borderColor="#f7f7f7"
+            _text={{
+              color: "#13B995",
+            }}
+            //mb={25}
+            // shadow={5}
+            onPress={() =>
+              // navigation.goBack()
+              navigation.navigate("Continue Application")
+            }
+          >
+            RESEND OTP
+          </Button>
+          <Button
+            flex={1}
+            size="md"
+            rounded="md"
+            backgroundColor="#317F6E"
+            border={1}
+            borderWidth="1"
+            borderColor="white"
+            //mb={25}
+            // shadow={5}
+            onPress={() => {
+              setShowLoadingModal(true);
+              verifyOTP({
+                variables: {
+                  email: data.email,
+                  otp: finalOTP.toString(),
+                },
+              });
+            }}
+          >
+            CONFIRM
+          </Button>
+        </Stack>
+      </Box>
+      <LoadingModal showModal={showLoadingModal} />
+      <ModalOverlay />
+    </Box>
+  );
 };
-
 
 export default VerifyOTPRegister;
