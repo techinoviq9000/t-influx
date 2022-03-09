@@ -174,7 +174,7 @@ const Registration = ({ route, navigation }) => {
         //Register new user
         addApplicant({
           variables: {
-            email: values.email,
+            email: values.email.trim().toLowerCase(),
             cnic: values.cnic,
             mobile_number: values.mobile_number
           }

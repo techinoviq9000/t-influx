@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./app/src/assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.salman9000.TInflux"
     },
     "web": {
       "favicon": "./app/src/assets/favicon.png"
