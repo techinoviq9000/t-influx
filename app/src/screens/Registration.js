@@ -52,6 +52,7 @@ mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: S
     cnic
     otp
     status
+    otp_created_time
   }
 }
 `;

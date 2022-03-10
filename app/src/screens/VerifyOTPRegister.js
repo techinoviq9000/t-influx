@@ -8,7 +8,9 @@ import {
   Modal,
   Input,
 } from "native-base";
-import React, { useRef, useState } from "react";
+
+import { BackHandler } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
 import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +18,8 @@ import { Ionicons } from "@expo/vector-icons";
 import OtpFields from "../CustomComponents/OtpFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import LoadingModal from "../CustomComponents/LoadingModal";
+import moment from "moment";
+import CountDown from "react-native-countdown-component";
 
 const VERIFY_OTP = gql`
   query verifyOTP($otp: String = "", $email: String = "") {
@@ -41,8 +45,31 @@ const UPDATE_STATUS = gql`
   }
 `;
 
+const GET_CONFIG = gql`
+  query getConfig {
+    config {
+      otp_expiry_duration
+    }
+  }
+`;
+
 const VerifyOTPRegister = ({ route, navigation }) => {
-  const data = route.params.data.insert_applicants_one;
+  const data = route?.params?.data?.insert_applicants_one;
+
+  const getDifference = () => {
+    const created_at = moment(data?.otp_created_time)
+    let diffInMinutes = moment().diff(created_at, 'minutes');
+    return diffInMinutes
+  }
+ 
+  const [getConfig, {data: config}] = useLazyQuery(GET_CONFIG)
+  let expiryDuration = config?.config[0]?.otp_expiry_duration
+  useEffect(() => {
+    getConfig()
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
+    return () => BackHandler.removeEventListener("hardwareBackPress", backHandler.remove());
+  }, [])
+
   const [otpError, setOtpError] = useState(null);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
 
@@ -76,7 +103,8 @@ const VerifyOTPRegister = ({ route, navigation }) => {
           setOtpError(null);
           updateApplicantStatus({ //Change status to approved
             variables: {
-              email: data.applicants[0].email,
+              // email: data.applicants[0].email,
+              email: "asdas",
               status: "Approved",
             },
           });
@@ -207,7 +235,7 @@ const VerifyOTPRegister = ({ route, navigation }) => {
         </Pressable>
       </Box>
       <Box alignItems="center">
-        {route.params.fromRegister ? (
+        {route?.params?.fromRegister ? (
           <StepHeader title="Verify OTP" />
         ) : (
           <StepHeader
@@ -296,9 +324,15 @@ const VerifyOTPRegister = ({ route, navigation }) => {
                   fontWeight="bold"
                   textAlign="center"
                 >
-                  Invalid OTP
+                  {otpError}
                 </Text>
               )}
+              <CountDown
+        until={60*2}
+        onFinish={() => alert('finished')}
+        onPress={() => alert('hello')}
+        size={20}
+      />
             </Box>
           </Box>
         </ScrollView>
@@ -336,13 +370,20 @@ const VerifyOTPRegister = ({ route, navigation }) => {
             //mb={25}
             // shadow={5}
             onPress={() => {
+              if(parseInt(getDifference()) >= parseInt(expiryDuration)) {
+                console.log(getDifference())
+                console.log(expiryDuration)
+                setOtpError("OTP Expired")
+              } else {
               setShowLoadingModal(true);
-              verifyOTP({
-                variables: {
-                  email: data.email,
-                  otp: finalOTP.toString(),
-                },
-              });
+                verifyOTP({
+                  variables: {
+                    email: data.email,
+                    otp: finalOTP.toString(),
+                  },
+                });
+              }
+              
             }}
           >
             CONFIRM
