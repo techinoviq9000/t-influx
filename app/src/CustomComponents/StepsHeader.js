@@ -15,7 +15,8 @@ const StepHeader = ({title, nextTitle, step}) => {
     <Box flex={1}>
       <Text
         fontSize="2xl"
-        color="white"
+        _light={{color: "white"}}
+        _dark={{color: "darkBlue.900"}}
         fontWeight="medium"
         lineHeight="xs"
         mt={2}

@@ -48,7 +48,7 @@ const SelectField = ({
               {touched?.[name] && errors?.[name] ? (
                 <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
               ) : touched?.[name] ? (
-                <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4" />
               ) : (
                 <></>
               )}

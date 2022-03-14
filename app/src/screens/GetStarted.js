@@ -14,24 +14,24 @@ const GetStarted = ({ navigation }) => {
         <Text fontSize="2xl" mx={5} mt={1} textAlign="center" color="white" fontWeight="thin">You should have the following documents</Text>
         <Box backgroundColor="white" rounded="lg" p={4} width={{base: "100%", md: "md"}} mt={10}>
         <HStack space={2}>
-          <CheckIcon size="4" mt="0.5" color="emerald.500" />
-          <Text color="#414141" fontSize="sm" fontWeight="medium">Active Mobile number & Email ID</Text>
+          <CheckIcon size="4" mt="0.5" color="emerald.400" />
+          <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">Active Mobile number & Email ID</Text>
         </HStack>
         <HStack space={2} mt={2}>
-          <CheckIcon size="4" mt="0.5" color="emerald.500" />
-          <Text color="#414141" fontSize="sm" fontWeight="medium" >Aged 18 and Above</Text>
+          <CheckIcon size="4" mt="0.5" color="emerald.400" />
+          <Text color="darkBlue.900" fontSize="sm" fontWeight="medium" >Aged 18 and Above</Text>
         </HStack>
         <HStack space={2} mt={2}>
-          <CheckIcon size="4" mt="0.5" color="emerald.500" />
-          <Text color="#414141" fontSize="sm" fontWeight="medium" >NADRA CNIC/Passport</Text>
+          <CheckIcon size="4" mt="0.5" color="emerald.400" />
+          <Text color="darkBlue.900" fontSize="sm" fontWeight="medium" >NADRA CNIC/Passport</Text>
         </HStack>
         <HStack space={2} mt={2}>
-          <CheckIcon size="4" mt="0.5" color="emerald.500" />
-          <Text color="#414141" fontSize="sm" fontWeight="medium" >Proof of Income</Text>
+          <CheckIcon size="4" mt="0.5" color="emerald.400" />
+          <Text color="darkBlue.900" fontSize="sm" fontWeight="medium" >Proof of Income</Text>
         </HStack>
         <HStack space={2} mt={2}>
-          <CheckIcon size="4" mt="0.5" color="emerald.500" />
-          <Text color="#414141" fontSize="sm" fontWeight="medium" >Active Filer</Text>
+          <CheckIcon size="4" mt="0.5" color="emerald.400" />
+          <Text color="darkBlue.900" fontSize="sm" fontWeight="medium" >Active Filer</Text>
         </HStack>          
           
         </Box>
@@ -61,7 +61,7 @@ const GetStarted = ({ navigation }) => {
             borderColor="white"
             shadow={5}
             _text={{
-              color: "#414141",
+              color: "darkBlue.900",
             }}
             onPress={() =>
               navigation.navigate("Registration")

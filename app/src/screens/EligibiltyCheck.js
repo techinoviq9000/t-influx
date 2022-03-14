@@ -121,7 +121,7 @@ const EligibiltyCheck = ({ navigation }) => {
                           <CheckIcon
                             size="5"
                             mt="0.5"
-                            color="emerald.500"
+                            color="emerald.400"
                             mr="4"
                           />
                         ) : (
@@ -168,7 +168,7 @@ const EligibiltyCheck = ({ navigation }) => {
                   color="black"
                   placeholderTextColor="#ccc"
                   // InputRightElement={
-                  //   <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
+                  //   <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4"/>
                   // }
                   InputLeftElement={
                     <Box pl="5">
@@ -205,7 +205,7 @@ const EligibiltyCheck = ({ navigation }) => {
                   color="black"
                   placeholderTextColor="#ccc"
                   InputRightElement={
-                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
+                    // <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4"/>
                     <></>
                   }
                   InputLeftElement={

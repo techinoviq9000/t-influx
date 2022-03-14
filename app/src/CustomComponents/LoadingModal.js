@@ -6,7 +6,7 @@ const LoadingModal = ({showModal}) => {
     <Modal isOpen={showModal} size="xs">
       <Modal.Content>
         <Modal.Body p="5">
-            <Spinner size="lg" color="emerald.500" />
+            <Spinner size="lg" color="emerald.400" />
             <Text textAlign="center" mt="2" fontSize="xs">Saving information. Please wait.</Text>
         </Modal.Body>
       </Modal.Content>

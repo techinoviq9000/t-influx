@@ -31,7 +31,6 @@ import QuestionsAndAnswers from "./app/src/screens/QuestionsAndAnswers";
 import ProductSelection from "./app/src/screens/ProductSelection";
 import Login from "./app/src/screens/Login";
 import Registration from "./app/src/screens/Registration";
-import VerifyOTPRegister from "./app/src/screens/VerifyOTPRegister";
 import ApplicationID from "./app/src/screens/ApplicationID";
 
 import { ENDPOINT } from "./app/src/config";
@@ -99,8 +98,8 @@ const NewCustomerStackScreen = () => (
                 ...TransitionPresets.FadeFromBottomAndroid,
               }}/>
     <NewCustomerStack.Screen
-      name="VerifyOTPRegister"
-      component={VerifyOTPRegister} options={{
+      name="VerifyOTP"
+      component={VerifyOTP} options={{
         cardOverlayEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         // ...TransitionPresets.SlideFromRightIOS,

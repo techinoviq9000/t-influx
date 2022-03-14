@@ -124,7 +124,7 @@ const WelcomeScreen = ({ navigation }) => {
             shadow={5}
             backgroundColor="white"
             _text={{
-              color: "#414141",
+              color: "darkBlue.900",
             }}
             onPress={() => navigation.navigate("RegisterRoute")}
           >

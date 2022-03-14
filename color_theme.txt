@@ -1,0 +1,3 @@
+Callout color, secondary color: #317F6E
+Primary Color: emerald.400, #34d399
+Text color: darkBlue.900: #000e21

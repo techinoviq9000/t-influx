@@ -77,43 +77,43 @@ const UploadDocuments = ({ navigation }) => {
                 Please Make sure you have the following documents ready.
               </Text>
               <HStack space={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                   Active Mobile number & Email ID
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                   Aged 18 and Above
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                   NADRA CNIC/Passport
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                   Proof of Income
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                   Active Filer
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                Signature on White Paper
                 </Text>
               </HStack>
               <HStack space={2} mt={2}>
-                <CheckIcon size="5" mt="0.5" color="emerald.500" />
+                <CheckIcon size="5" mt="0.5" color="emerald.400" />
                 <Text color="#414141" fontSize="md" fontWeight="medium">
                 Zakaat Affidavit - If Applicable
                 </Text>

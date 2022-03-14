@@ -6,6 +6,7 @@ import {
   Pressable,
   PresenceTransition,
   Text,
+  Icon,
 } from "native-base";
 import React, { useState } from "react";
 
@@ -70,7 +71,7 @@ const Registration = ({ route, navigation }) => {
     onCompleted: data => {
       setIsOpen(false);
       setShowModal(false);
-      navigation.navigate("VerifyOTPRegister", {
+      navigation.navigate("VerifyOTP", {
         fromRegister: true,
         data: data
       });
@@ -254,7 +255,8 @@ const Registration = ({ route, navigation }) => {
                   value={values.mobile_number}
                   placeholder={"03XX-XXXXXX"}
                   isValid={isValid}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                  icon={<Icon as={MaterialIcons} name="person" size="23" color="darkBlue.900" />}
+                  
                 />
 
                 {/* CNIC NUMBER */}
@@ -268,9 +270,8 @@ const Registration = ({ route, navigation }) => {
                   onBlur={handleBlur("cnic")}
                   value={values.cnic}
                   isValid={isValid}
-                  icon={
-                    <MaterialIcons name="credit-card" size={23} color="black" />
-                  }
+                  icon={<Icon as={MaterialIcons} name="credit-card" size="23" color="darkBlue.900" />}
+
                 />
 
                 {/* Email  */}
@@ -284,7 +285,7 @@ const Registration = ({ route, navigation }) => {
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   value={values.email}
-                  icon={<MaterialIcons name="email" size={23} color="black" />}
+                  icon={<Icon as={MaterialIcons} name="email" size="23" color="darkBlue.900" />}
                 />
               </Box>
               {/* <Box>

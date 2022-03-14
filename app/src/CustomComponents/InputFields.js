@@ -21,7 +21,7 @@ const InputFields = ({
         position="relative"
         top="25px"
         zIndex={10}
-        color={touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}
+        color={touched?.[name] && errors?.[name] ? "red.500" : "emerald.400"}
         fontSize="xs"
       >
         {title}
@@ -31,7 +31,7 @@ const InputFields = ({
         variant="unstyled"
         size="xl"
         placeholder={placeholder}
-        color="black"
+        color="darkBlue.900"
         placeholderTextColor="#ccc"
         type="text"
         onChangeText={onChangeText}
@@ -42,7 +42,7 @@ const InputFields = ({
             {touched?.[name] && errors?.[name] ? (
               <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
             ) : !isValid ? (
-              <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
+              <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4" />
             ) : (
               <></>
             )}
@@ -52,11 +52,11 @@ const InputFields = ({
         pb={2}
         pt={6}
         px={4}
-        borderColor={touched?.[name] && errors?.[name] ? "red.500" : "#a4ffc8"}
+        borderColor={touched?.[name] && errors?.[name] ? "red.500" : "emerald.200"}
         borderRadius="lg"
         borderWidth={1}
         _focus={{
-          borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}`,
+          borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "emerald.400"}`,
         }}
       />
       {touched?.[name] && errors?.[name] && (

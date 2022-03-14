@@ -1,220 +1,351 @@
 import {
   Box,
   Button,
-  CloseIcon,
-  HStack,
-  Image,
-  Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
-  Input,
-  CheckIcon,
+  Pressable,
+  PresenceTransition,
+  Text,
+  Icon,
 } from "native-base";
 import React, { useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  SafeAreaViewBase,
-} from "react-native";
-import AppLoading from "expo-app-loading";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Collapse } from "native-base";
+import { Formik } from "formik";
+import * as yup from "yup";
 
-//import for the collapsible/Expandable view
-import Collapsible from "react-native-collapsible";
-import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
-const Login = ({ navigation }) => {
- 
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import InputFields from "../CustomComponents/InputFields";
+import LoadingModal from "../CustomComponents/LoadingModal";
 
-  const [firstName, setfirstName] = useState("");
-  const [lastName, setlastName] = useState("");
-  const [cnic, setcnic] = useState("");
-  // "#13B995"
-  const getColor = (field, color) => {
-    if (field?.length >= 1) {
-      if (field.match(/^[A-Za-z\s]+$/)) {
-        return color;
-      } else {
-        return "red.500";
+const GET_APPLICANT = gql`
+  query MyQuery(
+    $mobile_number: String = ""
+    $cnic: String = ""
+    $email: String = ""
+  ) {
+    applicants(
+      where: {
+        _or: [
+          { mobile_number: { _eq: $mobile_number } }
+          { cnic: { _eq: $cnic } }
+          { email: { _eq: $email } }
+        ]
+      }
+    ) {
+      cnic
+      email
+      mobile_number
+      id
+    }
+  }
+`;
+
+const ADD_APPLICANT = gql`
+mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: String = "") {
+  insert_applicants_one(object: {cnic: $cnic, email: $email, mobile_number: $mobile_number}) {
+    id
+    email
+    mobile_number
+    cnic
+    otp
+    status
+    otp_created_time
+  }
+}
+`;
+
+const Login = ({ route, navigation }) => {
+  const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
+    GET_APPLICANT,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+    }
+  );
+
+  const [addApplicant, {data: addApplicantData}] = useMutation(ADD_APPLICANT, {
+    onCompleted: data => {
+      setIsOpen(false);
+      setShowModal(false);
+      navigation.navigate("VerifyOTP", {
+        fromLogin: true,
+        data: data
+      });
+      setTimeout(() => {
+        setIsOpen(true);
+      }, 500);
+    }
+  })
+  const [isOpen, setIsOpen] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [formValues, setFormValues] = useState(
+    route?.params?.applicantData?.[0]
+  );
+  let submitForm = false
+
+  const registerValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Please enter valid email")
+      .required("Email Address is Required"),
+    cnic: yup
+      .string()
+      .min(13, ({ min }) => `cnic must be at least ${min} characters`)
+      .max(13, ({ max }) => `Cnic must be at least ${max} characters`)
+      .required("cnic is required"),
+    mobile_number: yup
+      .string()
+      .min(11, ({ min }) => `Mobile must be at least ${min} characters`)
+      .max(11, ({ max }) => `Mobile must be at least ${max} characters`)
+      .required("Mobile Number is required"),
+  });
+
+  const validate = async (values) => {
+    const errors = {}
+    console.log("inside validate")
+    try {
+      const res = await registerValidationSchema.validate(values, { abortEarly: false })
+      // setSubmitForm(true)
+      console.log(submitForm);
+    } catch (error) {
+      submitForm = false
+        error.inner.map(err => {
+          errors[err.path] = err.message
+        });
+        return errors
+    }
+  
+    if(submitForm) {
+    console.log("inside submitform loop")
+      setShowModal(true)
+      try {
+        const response = await getApplicant({
+          variables: {
+            cnic: values.cnic,
+            email: values.email,
+            mobile_number: values.mobile_number,
+          },
+        });
+        console.log("hasura data")
+        return onCompleteGetApplicant(response.data, values);
+      } catch (e) {
+        setShowModal(false);
+        console.log(e);
+        return {};
       }
     } else {
-      return color;
+      return {}
     }
+    
   };
 
-    return (
-      <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box alignItems="flex-start" px={6} mt={6}>
-          <Ionicons
-            name="arrow-back-circle-sharp"
-            size={36}
-            color="white"
-            onPress={
-              () => navigation.goBack()
-              // navigation.navigate("Welcome")
-            }
-          />
-        </Box>
-        <Box alignItems="center">
-          <StepHeader title="Login" />
-        </Box>
-        <Box
-          backgroundColor="white"
-          rounded="xl"
-          roundedBottom="none"
-          py={8}
-          flex={1}
-          // minHeight="100%"
-          mt={5}
-          px={6}
-        >
-          <ScrollView
-            _contentContainerStyle={{
-              flexGrow: 1,
+  const onCompleteGetApplicant = (data, formValues) => {
+    const errors = {};
+    if (data.applicants[0]?.cnic === formValues.cnic) {
+      errors.cnic = "Cnic exists";
+    } 
+    if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
+      errors.mobile_number = "Mobile exists";
+    } 
+    if (data.applicants[0]?.email === formValues.email) {
+      errors.email = "Email Exists";
+    }
+    console.log("close modal");
+    setShowModal(false)
+    return errors;
+  };
+
+  return (
+    <Formik
+      id="sign-in-button"
+      initialValues={{
+        email: "salmanhanif133@gmail.com",
+        mobile_number: "03222681575",
+        cnic: "4230161551219",
+      }}
+      validateOnChange={false}
+      // validate
+      // validateOnBlur={false}
+      // validationSchema={registerValidationSchema}
+      validate={(values) => validate(values)}
+      onSubmit={(values) => {
+        //Register new user
+        addApplicant({
+          variables: {
+            email: values.email.trim().toLowerCase(),
+            cnic: values.cnic,
+            mobile_number: values.mobile_number
+          }
+        
+        })
+      }}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        isValid,
+      }) => (
+        <Box flex={1} minHeight="100%" safeAreaTop={5}>
+          <Box alignItems="flex-start" px={6} mt={6}>
+            <Pressable>
+              {({ isHovered, isFocused, isPressed }) => {
+                return (
+                  <Ionicons
+                    name="arrow-back-circle-sharp"
+                    size={36}
+                    color={isFocused ? "#87e3ff" : "white"}
+                    onPress={
+                      () => navigation.goBack()
+                      // navigation.navigate("Welcome")
+                    }
+                  />
+                );
+              }}
+            </Pressable>
+          </Box>
+          <PresenceTransition
+            visible={isOpen}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+              transition: {
+                duration: 250,
+              },
             }}
           >
-            <Box alignItems={{ md: "center" }}>
-              {/* Mobile Number */}
-              {/* <Box flex={1} width={{ base: "100%", md: "md" }}>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color="#13B995"
-                >
-                  Mobile Number
-                </Text>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  placeholder="03XX-XXXXXX"
-                  color="black"
-                  type="number"
-                  placeholderTextColor="#ccc"
-                  // InputRightElement={
-                  //   <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
-                  // }
-                  InputLeftElement={
-                    <Box pl="5">
-                      <MaterialIcons name="person" size={23} color="black" />
-                    </Box>
-                  }
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor="#a4ffc8"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
+            <Box alignItems="center">
+              <StepHeader title="Login" />
+            </Box>
+          </PresenceTransition>
+          <Box
+            backgroundColor="white"
+            rounded="xl"
+            roundedBottom="none"
+            py={8}
+            flex={1}
+            // minHeight="100%"
+            mt={5}
+            px={6}
+          >
+            <ScrollView
+              _contentContainerStyle={{
+                flexGrow: 1,
+              }}
+            >
+              <Box alignItems={{ md: "center" }}>
+                {/* Mobile Number */}
+                <InputFields
+                  title={"Mobile Number"}
+                  name={"mobile_number"}
+                  errors={errors}
+                  touched={touched}
+                  onChangeText={handleChange("mobile_number")}
+                  onBlur={handleBlur("mobile_number")}
+                  value={values.mobile_number}
+                  placeholder={"03XX-XXXXXX"}
+                  isValid={isValid}
+                  icon={<Icon as={MaterialIcons} name="person" size="23" color="darkBlue.900" />}
+                  
                 />
-              </Box> */}
 
-              {/* CNIC NUMBER */}
-              <Box flex={1} width={{ base: "100%", md: "md" }}>
-                <Text
-                  ml={12}
-                  pl={3}
-                  position="relative"
-                  top={8}
-                  color="#13B995"
-                >
-                  Application ID
-                </Text>
-                <Input
-                  variant="unstyled"
-                  size="xl"
-                  placeholder="XXXXXXXXXXXX"
-                  color="black"
-                  placeholderTextColor="#ccc"
-                  InputRightElement={
-                    // <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4"/>
-                    <></>
-                  }
-                  InputLeftElement={
-                    <Box pl="5">
-                      <MaterialIcons
-                        name="credit-card"
-                        size={23}
-                        color="black"
-                      />
-                    </Box>
-                  }
-                  pb={3}
-                  pt={7}
-                  px={4}
-                  borderColor="#a4ffc8"
-                  borderRadius="lg"
-                  borderWidth={1}
-                  _focus={{
-                    borderColor: "#13B995",
-                  }}
+                {/* CNIC NUMBER */}
+                <InputFields
+                  title={"CNIC Number"}
+                  errors={errors}
+                  touched={touched}
+                  name={"cnic"}
+                  placeholder={"XXXXX-XXXXXXX-X"}
+                  onChangeText={handleChange("cnic")}
+                  onBlur={handleBlur("cnic")}
+                  value={values.cnic}
+                  isValid={isValid}
+                  icon={<Icon as={MaterialIcons} name="credit-card" size="23" color="darkBlue.900" />}
+
+                />
+
+                {/* Email  */}
+                <InputFields
+                  title={"Email ID"}
+                  errors={errors}
+                  touched={touched}
+                  name={"email"}
+                  placeholder={"example@email.com"}
+                  isValid={isValid}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  icon={<Icon as={MaterialIcons} name="email" size="23" color="darkBlue.900" />}
                 />
               </Box>
-            </Box>
-          </ScrollView>
-        </Box>
-        <Box justifyContent="flex-end">
-          <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#f7f7f7"
-              border={1}
-              borderWidth="1"
-              borderColor="#f7f7f7"
-              _text={{
-                color: "#13B995",
-              }}
-              //mb={25}
-              // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("VerifyOTP")
-              }
-            >
-              I NEED HELP
-            </Button>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#317F6E"
-              border={1}
-              borderWidth="1"
-              borderColor="white"
-              //mb={25}
-              // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("VerifyOTP", { fromLogin: true })
-              }
-            >
-              CONFIRM
-            </Button>
-          </Stack>
-        </Box>
-      </Box>
-    );
-};
+              {/* <Box>
+                {Object.values(invalidInput).map((value, index) => {
+                  return <Text key={index}>{value}</Text>;
+                })}
+              </Box> */}
+            </ScrollView>
+          </Box>
+          <Box justifyContent="flex-end">
+            <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+              <Button
+                flex={1}
+                size="md"
+                rounded="md"
+                backgroundColor="#f7f7f7"
+                border={1}
+                borderWidth="1"
+                borderColor="#f7f7f7"
+                _text={{
+                  color: "#13B995",
+                }}
+                //mb={25}
+                // shadow={5}
+                onPress={() =>
+                  // navigation.goBack()
+                  navigation.navigate("VerifyOTP")
+                }
+              >
+                I NEED HELP
+              </Button>
+              {/* <Box id="sign-in-button"/> */}
+              <Button
+                flex={1}
+                size="md"
+                rounded="md"
+                backgroundColor="#317F6E"
+                border={1}
+                borderWidth="1"
+                borderColor="white"
+                onPress={
+                  () => {
+                    submitForm = true
+                      handleSubmit()
+                  }
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
+                  // navigation.goBack()
+                  // getUser()
+
+                  // navigation.navigate("VerifyOTPRegister", { fromRegister: true })
+                }
+              >
+                CONFIRM
+              </Button>
+            </Stack>
+          </Box>
+          <LoadingModal showModal={showModal} />
+        </Box>
+      )}
+    </Formik>
+  );
+};
 
 export default Login;
