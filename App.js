@@ -12,10 +12,10 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import {
   createStackNavigator,
   TransitionPresets,
-  CardStyleInterpolators
+  CardStyleInterpolators,
 } from "@react-navigation/stack";
 
-import { createSharedElementStackNavigator } from "react-navigation-shared-element"
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import React from "react";
 import { StyleSheet, View } from "react-native";
@@ -93,15 +93,48 @@ const NewCustomerStackScreen = () => (
       headerShown: false,
     }}
   >
-    <NewCustomerStack.Screen name="Get Started" component={GetStarted}  options={{
-                //...TransitionPresets.SlideFromRightIOS,
-              }}/>
-    <NewCustomerStack.Screen name="Registration" component={Registration}  options={{
-                // ...TransitionPresets.FadeFromBottomAndroid,
-              }}/>
+    <NewCustomerStack.Screen
+      name="Get Started"
+      component={GetStarted}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
+    />
+    <NewCustomerStack.Screen
+      name="Registration"
+      component={Registration}
+      sharedElements={(route, otherRoute, showing) => {
+        const { id } = route.params;
+        return [
+          {
+            id,
+            animation: "move",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+        ];
+      }}
+      options={() => ({
+        gestureEnabled: false,
+        transitionSpec: {
+          open: {animation: "timing", config: {duration: 500}},
+          close: {animation: "timing", config: {duration: 500}}
+        },
+        // cardStyleInterpolator: ({current: {progress}}) => {
+        //   return {
+        //     cardStyle: {
+        //       opacity: progress
+        //     }
+        //   }
+        // }
+      })}
+    />
     <NewCustomerStack.Screen
       name="VerifyOTP"
-      component={VerifyOTP} options={{
+      component={VerifyOTP}
+      options={{
         cardOverlayEnabled: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
         // ...TransitionPresets.SlideFromRightIOS,
@@ -109,107 +142,155 @@ const NewCustomerStackScreen = () => (
     />
     <NewCustomerStack.Screen
       name="Scanner"
-      component={Scanner} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={Scanner}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Application ID Screen"
-      component={ApplicationID} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={ApplicationID}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="ExistingCustomer"
-      component={ExistingCustomerStackScreen} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={ExistingCustomerStackScreen}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Basic Account Details"
-      component={BasicAccountDetails} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={BasicAccountDetails}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
-        <NewCustomerStack.Screen
+    <NewCustomerStack.Screen
       name="Services"
-      component={Services} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={Services}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Address"
-      component={Address} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={Address}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Personal Details"
-      component={PersonalDetails} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={PersonalDetails}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Profession"
-      component={Profession} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={Profession}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen name="Q/A" component={QuestionsAndAnswers} />
     <NewCustomerStack.Screen
       name="Product Selection"
-      component={ProductSelection} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={ProductSelection}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
-     <NewCustomerStack.Screen
+    <NewCustomerStack.Screen
       name="Upload Documents"
-      component={UploadDocuments} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={UploadDocuments}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="Begin Document Submission"
-      component={BeginDocumentSubmission} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={BeginDocumentSubmission}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
-        <NewCustomerStack.Screen
+    <NewCustomerStack.Screen
       name="Foreign Tax"
-      component={ForeignTax} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={ForeignTax}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
-     <NewCustomerStack.Screen
+    <NewCustomerStack.Screen
       name="Next Of Kin"
-      component={NextOfKin} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={NextOfKin}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="PEP"
-      component={PEP} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={PEP}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
-     <NewCustomerStack.Screen
+    <NewCustomerStack.Screen
       name="Declaration"
-      component={Declaration} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={Declaration}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <NewCustomerStack.Screen
       name="ToC"
-      component={ToC} options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      component={ToC}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
   </NewCustomerStack.Navigator>
 );
 
 const ExistingCustomerStackScreen = () => (
   <ExistingCustomerStack.Navigator
-  initialRouteName="Login"
+    initialRouteName="Login"
     screenOptions={{
       headerShown: false,
     }}
@@ -217,23 +298,29 @@ const ExistingCustomerStackScreen = () => (
     <ExistingCustomerStack.Screen
       name="Login"
       component={Login}
-      options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <ExistingCustomerStack.Screen
       name="VerifyOTP"
       component={VerifyOTP}
-      options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <ExistingCustomerStack.Screen
       name="Continue Application"
       component={ContinueRegistration}
-      options={{
-        //...TransitionPresets.SlideFromRightIOS,
-      }}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
     />
     <ExistingCustomerStack.Screen
       name="Personal Details"
@@ -258,42 +345,46 @@ const ExistingCustomerStackScreen = () => (
 export default function App() {
   return (
     <NhostAuthProvider nhost={nhost}>
-    <NhostApolloProvider nhost={nhost}>
-    <NativeBaseProvider>
-      <Background>
-        <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-            initialRouteName="Welcome"
-          >
-            <Stack.Screen
-              name="Welcome"
-              component={WelcomeScreen}
-              options={{
-                //...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="RegisterRoute"
-              component={NewCustomerStackScreen}
-              options={{
-                //...TransitionPresets.SlideFromRightIOS,
-              }}
-            />
-            <Stack.Screen
-              name="LoginRoute"
-              component={ExistingCustomerStackScreen}
-              options={{
-                ...TransitionPresets.RevealFromBottomAndroid,
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </Background>
-    </NativeBaseProvider>
-    </NhostApolloProvider>
+      <NhostApolloProvider nhost={nhost}>
+        <NativeBaseProvider>
+          <Background>
+            <NavigationContainer theme={MyTheme}>
+              <Stack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                }}
+                initialRouteName="Welcome"
+              >
+                <Stack.Screen
+                  name="Welcome"
+                  component={WelcomeScreen}
+                  options={
+                    {
+                      //...TransitionPresets.SlideFromRightIOS,
+                    }
+                  }
+                />
+                <Stack.Screen
+                  name="RegisterRoute"
+                  component={NewCustomerStackScreen}
+                  options={
+                    {
+                      //...TransitionPresets.SlideFromRightIOS,
+                    }
+                  }
+                />
+                <Stack.Screen
+                  name="LoginRoute"
+                  component={ExistingCustomerStackScreen}
+                  options={{
+                    ...TransitionPresets.RevealFromBottomAndroid,
+                  }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </Background>
+        </NativeBaseProvider>
+      </NhostApolloProvider>
     </NhostAuthProvider>
   );
 }

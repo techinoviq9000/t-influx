@@ -8,6 +8,7 @@ import {
   Text,
   Icon,
 } from "native-base";
+import { Animated } from "react-native";
 import React, { useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -61,6 +62,7 @@ mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: S
 `;
 
 const Registration = ({ route, navigation }) => {
+  const mountedAnimation = React.useRef(new Animated.Value(0)).current
   const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
     GET_APPLICANT,
     {
@@ -161,6 +163,28 @@ const Registration = ({ route, navigation }) => {
     return errors;
   };
 
+  const translateY = mountedAnimation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [500, 0]
+  })
+
+  const animateBack = () => {
+    Animated.timing(mountedAnimation, {
+      toValue: 0,
+      duration: 400,
+      useNativeDriver: true 
+    }).start();
+  };
+  React.useEffect(() => {
+    Animated.timing(mountedAnimation, {
+      toValue: 1,
+      duration: 500,
+      delay: 400,
+      useNativeDriver: true,
+    }).start()
+  }, [])
+  
+
   return (
     <Formik
       id="sign-in-button"
@@ -205,7 +229,12 @@ const Registration = ({ route, navigation }) => {
                     size={36}
                     color={isFocused ? "#87e3ff" : "white"}
                     onPress={
-                      () => navigation.goBack()
+                      () => {
+                        animateBack()
+                        setTimeout(() => {
+                          navigation.navigate("Get Started")                      
+                        }, 200);
+                      }
                       // navigation.navigate("Welcome")
                     }
                   />
@@ -213,29 +242,22 @@ const Registration = ({ route, navigation }) => {
               }}
             </Pressable>
           </Box>
-          <SharedElement>
+          
 
             <Box alignItems="center">
               <StepHeader title="Registration" />
               {/* <Text>ASD</Text> */}
             </Box>
 
-          <Box
-            backgroundColor="white"
-            rounded="xl"
-            roundedBottom="none"
-            py={8}
-            flex={1}
-            // minHeight="100%"
-            mt={5}
-            px={6}
+            <SharedElement id="1" style={{flex: 1}}>
+          <Animated.View style={{backgroundColor: "white", borderRadius: 12, borderBottomLeftRadius: 0, borderBottomRightRadius:0, paddingVertical: 32, paddingHorizontal: 24, marginTop: 20, flex:1}}
           >
             <ScrollView
               _contentContainerStyle={{
                 flexGrow: 1,
               }}
             >
-              <Box alignItems={{ md: "center" }}>
+              <Animated.View style={{opacity: mountedAnimation, transform:[{translateY}]}}>
                 {/* Mobile Number */}
                 <InputFields
                   title={"Mobile Number"}
@@ -279,15 +301,15 @@ const Registration = ({ route, navigation }) => {
                   value={values.email}
                   icon={<Icon as={MaterialIcons} name="email" size="23" color="darkBlue.900" />}
                 />
-              </Box>
+              </Animated.View>
               {/* <Box>
                 {Object.values(invalidInput).map((value, index) => {
                   return <Text key={index}>{value}</Text>;
                 })}
               </Box> */}
             </ScrollView>
-          </Box>
-
+          </Animated.View>
+          </SharedElement>
           <Box justifyContent="flex-end">
             <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
               <Button
@@ -335,7 +357,7 @@ const Registration = ({ route, navigation }) => {
               </Button>
             </Stack>
           </Box>
-          </SharedElement>
+          
           <LoadingModal showModal={showModal} />
         </Box>
       )}
