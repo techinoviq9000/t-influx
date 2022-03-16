@@ -15,6 +15,8 @@ import {
   CardStyleInterpolators
 } from "@react-navigation/stack";
 
+import { createSharedElementStackNavigator } from "react-navigation-shared-element"
+
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import WelcomeScreen from "./app/src/screens/WelcomeScreen";
@@ -82,7 +84,7 @@ const MyTheme = {
 };
 
 const ExistingCustomerStack = createStackNavigator();
-const NewCustomerStack = createStackNavigator();
+const NewCustomerStack = createSharedElementStackNavigator();
 
 const NewCustomerStackScreen = () => (
   <NewCustomerStack.Navigator
@@ -95,7 +97,7 @@ const NewCustomerStackScreen = () => (
                 //...TransitionPresets.SlideFromRightIOS,
               }}/>
     <NewCustomerStack.Screen name="Registration" component={Registration}  options={{
-                ...TransitionPresets.FadeFromBottomAndroid,
+                // ...TransitionPresets.FadeFromBottomAndroid,
               }}/>
     <NewCustomerStack.Screen
       name="VerifyOTP"

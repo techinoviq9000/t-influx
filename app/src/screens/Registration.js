@@ -20,6 +20,7 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import InputFields from "../CustomComponents/InputFields";
 import LoadingModal from "../CustomComponents/LoadingModal";
+import { SharedElement } from "react-navigation-shared-element";
 
 const GET_APPLICANT = gql`
   query MyQuery(
@@ -211,23 +212,13 @@ const Registration = ({ route, navigation }) => {
               }}
             </Pressable>
           </Box>
-          <PresenceTransition
-            visible={isOpen}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-              transition: {
-                duration: 250,
-              },
-            }}
-          >
+          <SharedElement>
+
             <Box alignItems="center">
               <StepHeader title="Registration" />
               {/* <Text>ASD</Text> */}
             </Box>
-          </PresenceTransition>
+
           <Box
             backgroundColor="white"
             rounded="xl"
@@ -295,6 +286,7 @@ const Registration = ({ route, navigation }) => {
               </Box> */}
             </ScrollView>
           </Box>
+
           <Box justifyContent="flex-end">
             <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
               <Button
@@ -342,6 +334,7 @@ const Registration = ({ route, navigation }) => {
               </Button>
             </Stack>
           </Box>
+          </SharedElement>
           <LoadingModal showModal={showModal} />
         </Box>
       )}

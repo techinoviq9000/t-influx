@@ -1,5 +1,6 @@
 import { Box, Button, CheckIcon, HStack, Image, Text } from "native-base";
 import React from "react";
+import { SharedElement } from "react-navigation-shared-element";
 const GetStarted = ({ navigation }) => {
   return (
     <Box flex={1} alignItems="center" minHeight="100%" px={3}>
@@ -12,7 +13,9 @@ const GetStarted = ({ navigation }) => {
         />
         <Text fontSize="3xl" color="white" fontWeight="bold">Before you get started</Text>
         <Text fontSize="2xl" mx={5} mt={1} textAlign="center" color="white" fontWeight="thin">You should have the following documents</Text>
-        <Box backgroundColor="white" rounded="lg" p={4} width={{base: "100%", md: "md"}} mt={10}>
+        <Box width="full">
+        <SharedElement id="1">
+          <Box backgroundColor="white" rounded="lg" p={4} mt={10}>
         <HStack space={2}>
           <CheckIcon size="4" mt="0.5" color="emerald.400" />
           <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">Active Mobile number & Email ID</Text>
@@ -33,7 +36,8 @@ const GetStarted = ({ navigation }) => {
           <CheckIcon size="4" mt="0.5" color="emerald.400" />
           <Text color="darkBlue.900" fontSize="sm" fontWeight="medium" >Active Filer</Text>
         </HStack>          
-          
+        </Box>
+        </SharedElement>
         </Box>
         <Box flex={1} width={{base: "100%", md:"md"}}  justifyContent="flex-end" mt={6} mb={5}>
           <Button
