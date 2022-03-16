@@ -40,6 +40,7 @@ const GET_APPLICANT = gql`
       email
       mobile_number
       id
+      updated_at
     }
   }
 `;
@@ -53,7 +54,7 @@ mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: S
     cnic
     otp
     status
-    otp_created_time
+    updated_at
   }
 }
 `;

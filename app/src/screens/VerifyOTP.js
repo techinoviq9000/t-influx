@@ -20,6 +20,7 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import LoadingModal from "../CustomComponents/LoadingModal";
 import moment from "moment";
 import CountDown from "react-native-countdown-component";
+import { http } from "../utils/http";
 
 const VERIFY_OTP = gql`
   query verifyOTP($otp: String = "", $email: String = "") {
@@ -55,20 +56,30 @@ const GET_CONFIG = gql`
 
 const VerifyOTP = ({ route, navigation }) => {
   const data = route?.params?.data?.insert_applicants_one;
-  const [expiryTime, setExpiryTime] = useState(2)
+  const [updated_at, setUpdated_at] = useState(null)
+  const [disabled, setDisabled] = useState(true);
+  const [countDownId, setCountDownId] = useState(1);
   const getDifference = () => {
-    const created_at = moment(data?.otp_created_time)
-    let diffInMinutes = moment().diff(created_at, 'minutes');
-    return diffInMinutes
-  }
- 
-  const [getConfig, {data: config}] = useLazyQuery(GET_CONFIG)
-  let expiryDuration = config?.config[0]?.otp_expiry_duration
+    console.log(updated_at)
+    const created_at = updated_at ? moment(updated_at) : moment(data?.updated_at)
+    let diffInMinutes = moment().diff(created_at, "minutes");
+    return Math.abs(diffInMinutes);
+  };
+
+  const [getConfig, { data: config }] = useLazyQuery(GET_CONFIG);
+  let expiryDuration = config?.config[0]?.otp_expiry_duration;
   useEffect(() => {
-    getConfig()
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => true)
-    return () => BackHandler.removeEventListener("hardwareBackPress", backHandler.remove());
-  }, [])
+    getConfig();
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => true
+    );
+    return () =>
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        backHandler.remove()
+      );
+  }, []);
 
   const [otpError, setOtpError] = useState(null);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
@@ -79,8 +90,9 @@ const VerifyOTP = ({ route, navigation }) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       setShowLoadingModal(false);
-      console.log(data);
-      navigation.navigate("Basic Account Details") //navigate if otp correct
+      navigation.navigate("Basic Account Details", {
+        data: verifyOTPData
+      }); //navigate if otp correct
     },
     onError: (error) => {
       setShowLoadingModal(false);
@@ -92,23 +104,25 @@ const VerifyOTP = ({ route, navigation }) => {
   const [verifyOTP, { data: verifyOTPData, loading }] = useLazyQuery(
     VERIFY_OTP,
     {
-      notifyOnNetworkStatusChange: true, 
+      notifyOnNetworkStatusChange: true,
       nextFetchPolicy: "network-only",
       fetchPolicy: "network-only",
       onCompleted: (data) => {
-        if (data.applicants.length < 1) { //If otp does not exist in db
+        if (data.applicants.length < 1) {
+          //If otp does not exist in db
           setShowLoadingModal(false);
+          clearOTP();
           return setOtpError("Invalid OTP"); //Set otp error
-        } else { //Otp exists
+        } else {
+          //Otp exists
           setOtpError(null);
-          updateApplicantStatus({ //Change status to approved
+          updateApplicantStatus({
+            //Change status to approved
             variables: {
-              // email: data.applicants[0].email,
-              email: "asdas",
+              email: data.applicants[0].email,
               status: "Approved",
             },
           });
-          return console.log(data);
         }
       },
       onError: (error) => {
@@ -151,6 +165,49 @@ const VerifyOTP = ({ route, navigation }) => {
   const fourthOTP = useRef();
 
   const otpArrayFields = [firstOTP, secondOTP, thirdOTP, fourthOTP];
+  const clearOTP = () => {
+    setOtp([
+      {
+        id: 0,
+        value: "",
+      },
+      {
+        id: 1,
+        value: "",
+      },
+      {
+        id: 2,
+        value: "",
+      },
+      {
+        id: 3,
+        value: "",
+      },
+    ]);
+    firstOTP.current.focus();
+  };
+  const resendOTP = async () => {
+    try {
+      setShowLoadingModal(true);
+      setOtpError(null);
+      clearOTP();
+      const res = await http.post("/resendOTPEmail", {
+        email: data?.email,
+      });
+      console.log(res.data)
+      setUpdated_at(res.data.data)
+      setCountDownId((prevState) => {
+        console.log(countDownId);
+        return prevState + 1;
+      });
+      setShowLoadingModal(false);
+    } catch (e) {
+      setShowLoadingModal(false);
+      clearOTP();
+      setOtpError("Something went wrong");
+      console.log(e);
+    }
+  };
 
   const handleChange = (inputValue, id, secondRef) => {
     setOtp(
@@ -328,19 +385,27 @@ const VerifyOTP = ({ route, navigation }) => {
                 </Text>
               )}
               <Box margin="auto" mt="2">
-              <CountDown
-                until={60*expiryTime}
-                timeToShow={["M","S"]}
-                digitStyle={{width: 'auto', height: 'auto'}}
-                showSeparator={true}
-                digitTxtStyle={{color: "white"}}
-                separatorStyle={{padding: 0, color: "white",  marginBottom: 2}}
-                timeLabels={false}
-                style={{backgroundColor: "#34d399", width: 70, borderRadius: 50}}
-                size={15}
-                onFinish={() => alert('finished')}
-                onPress={() => alert('hello')}
-              />
+                <CountDown
+                  until={60 * 2}
+                  id={`${countDownId}`}
+                  timeToShow={["M", "S"]}
+                  digitStyle={{ width: "auto", height: "auto" }}
+                  showSeparator={true}
+                  digitTxtStyle={{ color: "white" }}
+                  separatorStyle={{
+                    padding: 0,
+                    color: "white",
+                    marginBottom: 2,
+                  }}
+                  timeLabels={false}
+                  style={{
+                    backgroundColor: "#34d399",
+                    width: 70,
+                    borderRadius: 50,
+                  }}
+                  size={15}
+                  onFinish={() => setDisabled(false)}
+                />
               </Box>
             </Box>
           </Box>
@@ -354,17 +419,28 @@ const VerifyOTP = ({ route, navigation }) => {
             rounded="md"
             backgroundColor="#f7f7f7"
             border={1}
+            disabled={disabled}
             borderWidth="1"
             borderColor="#f7f7f7"
-            _text={{
-              color: "#13B995",
-            }}
+            _text={
+              !disabled
+                ? {
+                    color: "#13B995",
+                    fontWeight: "bold",
+                  }
+                : {
+                    color: "rgba(155,155,155,0.5)",
+                  }
+            }
             //mb={25}
             // shadow={5}
-            onPress={() =>
+            onPress={
+              () => {
+                resendOTP();
+                setDisabled(true);
+              }
               // navigation.goBack()
               // navigation.navigate("Continue Application")
-              setExpiryTime(2)
             }
           >
             RESEND OTP
@@ -380,12 +456,12 @@ const VerifyOTP = ({ route, navigation }) => {
             //mb={25}
             // shadow={5}
             onPress={() => {
-              if(parseInt(getDifference()) >= parseInt(expiryDuration)) {
-                console.log(getDifference())
-                console.log(expiryDuration)
-                setOtpError("OTP Expired")
+              console.log(parseInt(getDifference()))
+              if (parseInt(getDifference()) >= parseInt(expiryDuration)) {
+                clearOTP();
+                setOtpError("OTP Expired");
               } else {
-              setShowLoadingModal(true);
+                setShowLoadingModal(true);
                 verifyOTP({
                   variables: {
                     email: data.email,
@@ -393,7 +469,6 @@ const VerifyOTP = ({ route, navigation }) => {
                   },
                 });
               }
-              
             }}
           >
             CONFIRM
