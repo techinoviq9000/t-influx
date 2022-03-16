@@ -9,7 +9,8 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import SelectField from "../CustomComponents/SelectField";
 
-const BasicAccountDetails = ({ navigation }) => {
+const BasicAccountDetails = ({ route, navigation }) => {
+  const data = route?.params?.data?.applicants[0]
   const registerValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -24,7 +25,7 @@ const BasicAccountDetails = ({ navigation }) => {
   return (
     <Formik
       id="sign-in-button"
-      initialValues={{ email: "a@gmail.com", branchName: "2", custRel: "2", purposeOfAcc: "2", accType1: "2"}}
+      initialValues={{ email: data?.email, branchName: "2", custRel: "2", purposeOfAcc: "2", accType1: "2"}}
       validationSchema={registerValidationSchema}
       onSubmit={(values) => navigation.navigate("Services")}
     >

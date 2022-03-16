@@ -41,7 +41,7 @@ const Services = ({ navigation }) => {
     return (
       <Formik
       id="sign-in-button"
-      initialValues={{ atmCard: "", chequeBook: "No Chequebook"}}
+      initialValues={{ atmCard: "asd", chequeBook: "No Chequebook"}}
       validationSchema={registerValidationSchema}
       onSubmit={(values) => navigation.navigate("Personal Details")}
     >
