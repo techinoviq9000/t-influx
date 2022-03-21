@@ -8,8 +8,13 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import { Formik } from "formik";
 import * as yup from "yup";
 import SelectField from "../CustomComponents/SelectField";
+import { SharedElement } from "react-navigation-shared-element";
+import {  Animated } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const BasicAccountDetails = ({ route, navigation }) => {
+  const mountedAnimation = React.useRef(new Animated.Value(0)).current
+  const translateX = React.useRef(new Animated.Value(500)).current
   const data = route?.params?.data?.applicants[0]
   const registerValidationSchema = yup.object().shape({
     email: yup
@@ -21,6 +26,28 @@ const BasicAccountDetails = ({ route, navigation }) => {
     purposeOfAcc: yup.string().required("Please select"),
     accType1: yup.string().required("Please select")
   });
+
+    
+  const translationX = (toValue, delay) => {
+    Animated.timing(translateX, {
+      toValue,
+      duration: 500,
+      delay,
+      useNativeDriver: true 
+    }).start()
+}
+
+const animateBack = () => {
+    translationX(500, 500, 0)
+};
+
+useFocusEffect(
+  React.useCallback(() => {
+    Animated.parallel([
+      translationX(0, 50),
+    ]).start()
+  }, [])
+);
 
   return (
     <Formik
@@ -56,6 +83,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
               }}
             </Pressable>
           </Box> */}
+          <SharedElement id="stepHeader">
           <Box alignItems="center">
             <StepHeader
               title="Basic Account Details"
@@ -63,6 +91,8 @@ const BasicAccountDetails = ({ route, navigation }) => {
               step="1"
             />
           </Box>
+          </SharedElement>
+          <SharedElement id="1" style={{flex: 1}}>
           <Box
             backgroundColor="white"
             rounded="xl"
@@ -79,7 +109,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 pb: 8,
               }}
             >
-              <Box>
+              <Animated.View style={{transform:[{translateX}]}}>
                 {/* City name */}
 
                 <InputFields
@@ -208,10 +238,12 @@ const BasicAccountDetails = ({ route, navigation }) => {
                   ]}
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 /> */}
-              </Box>
+              </Animated.View>
             </ScrollView>
           </Box>
+          </SharedElement>
           <Box justifyContent="flex-end">
+          <SharedElement id="footer">
             <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
               <Button
                 flex={1}
@@ -253,6 +285,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 CONFIRM
               </Button>
             </Stack>
+            </SharedElement>
           </Box>
         </Box>
       )}

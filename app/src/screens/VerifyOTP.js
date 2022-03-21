@@ -9,10 +9,10 @@ import {
   Input,
 } from "native-base";
 
-import { BackHandler } from "react-native";
+import { BackHandler, Animated, Easing } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
-
+import { SharedElement } from "react-navigation-shared-element";
 import { Ionicons } from "@expo/vector-icons";
 
 import OtpFields from "../CustomComponents/OtpFields";
@@ -21,6 +21,7 @@ import LoadingModal from "../CustomComponents/LoadingModal";
 import moment from "moment";
 import CountDown from "react-native-countdown-component";
 import { http } from "../utils/http";
+import { useFocusEffect } from "@react-navigation/native";
 
 const VERIFY_OTP = gql`
   query verifyOTP($otp: String = "", $email: String = "") {
@@ -56,6 +57,8 @@ const GET_CONFIG = gql`
 
 const VerifyOTP = ({ route, navigation }) => {
   const data = route?.params?.data?.insert_applicants_one;
+  const mountedAnimation = React.useRef(new Animated.Value(0)).current
+  const translateX = React.useRef(new Animated.Value(500)).current
   const [updated_at, setUpdated_at] = useState(null)
   const [disabled, setDisabled] = useState(true);
   const [countDownId, setCountDownId] = useState(1);
@@ -68,18 +71,18 @@ const VerifyOTP = ({ route, navigation }) => {
 
   const [getConfig, { data: config }] = useLazyQuery(GET_CONFIG);
   let expiryDuration = config?.config[0]?.otp_expiry_duration;
-  useEffect(() => {
-    getConfig();
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => true
-    );
-    return () =>
-      BackHandler.removeEventListener(
-        "hardwareBackPress",
-        backHandler.remove()
-      );
-  }, []);
+  // useEffect(() => {
+  //   getConfig();
+  //   const backHandler = BackHandler.addEventListener(
+  //     "hardwareBackPress",
+  //     () => true
+  //   );
+  //   return () =>
+  //     BackHandler.removeEventListener(
+  //       "hardwareBackPress",
+  //       backHandler.remove()
+  //     );
+  // }, []);
 
   const [otpError, setOtpError] = useState(null);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
@@ -225,6 +228,28 @@ const VerifyOTP = ({ route, navigation }) => {
   };
   let finalOTP = otp.map((otpItem) => otpItem.value).join("");
 
+  
+  const translationX = (toValue, delay) => {
+      Animated.timing(translateX, {
+        toValue,
+        duration: 500,
+        delay,
+        useNativeDriver: true 
+      }).start()
+  }
+
+  const animateBack = () => {
+      translationX(500, 500, 0)
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Animated.parallel([
+        translationX(0, 50),
+      ]).start()
+    }, [])
+  );
+
   const ModalOverlay = () => {
     return (
       <Modal isOpen={showModal}>
@@ -270,6 +295,7 @@ const VerifyOTP = ({ route, navigation }) => {
   return (
     <Box flex={1} minHeight="100%" safeAreaTop={5}>
       <Box alignItems="flex-start" px={6} mt={6}>
+      <SharedElement id="backButton1">
         <Pressable>
           {({ isHovered, isFocused, isPressed }) => {
             return (
@@ -279,10 +305,10 @@ const VerifyOTP = ({ route, navigation }) => {
                 color={isFocused ? "#87e3ff" : "white"}
                 onPress={
                   () => {
-                    navigation.navigate({
-                      name: "Registration",
-                      params: route.params.data,
-                    });
+                    animateBack()
+                    setTimeout(() => {
+                      navigation.goBack()                      
+                    }, 200);
                   }
                   // navigation.navigate("Welcome")
                 }
@@ -290,7 +316,9 @@ const VerifyOTP = ({ route, navigation }) => {
             );
           }}
         </Pressable>
+        </SharedElement>
       </Box>
+      <SharedElement id="stepHeader">
       <Box alignItems="center">
         {route?.params?.fromRegister ? (
           <StepHeader title="Verify OTP" />
@@ -302,23 +330,23 @@ const VerifyOTP = ({ route, navigation }) => {
           />
         )}
       </Box>
-      <Box
-        backgroundColor="white"
-        rounded="xl"
-        roundedBottom="none"
-        py={8}
-        flex={1}
-        // minHeight="100%"
-        mt={5}
-        px={6}
-      >
+      </SharedElement>
+      <SharedElement id="1" style={{flex: 1}}>
+      <Box backgroundColor="white"
+          rounded="xl"
+          roundedBottom="none"
+          pt={8}
+          flex={1}
+          // minHeight="100%"
+          mt={5}
+        >
         <ScrollView
           _contentContainerStyle={{
             flexGrow: 1,
           }}
           keyboardShouldPersistTaps="never"
         >
-          <Box>
+          <Animated.View style={{transform:[{translateX}]}}>
             <Stack
               direction="row"
               space={5}
@@ -408,18 +436,21 @@ const VerifyOTP = ({ route, navigation }) => {
                 />
               </Box>
             </Box>
-          </Box>
+          </Animated.View>
         </ScrollView>
-      </Box>
+        </Box>
+      </SharedElement>
       <Box justifyContent="flex-end">
+      <SharedElement id="footer">
         <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+        
           <Button
             flex={1}
             size="md"
             rounded="md"
             backgroundColor="#f7f7f7"
             border={1}
-            disabled={disabled}
+            // disabled={disabled}
             borderWidth="1"
             borderColor="#f7f7f7"
             _text={
@@ -436,11 +467,11 @@ const VerifyOTP = ({ route, navigation }) => {
             // shadow={5}
             onPress={
               () => {
-                resendOTP();
-                setDisabled(true);
+                // resendOTP();
+                // setDisabled(true);
+              navigation.navigate("Basic Account Details")
               }
               // navigation.goBack()
-              // navigation.navigate("Continue Application")
             }
           >
             RESEND OTP
@@ -474,6 +505,7 @@ const VerifyOTP = ({ route, navigation }) => {
             CONFIRM
           </Button>
         </Stack>
+        </SharedElement>
       </Box>
       <LoadingModal showModal={showLoadingModal} />
       <ModalOverlay />

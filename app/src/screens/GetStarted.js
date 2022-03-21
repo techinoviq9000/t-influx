@@ -1,44 +1,53 @@
+import { useFocusEffect } from "@react-navigation/native";
 import { Box, Button, CheckIcon, HStack, Image, Text } from "native-base";
 import React, { useState, useRef, useEffect } from "react";
-import {Animated, View} from "react-native";
+import { Animated, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
-const GetStarted = ({  navigation }) => {
-  const [navigating, setNavigating] = useState(false);
-  const myRef = useRef();
-  const [width, setWidth] = useState();
-  const [height, setHeight] = useState();
-  const mountedAnimation =  React.useRef(new Animated.Value(1)).current
+import * as Animatable from "react-native-animatable";
+const GetStarted = ({ route, navigation }) => {
+  const mountedAnimation = useRef(new Animated.Value(0)).current;
 
-  useEffect(() => {
-    const newWidth = (myRef?.current && myRef.current.offsetWidth) || 0;
-    console.log(newWidth);
-    setWidth(newWidth);
-    const newHeight = myRef.current.clientHeight;
-    console.log(newHeight);
-    setHeight(newHeight);
-  }, []);
-
+  const animation = {
+    0: { opacity: 0, translateX: 50 },
+    1: { opacity: 1, translateX: 0 },
+  };
   const fadeOut = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
     Animated.timing(mountedAnimation, {
       toValue: 0,
       duration: 500,
-      useNativeDriver: true
+      useNativeDriver: true,
     }).start();
   };
 
-  React.useEffect(() => {
-
-    const willFocusSubscription = navigation.addListener('focus', () => {
+  const fadeIn = () => {
     Animated.timing(mountedAnimation, {
       toValue: 1,
       duration: 500,
-      useNativeDriver: true
-    }).start();      
-  });
-  return willFocusSubscription
-  }, [])
-  
+      useNativeDriver: true,
+    }).start();
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fadeIn();
+    }, [])
+  );
+
+  const textArray = [
+    "Active Mobile number & Email ID",
+    "Aged 18 and Above",
+    "NADRA CNIC/Passport",
+    "Proof of Income",
+    "Active Filer",
+  ];
+  const MyHStack = ({ text }) => (
+    <HStack space={2} mb={2}>
+      <CheckIcon size="4" mt="0.5" color="emerald.400" />
+      <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
+        {text}
+      </Text>
+    </HStack>
+  );
   return (
     <Box flex={1} alignItems="center" minHeight="100%" px={3}>
       <Image
@@ -61,48 +70,20 @@ const GetStarted = ({  navigation }) => {
       >
         You should have the following documents
       </Text>
-      <Box
-        width="full"
-        ref={myRef}
-        onLayout={(event) => {
-          var { x, y, width, height } = event.nativeEvent.layout;
-          console.log(width)
-        }}
-      >
+      <Box width="full">
         <SharedElement id="1">
-          <Box backgroundColor="white" rounded="lg" p={4} mt={10}>
-              <Animated.View style={{opacity: mountedAnimation}}>
-                <HStack space={2}>
-                  <CheckIcon size="4" mt="0.5" color="emerald.400" />
-                  <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
-                    Active Mobile number & Email ID
-                  </Text>
-                </HStack>
-                <HStack space={2} mt={2}>
-                  <CheckIcon size="4" mt="0.5" color="emerald.400" />
-                  <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
-                    Aged 18 and Above
-                  </Text>
-                </HStack>
-                <HStack space={2} mt={2}>
-                  <CheckIcon size="4" mt="0.5" color="emerald.400" />
-                  <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
-                    NADRA CNIC/Passport
-                  </Text>
-                </HStack>
-                <HStack space={2} mt={2}>
-                  <CheckIcon size="4" mt="0.5" color="emerald.400" />
-                  <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
-                    Proof of Income
-                  </Text>
-                </HStack>
-                <HStack space={2} mt={2}>
-                  <CheckIcon size="4" mt="0.5" color="emerald.400" />
-                  <Text color="darkBlue.900" fontSize="sm" fontWeight="medium">
-                    Active Filer
-                  </Text>
-                </HStack>
-              </Animated.View>
+          <Box backgroundColor="white" rounded="lg" p={4} pb={2} mt={10}>
+            <Animated.View style={{ opacity: mountedAnimation }}>
+              {textArray.map((value, index) => (
+                <Animatable.View  key={index} 
+                  useNativeDriver
+                  animation={animation}
+                  delay={(index) * 200}
+                >
+                  <MyHStack text={value} />
+                </Animatable.View>
+              ))}
+            </Animated.View>
           </Box>
         </SharedElement>
       </Box>
@@ -113,6 +94,7 @@ const GetStarted = ({  navigation }) => {
         mt={6}
         mb={5}
       >
+        <SharedElement id="getStartedBtn1">
         <Button
           size="md"
           rounded="md"
@@ -122,13 +104,12 @@ const GetStarted = ({  navigation }) => {
           borderColor="white"
           shadow={5}
           mb={5}
-          onPress={
-            () => navigation.goBack()
-            // navigation.navigate("Registration")
-          }
+          onPress={() => navigation.goBack()}
         >
           GO BACK
         </Button>
+        </SharedElement>
+        <SharedElement id="getStartedBtn2">
         <Button
           size="md"
           rounded="md"
@@ -141,20 +122,15 @@ const GetStarted = ({  navigation }) => {
             color: "darkBlue.900",
           }}
           onPress={() => {
-            // setNavigating(prev => {
-            //   prev = !prev
-            //   navigation.navigate("Registration", { id: 1 })
-            //   return prev
-            // })
-            fadeOut()
+            fadeOut();
             setTimeout(() => {
-              navigation.navigate("Registration", { id: 1 })
+              navigation.navigate("Registration", { id: 1 });
             }, 200);
-            // console.log(width);
           }}
         >
           I'M READY
         </Button>
+        </SharedElement>
       </Box>
     </Box>
   );

@@ -8,7 +8,7 @@ import {
   Text,
   Icon,
 } from "native-base";
-import { Animated } from "react-native";
+import { Animated , Easing } from "react-native";
 import React, { useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -22,6 +22,7 @@ import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import InputFields from "../CustomComponents/InputFields";
 import LoadingModal from "../CustomComponents/LoadingModal";
 import { SharedElement } from "react-navigation-shared-element";
+import { useFocusEffect } from "@react-navigation/native";
 
 const GET_APPLICANT = gql`
   query MyQuery(
@@ -63,6 +64,8 @@ mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: S
 
 const Registration = ({ route, navigation }) => {
   const mountedAnimation = React.useRef(new Animated.Value(0)).current
+  const translateY = React.useRef(new Animated.Value(500)).current
+  const translateX = React.useRef(new Animated.Value(0)).current
   const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
     GET_APPLICANT,
     {
@@ -75,10 +78,19 @@ const Registration = ({ route, navigation }) => {
     onCompleted: data => {
       setIsOpen(false);
       setShowModal(false);
-      navigation.navigate("VerifyOTP", {
-        fromRegister: true,
-        data: data
-      });
+        translationX(-500, 0, 0)
+        setTimeout(() => {
+          navigation.navigate("VerifyOTP", {
+            fromRegister: true,
+            data
+          });
+        },);
+        
+        setTimeout(() => {
+          setIsOpen(true);
+        }, 500);
+      
+      
       setTimeout(() => {
         setIsOpen(true);
       }, 500);
@@ -163,27 +175,55 @@ const Registration = ({ route, navigation }) => {
     return errors;
   };
 
-  const translateY = mountedAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [500, 0]
-  })
+
+  const translationY = (toValue, delay) => {
+    Animated.timing(translateY, {
+      toValue,
+      duration: 500,
+      delay,
+      easing: Easing.ease,
+      useNativeDriver: true 
+    }).start()
+  }
+
+  const translationX = (toValue, delay, opacityValue) => {
+    Animated.parallel([
+      Animated.timing(mountedAnimation, {
+        toValue: opacityValue,
+        duration: 300,
+        delay: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateX, {
+        toValue,
+        duration: 300,
+        delay,
+        easing: Easing.ease,
+        useNativeDriver: true 
+      })
+    ]).start()
+  }
 
   const animateBack = () => {
-    Animated.timing(mountedAnimation, {
-      toValue: 0,
-      duration: 400,
-      useNativeDriver: true 
-    }).start();
+    Animated.parallel([
+      Animated.timing(mountedAnimation, {
+        toValue: 0,
+        duration: 300,
+        delay: 100,
+        useNativeDriver: true,
+      }),
+      translationY(500, 0),
+    ]).start()
   };
-  React.useEffect(() => {
-    Animated.timing(mountedAnimation, {
-      toValue: 1,
-      duration: 500,
-      delay: 400,
-      useNativeDriver: true,
-    }).start()
-  }, [])
-  
+  useFocusEffect(
+    React.useCallback(() => {
+      Animated.parallel([
+        translationX(0, 100, 1),
+        translationY(0, 100)
+      ]).start()
+    }, [])
+  );
+
 
   return (
     <Formik
@@ -221,6 +261,7 @@ const Registration = ({ route, navigation }) => {
       }) => (
         <Box flex={1} minHeight="100%" safeAreaTop={5}>
           <Box alignItems="flex-start" px={6} mt={6}>
+            <SharedElement id="backButton1">
             <Pressable>
               {({ isHovered, isFocused, isPressed }) => {
                 return (
@@ -232,7 +273,7 @@ const Registration = ({ route, navigation }) => {
                       () => {
                         animateBack()
                         setTimeout(() => {
-                          navigation.navigate("Get Started")                      
+                          navigation.goBack()                      
                         }, 200);
                       }
                       // navigation.navigate("Welcome")
@@ -241,13 +282,15 @@ const Registration = ({ route, navigation }) => {
                 );
               }}
             </Pressable>
+            </SharedElement>
           </Box>
           
-
+              <SharedElement id="stepHeader">
             <Box alignItems="center">
               <StepHeader title="Registration" />
               {/* <Text>ASD</Text> */}
             </Box>
+            </SharedElement>
 
             <SharedElement id="1" style={{flex: 1}}>
           <Animated.View style={{backgroundColor: "white", borderRadius: 12, borderBottomLeftRadius: 0, borderBottomRightRadius:0, paddingVertical: 32, paddingHorizontal: 24, marginTop: 20, flex:1}}
@@ -257,7 +300,7 @@ const Registration = ({ route, navigation }) => {
                 flexGrow: 1,
               }}
             >
-              <Animated.View style={{opacity: mountedAnimation, transform:[{translateY}]}}>
+              <Animated.View style={{opacity: mountedAnimation, transform:[{translateY}, {translateX}]}}>
                 {/* Mobile Number */}
                 <InputFields
                   title={"Mobile Number"}
@@ -311,7 +354,9 @@ const Registration = ({ route, navigation }) => {
           </Animated.View>
           </SharedElement>
           <Box justifyContent="flex-end">
+          <SharedElement id="footer">
             <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+              <SharedElement id="getStartedBtn1" style={{flex: 1}}>
               <Button
                 flex={1}
                 size="md"
@@ -325,14 +370,13 @@ const Registration = ({ route, navigation }) => {
                 }}
                 //mb={25}
                 // shadow={5}
-                onPress={() =>
-                  // navigation.goBack()
-                  navigation.navigate("VerifyOTP")
-                }
+              
               >
                 I NEED HELP
               </Button>
+              </SharedElement>
               {/* <Box id="sign-in-button"/> */}
+              <SharedElement id="getStartedBtn2" style={{flex: 1, height: 38}}>
               <Button
                 flex={1}
                 size="md"
@@ -355,7 +399,9 @@ const Registration = ({ route, navigation }) => {
               >
                 CONFIRM
               </Button>
+              </SharedElement>
             </Stack>
+            </SharedElement>
           </Box>
           
           <LoadingModal showModal={showModal} />

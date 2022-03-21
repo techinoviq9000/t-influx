@@ -18,12 +18,11 @@ import {
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Easing } from "react-native";
 import WelcomeScreen from "./app/src/screens/WelcomeScreen";
 import GetStarted from "./app/src/screens/GetStarted";
 import ContinueRegistration from "./app/src/screens/ContinueRegistration";
 import Background from "./app/src/CustomComponents/Background";
-import Animated, { add } from "react-native-reanimated";
 import UploadDocuments from "./app/src/screens/UploadDocuments";
 import BeginDocumentSubmission from "./app/src/screens/BeginDocumentSubmission";
 import EligibiltyCheck from "./app/src/screens/EligibiltyCheck";
@@ -106,21 +105,40 @@ const NewCustomerStackScreen = () => (
       name="Registration"
       component={Registration}
       sharedElements={(route, otherRoute, showing) => {
-        const { id } = route.params;
         return [
           {
-            id,
+            id: "1",
             animation: "move",
             // resize: "none",
             // align: "right-bottom"
           },
+          {
+            id: "getStartedBtn1",
+            animation: "fade"
+          },
+          {
+            id: "getStartedBtn2",
+            animation: "fade"
+          },
+          {
+            id: "backButton1",
+            animation: "fade-in",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+          {
+            id: "stepHeader",
+            animation: "fade"
+          },
+          
         ];
       }}
       options={() => ({
         gestureEnabled: false,
+        cardOverlayEnabled: false,
         transitionSpec: {
-          open: {animation: "timing", config: {duration: 500}},
-          close: {animation: "timing", config: {duration: 500}}
+          open: {animation: "timing", config: {duration: 100, easing: Easing.inOut(Easing.ease)}},
+          close: {animation: "timing", config: {duration: 100, easing: Easing.inOut(Easing.ease)}}
         },
         // cardStyleInterpolator: ({current: {progress}}) => {
         //   return {
@@ -134,10 +152,35 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="VerifyOTP"
       component={VerifyOTP}
+      sharedElements={(route, otherRoute, showing) => {
+        return [
+          {
+            id: "backButton1",
+            animation: "move",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+          {
+            id: "1",
+            animation: "move",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+          {
+            id: "stepHeader",
+            animation: "fade"
+          },
+          {
+            id: "footer",
+            animation: "fade"
+          }
+        ]
+      }}
       options={{
+        gestureEnabled: false,
+
         cardOverlayEnabled: false,
-        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-        // ...TransitionPresets.SlideFromRightIOS,
+        
       }}
     />
     <NewCustomerStack.Screen
@@ -170,11 +213,36 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="Basic Account Details"
       component={BasicAccountDetails}
-      options={
-        {
-          //...TransitionPresets.SlideFromRightIOS,
-        }
-      }
+      sharedElements={(route, otherRoute, showing) => {
+        return [
+          {
+            id: "backButton1",
+            animation: "move",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+          {
+            id: "1",
+            animation: "move",
+            // resize: "none",
+            // align: "right-bottom"
+          },
+          {
+            id: "stepHeader",
+            animation: "fade"
+          },
+          {
+            id: "footer",
+            animation: "fade"
+          }
+        ]
+      }}
+      options={{
+        gestureEnabled: false,
+
+        cardOverlayEnabled: false,
+        
+      }}
     />
     <NewCustomerStack.Screen
       name="Services"
