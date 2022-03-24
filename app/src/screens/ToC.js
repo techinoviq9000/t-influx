@@ -210,7 +210,7 @@ const ToC = ({ navigation }) => {
           <StepHeader
             title="Terms and Conditons"
             // nextTitle="Next: Terms and Conditons"
-            step="10"
+            step="9"
           />
         </Box>
         <Box
@@ -280,7 +280,7 @@ const ToC = ({ navigation }) => {
 
               </Text>
 
-              <Checkbox value="one" accessibilityLabel="This is a dummy checkbox">I / we hereby agree to the terms and conditions and declarations appended above
+              <Checkbox  colorScheme="emerald" value="one" accessibilityLabel="This is a dummy checkbox">I / we hereby agree to the terms and conditions and declarations appended above
 </Checkbox>
             </Box>
           </ScrollView>
@@ -320,7 +320,10 @@ const ToC = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("PEP")
+                  navigation.reset({
+                    index: 0,
+                    routes:[{name: "EndScreen"}]
+                  })
                 // submitForm()
               }
             >

@@ -1,190 +1,83 @@
 import {
   Box,
   Button,
-  CheckIcon,
-  HStack,
-  Image,
   Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
-  Input,
   Pressable,
-  CloseIcon,
-  FormControl,
-  Switch,
   Divider,
 } from "native-base";
 import React, { useState } from "react";
 import {
-  ImageBackground,
   StyleSheet,
-  View,
-  SafeAreaViewBase,
   Animated,
-  Platform,
 } from "react-native";
-import AppLoading from "expo-app-loading";
 import { SharedElement } from "react-navigation-shared-element";
 
 import { Ionicons } from "@expo/vector-icons";
 import {
-  MaterialCommunityIcons,
   MaterialIcons,
-  FontAwesome,
-  Feather,
 } from "@expo/vector-icons";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import { Formik } from "formik";
+import * as yup from "yup";
+
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import { useFocusEffect } from "@react-navigation/native";
 
 const PersonalDetails = ({ navigation }) => {
-  const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
-  const [show, setShow] = useState(false);
+  const translateX = React.useRef(new Animated.Value(500)).current
 
-  const [fields, setFields] = useState({
-    firstName: "",
-    firstNameActive: false,
-    lastName: "",
-    lastNameActive: false,
-    email: "",
-    emailActive: false,
-    dob: "12/09/2021",
-    dobActive: false,
-    phone: "",
-    phoneActive: false,
+  const registerValidationSchema = yup.object().shape({
+    name: yup
+      .string()
+      .required("Name is Requried"),
+      motherName: yup.string().required("Mother Name is Requried"),
+      placeOfBirth: yup.string().required("Place of Birth is Requried"),
+      nationality: yup.string().required("Nationalilty is Requried"),
+      mailingAddress: yup.string().required("Mailing Address is Required"),
+      permanantAddress: yup.string().required("Permanant Address is Requried"),
+      postalCommunication: yup.string().required("Postal Communication is Requried")
   });
 
-  const addDate = (e, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
-    setDate(currentDate);
-    let tempDate = new Date(currentDate);
-    let fDate =
-      tempDate.getDate() +
-      "/" +
-      (tempDate.getMonth() + 1) +
-      "/" +
-      tempDate.getFullYear();
-    let fieldsCopy = fields;
-    fieldsCopy.dob = fDate;
-    fieldsCopy.dobActive = true;
-    setFields({ ...fieldsCopy });
-    handleValidation();
-  };
+  const translationX = (toValue, delay) => {
+    Animated.timing(translateX, {
+      toValue,
+      duration: 500,
+      delay,
+      useNativeDriver: true 
+    }).start()
+}
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
+const animateBack = () => {
+    translationX(500, 500, 0)
+};
 
-  const [errors, setErrors] = useState({});
-
-  const handleValidation = () => {
-    //First Name
-    if (fields.firstNameActive) {
-      if (fields.firstName === "") {
-        errors.firstName = "Cannot be empty";
-      } else if (!fields.firstName.match(/^[a-zA-Z\s]+$/)) {
-        errors.firstName = "Only letters are allowed";
-      } else {
-        errors.firstName = null;
-      }
-    }
-
-    //Last Name
-    if (fields.lastNameActive) {
-      if (fields.lastName === "") {
-        errors.lastName = "Cannot be empty";
-      } else if (!fields.lastName.match(/^[a-zA-Z\s]+$/)) {
-        errors.lastName = "Only letters are allowed";
-      } else {
-        errors.lastName = null;
-      }
-    }
-
-    //DOB
-    if (fields.dobActive) {
-      if (fields.dob === "") {
-        errors.dob = "Cannot be empty";
-      } else {
-        errors.dob = null;
-      }
-    }
-
-    //phone
-    if (fields.phoneActive) {
-      if (fields.phone === "") {
-        errors.phone = "Cannot be empty";
-      } else if (!fields.phone.match(/^[0-9]*$/)) {
-        errors.phone = "Only numbers";
-      } else {
-        errors.phone = null;
-      }
-    }
-
-    //Email
-    if (fields.emailActive) {
-      if (fields.email === "") {
-        errors.email = "Cannot be empty";
-      } else {
-        let lastAtPos = fields.email.lastIndexOf("@");
-        let lastDotPos = fields.email.lastIndexOf(".");
-
-        if (
-          !(
-            lastAtPos < lastDotPos &&
-            lastAtPos > 0 &&
-            fields.email.indexOf("@@") == -1 &&
-            lastDotPos > 2 &&
-            fields.email.length - lastDotPos > 2
-          )
-        ) {
-          errors.email = "Email is not valid";
-        } else {
-          errors.email = null;
-        }
-      }
-    }
-    setErrors({ ...errors });
-    let formIsValid = false;
-    for (var prop in errors) {
-      if (errors[prop] != null) {
-        formIsValid = false;
-        break;
-      } else {
-        formIsValid = true;
-      }
-    }
-    return formIsValid;
-  };
-
-  const submitForm = () => {
-    fields.firstNameActive = true;
-    fields.lastNameActive = true;
-    fields.emailActive = true;
-    fields.dobActive = true;
-    fields.phoneActive = true;
-    if (handleValidation()) {
-      alert("Form submitted");
-    } else {
-      alert("Make sure you have filled the form correctly!");
-    }
-  };
-
-  const handleChange = (field, e) => {
-    let fieldsCopy = fields;
-    fieldsCopy[field] = e.nativeEvent.text;
-    fieldsCopy[`${field}Active`] = true;
-    setFields({ ...fieldsCopy });
-    handleValidation();
-  };
-
+useFocusEffect(
+  React.useCallback(() => {
+    Animated.parallel([
+      translationX(0, 50),
+    ]).start()
+  }, [])
+);
   return (
+    <Formik
+    id="sign-in-button"
+    validateOnChange={false}
+    initialValues={{ motherName: "", name: "", placeOfBirth: "", nationality: "", mailingAddress: "", permanantAddress: "",  postalCommunication: ""}}
+    validationSchema={registerValidationSchema}
+    onSubmit={(values) => navigation.navigate("Begin Document Submission")}
+  >
+    {({
+      handleChange,
+      handleBlur,
+      handleSubmit,
+      values,
+      errors,
+      touched,
+      isValid,
+    }) => (
     <Box flex={1} minHeight="100%" safeAreaTop={5}>
       <Box alignItems="flex-start" px={6} mt={6}>
       <SharedElement id="backButton1">
@@ -234,32 +127,40 @@ const PersonalDetails = ({ navigation }) => {
           <Animated.View style={{transform:[{translateX}]}}>
             {/* First name */}
             <InputFields
-              fields={fields}
               title={"Customer Name as per CNIC"}
-              errors={errors}
-              name={"firstName"}
+              name={"name"}
               placeholder={"Customer Name as per CNIC"}
-              handleChange={handleChange}
+              value={values.name}
+              onChangeText={handleChange("name")}
+              onBlur={handleBlur("name")}
+              errors={errors}
+              touched={touched}
+              isValid={isValid}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
 
             {/* last name */}
             <InputFields
-              fields={fields}
-              title={"Mother's Madien name"}
+              title={"Mother's Maiden name"}
+              name={"motherName"}
+              placeholder={"Mother's Maiden name"}
+              value={values.motherName}
+              onChangeText={handleChange("motherName")}
+              onBlur={handleBlur("motherName")}
               errors={errors}
-              name={"lastName"}
-              placeholder={"Mother's Madien name"}
-              handleChange={handleChange}
+              touched={touched}
+              isValid={isValid}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
 
+
             <SelectField
-              fields={fields}
               title={"Place of Birth"}
-              name={"branchName"}
+              name={"placeOfBirth"}
               placeholder={"Place of Birth"}
-              handleChange={handleChange}
+              handleChange={handleChange("placeOfBirth")}
+              errors={errors}
+              touched={touched}
               selectValue={[
                 "Pakistan",
                 "United Arab Emirates",
@@ -270,11 +171,12 @@ const PersonalDetails = ({ navigation }) => {
             />
 
             <SelectField
-              fields={fields}
               title={"Other Nationality if any"}
-              name={"branchName"}
+              name={"nationality"}
               placeholder={"Other Nationality if any"}
-              handleChange={handleChange}
+              handleChange={handleChange("nationality")}
+              errors={errors}
+              touched={touched}
               selectValue={["United Arab Emirates", "India", "America", "None"]}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
@@ -283,31 +185,39 @@ const PersonalDetails = ({ navigation }) => {
               Address
             </Text>
             <InputFields
-              fields={fields}
               title={"Residence/ Correspondence (Mailing) Address"}
-              errors={errors}
-              name={"phone"}
+              name={"mailingAddress"}
               placeholder={"Residence/ Correspondence (Mailing) Address"}
-              handleChange={handleChange}
+              value={values.mailingAddress}
+              onChangeText={handleChange("mailingAddress")}
+              onBlur={handleBlur("mailingAddress")}
+              errors={errors}
+              touched={touched}
+              isValid={isValid}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
 
             <InputFields
-              fields={fields}
               title={"Permanant Address"}
-              errors={errors}
-              name={"phone"}
+              name={"permanantAddress"}
               placeholder={"Permanant Address"}
-              handleChange={handleChange}
+              value={values.permanantAddress}
+              onChangeText={handleChange("permanantAddress")}
+              onBlur={handleBlur("permanantAddress")}
+              errors={errors}
+              touched={touched}
+              isValid={isValid}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
 
             <SelectField
-              fields={fields}
+
               title={"Preferred Postal Communication"}
-              name={"branchName"}
+              name={"postalCommunication"}
               placeholder={"Preferred Postal Communication"}
-              handleChange={handleChange}
+              handleChange={handleChange("postalCommunication")}
+              touched={touched}
+              errors={errors}
               selectValue={["Residence Address", "Permanent Address"]}
               icon={<MaterialIcons name="person" size={23} color="black" />}
             />
@@ -351,8 +261,10 @@ const PersonalDetails = ({ navigation }) => {
             onPress={
               () =>
                 // navigation.goBack()
-                navigation.navigate("Upload Documents")
+                // navigation.navigate("Upload Documents"
+                
               // submitForm()
+              handleSubmit()
             }
           >
             CONFIRM
@@ -360,16 +272,9 @@ const PersonalDetails = ({ navigation }) => {
         </Stack>
         </SharedElement>
       </Box>
-      {show && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          display="default"
-          onChange={addDate}
-        />
-      )}
     </Box>
+    )}
+    </Formik>
   );
 };
 

@@ -41,7 +41,6 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
 const Declaration = ({ navigation }) => {
- 
   const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -186,112 +185,118 @@ const Declaration = ({ navigation }) => {
     handleValidation();
   };
 
-  
-    return (
-      <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box alignItems="flex-start" px={6} mt={6}>
+  return (
+    <Box flex={1} minHeight="100%" safeAreaTop={5}>
+      <Box alignItems="flex-start" px={6} mt={6}>
         <Pressable>
-      {({ isHovered, isFocused, isPressed }) => {
-        return (
-          <Ionicons
-          name="arrow-back-circle-sharp"
-          size={36}
-          color={isFocused ? "#87e3ff" : "white"}
-          onPress={
-            () => navigation.goBack()
-            // navigation.navigate("Welcome")
-          }
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Ionicons
+                name="arrow-back-circle-sharp"
+                size={36}
+                color={isFocused ? "#87e3ff" : "white"}
+                onPress={
+                  () => navigation.goBack()
+                  // navigation.navigate("Welcome")
+                }
+              />
+            );
+          }}
+        </Pressable>
+      </Box>
+      <Box alignItems="center">
+        <StepHeader
+          title="Declaration of beneficial Owner"
+          nextTitle="Next: Terms and Conditons"
+          step="8"
         />
-        )
-      }}
-    </Pressable>
-        </Box>
-        <Box alignItems="center">
-          <StepHeader
-            title="Declaration of beneficial Owner"
-            nextTitle="Next: Terms and Conditons"
-            step="9"
-          />
-        </Box>
-        <Box
-          backgroundColor="white"
-          rounded="xl"
-          roundedBottom="none"
-          pt={8}
-          flex={1}
-          // minHeight="100%"
-          mt={5}
+      </Box>
+      <Box
+        backgroundColor="white"
+        rounded="xl"
+        roundedBottom="none"
+        pt={8}
+        flex={1}
+        // minHeight="100%"
+        mt={5}
+      >
+        <ScrollView
+          _contentContainerStyle={{
+            flexGrow: 1,
+            px: 6,
+            pb: 8,
+          }}
         >
-          <ScrollView
-            _contentContainerStyle={{
-              flexGrow: 1,
-              px: 6,
-              pb: 8,
-            }}
-          >
-            <Box>
-            
-              <Radio.Group
-                name="myRadioGroup"
-                accessibilityLabel="favorite number"
-                value={value}
-                onChange={(nextValue) => {
-                  setValue(nextValue);
-                }}
-              >
-                <Radio value="one" my={1}>
-                  There is/are NO beneficial owner(s) of the account apart from
-                  the owner(s) of the account (i.e., accounts are operated in
-                  my/our behalf and not on behalf of a third party).
-                </Radio>
-                <Radio value="two" my={1}>
-                  There is/are a beneficial owner(s) of the account apart from
-                  the owner(s) of the account (i.e., accounts are operated on
-                  behalf of a third party whose details are as follows)
-                </Radio>
-              </Radio.Group>
+          <Box>
+            <Radio.Group
+              name="myRadioGroup"
+              accessibilityLabel="favorite number"
+              value={value}
+              onChange={(nextValue) => {
+                setValue(nextValue);
+              }}
+            >
+              <Radio colorScheme="emerald" value="one" my={1}>
+                There is/are NO beneficial owner(s) of the account apart from
+                the owner(s) of the account (i.e., accounts are operated in
+                my/our behalf and not on behalf of a third party).
+              </Radio>
+              <Radio colorScheme="emerald" value="two" my={1}>
+                There is/are a beneficial owner(s) of the account apart from the
+                owner(s) of the account (i.e., accounts are operated on behalf
+                of a third party whose details are as follows)
+              </Radio>
+            </Radio.Group>
+            {value == "two" && (
+              <Box>
+                <InputFields
+                  fields={fields}
+                  title={"Full Name (as per document name)"}
+                  errors={errors}
+                  name={"firstName"}
+                  placeholder={"Full Name (as per document name)"}
+                  handleChange={handleChange}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
+                <InputFields
+                  fields={fields}
+                  title={"Legal ID Number"}
+                  errors={errors}
+                  name={"firstName"}
+                  placeholder={"Legal ID Number"}
+                  handleChange={handleChange}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
+                <SelectField
+                  fields={fields}
+                  title={"Country of Issuance"}
+                  name={"purposeOfAcc"}
+                  placeholder={"Select Country of Issuance"}
+                  handleChange={handleChange}
+                  selectValue={["List of Countries"]}
+                  icon={<MaterialIcons name="person" size={23} color="black" />}
+                />
+              </Box>
+            )}
 
-              <InputFields
-                fields={fields}
-                title={"Full Name (as per document name)"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Full Name (as per document name)"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <InputFields
-                fields={fields}
-                title={"Legal ID Number"}
-                errors={errors}
-                name={"firstName"}
-                placeholder={"Legal ID Number"}
-                handleChange={handleChange}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-              <SelectField
-                fields={fields}
-                title={"Country of Issuance"}
-                name={"purposeOfAcc"}
-                placeholder={"Select Country of Issuance"}
-                handleChange={handleChange}
-                selectValue={["List of Countries"]}
-                icon={<MaterialIcons name="person" size={23} color="black" />}
-              />
-
-           
-              <Stack direction="row" width={{base: "100%", md: "md"}} mt={4} alignItems="center" flex={1} >
-                <Text flex={1} >Please read the Terms & Conditions</Text>
-                <Box>
-                  <Ionicons
-                    name={`chevron-${collapsed ? "up" : "down"}-circle-outline`}
-                    size={24}
-                    color="#13b995"
-                    onPress={() => setCollapsed(!collapsed)}
-                  />
-                </Box>
-              </Stack>
-              <Collapse isOpen={collapsed}>
+            <Stack
+              direction="row"
+              width={{ base: "100%", md: "md" }}
+              mt={4}
+              alignItems="center"
+              flex={1}
+            >
+              <Text flex={1}>Please read the Terms & Conditions</Text>
+              <Box>
+                <Ionicons
+                  name={`chevron-${collapsed ? "up" : "down"}-circle-outline`}
+                  size={24}
+                  color="#13b995"
+                  onPress={() => setCollapsed(!collapsed)}
+                />
+              </Box>
+            </Stack>
+            <Collapse isOpen={collapsed}>
               <Text mt={2} mb={2} fontSize={"sm"} fontWeight={"medium"}>
                 I/We undertake to give T-Influx notice of any change in what has
                 been mentioned above. I/We am/are aware that submitting false
@@ -306,9 +311,9 @@ const Declaration = ({ navigation }) => {
               </Text>
               <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
                 a. My / our declaration relates to the account as well as to all
-                other accounts maintained with T-Influx in my/our name(s)
-                and which are linked to this account and also to accounts that
-                will be opened in future under my/our name(s) and which will be
+                other accounts maintained with T-Influx in my/our name(s) and
+                which are linked to this account and also to accounts that will
+                be opened in future under my/our name(s) and which will be
                 linked to this account.
               </Text>
               <Text pl={3} color={"#13B995"} zIndex={10} pb={2}>
@@ -326,65 +331,64 @@ const Declaration = ({ navigation }) => {
                 the owner(s) of the account (i.e., accounts are operated on
                 behalf of a third party whose details are as follows)
               </Text>
-
-              </Collapse>
-            </Box>
-          </ScrollView>
-        </Box>
-        <Box justifyContent="flex-end">
-          <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#f7f7f7"
-              border={1}
-              borderWidth="1"
-              borderColor="#f7f7f7"
-              _text={{
-                color: "#13B995",
-              }}
-              //mb={25}
-              // shadow={5}
-              onPress={() =>
-                // navigation.goBack()
-                navigation.navigate("VerifyOTP")
-              }
-            >
-              I NEED HELP
-            </Button>
-            <Button
-              flex={1}
-              size="md"
-              rounded="md"
-              backgroundColor="#317F6E"
-              border={1}
-              borderWidth="1"
-              borderColor="white"
-              //mb={25}
-              // shadow={5}
-              onPress={
-                () =>
-                  // navigation.goBack()
-                  navigation.navigate("ToC")
-                // submitForm()
-              }
-            >
-              CONFIRM
-            </Button>
-          </Stack>
-        </Box>
-        {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode={mode}
-            display="default"
-            onChange={addDate}
-          />
-        )}
+            </Collapse>
+          </Box>
+        </ScrollView>
       </Box>
-    );
+      <Box justifyContent="flex-end">
+        <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+          <Button
+            flex={1}
+            size="md"
+            rounded="md"
+            backgroundColor="#f7f7f7"
+            border={1}
+            borderWidth="1"
+            borderColor="#f7f7f7"
+            _text={{
+              color: "#13B995",
+            }}
+            //mb={25}
+            // shadow={5}
+            onPress={() =>
+              // navigation.goBack()
+              navigation.navigate("VerifyOTP")
+            }
+          >
+            I NEED HELP
+          </Button>
+          <Button
+            flex={1}
+            size="md"
+            rounded="md"
+            backgroundColor="#317F6E"
+            border={1}
+            borderWidth="1"
+            borderColor="white"
+            //mb={25}
+            // shadow={5}
+            onPress={
+              () =>
+                // navigation.goBack()
+                navigation.navigate("ToC")
+              // submitForm()
+            }
+          >
+            CONFIRM
+          </Button>
+        </Stack>
+      </Box>
+      {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={mode}
+          display="default"
+          onChange={addDate}
+        />
+      )}
+    </Box>
+  );
 };
 
 const styles = StyleSheet.create({

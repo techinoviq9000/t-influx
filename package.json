@@ -25,6 +25,7 @@
     "expo-font": "~10.0.3",
     "expo-image-picker": "~11.0.3",
     "expo-linear-gradient": "~10.0.3",
+    "expo-media-library": "~13.0.3",
     "expo-status-bar": "~1.1.0",
     "expo-updates": "~0.10.15",
     "formik": "^2.2.9",

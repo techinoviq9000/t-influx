@@ -1,80 +1,156 @@
 import {
   Box,
   Button,
-  CheckIcon,
   HStack,
   Image,
   Text,
-  VStack,
   ScrollView,
-  Wrap,
   Stack,
-  Center,
   Pressable,
+  Icon,
 } from "native-base";
 import React, { useState } from "react";
+import { Camera } from "expo-camera";
 import {
   ImageBackground,
   StyleSheet,
-  View,
-  SafeAreaViewBase,
+  View
 } from "react-native";
-import AppLoading from "expo-app-loading";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Collapse } from "native-base";
-
-//import for the collapsible/Expandable view
-import Collapsible from "react-native-collapsible";
-import { boxShadow } from "styled-system";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StepHeader from "../CustomComponents/StepsHeader";
+import * as ImagePicker from 'expo-image-picker'; 
+import * as MediaLibrary from "expo-media-library";
 
 const BeginDocumentSubmission = ({ navigation }) => {
- 
+  let camera;
+  const [startCamera, setStartCamera] = React.useState(false);
+  const [previewVisible, setPreviewVisible] = React.useState(false);
+  const [capturedImage, setCapturedImage] = React.useState(null);
 
-  const [list, setList] = useState([
-    {
-      id: 0,
-      title: "NADRA CNIC",
-      status: true,
-      description: "CNIC junaid.png",
-    },
-    {
-      id: 1,
-      title: "Proof Of Income",
-      status: true,
-      description: "proof of income.pdf",
-    },
-    {
-      id: 2,
-      title: "Active Filer Certificate",
-      status: false,
-      description: "certificte.pdf",
-    },
-    {
-      id: 3,
-      title: "Upload Signature on White Paper",
-      status: false,
-      description: "signature.jpg",
-    },
-    {
-      id: 3,
-      title: "Zakaat Affidavit - If Applicable",
-      status: false,
-      description: "zakaat.pdf",
-    },
-  ]);
+  const [nicFront, setNicFront] = useState({
+    taken: false,
+    image: null
+  })
 
+  const [nicBack, setNicBack] = useState({
+    taken: false,
+    image: null
+  })
+
+  const [poi, setPoi] = useState({
+    taken: false,
+    image: null
+  })
+
+  const [signature, setSigntaure] = useState({
+    taken: false,
+    image: null
+  })
+
+
+  const __startCamera = async (state, setState) => {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+  
+      const { status: status2 } = await Camera.requestCameraPermissionsAsync();
+      if (status2 !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: false,
+        exif: true,
+        quality: 0.2,
+      });
+      if (!result.cancelled) {
+        // _uploadImage(result.uri);
+        setState({...state, taken: true, image: result.uri})
+      }
+  }; 
+
+  
+  const CameraPreview = ({ photo }) => {
+    return (
+      <View
+        style={{
+          backgroundColor: "transparent",
+          flex: 1,
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <ImageBackground
+          source={{ uri: photo && photo.uri }}
+          style={{
+            flex: 1,
+          }}
+        />
+
+        <Pressable onPressOut={__retakePicture}>
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Text
+                bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                borderWidth="2"
+                borderColor={isPressed ? "white" : "black"}
+                mb="2"
+              >
+                Retake
+              </Text>
+            );
+          }}
+        </Pressable>
+      </View>
+    );
+  };
+
+  // const [list, setList] = useState([
+  //   {
+  //     id: 0,
+  //     title: "NADRA CNIC FRONT",
+  //     status: true,
+  //     imagePreview: "../assets/nic_image.jpg",
+  //   },
+  //   {
+  //     id: 1,
+  //     title: "NADRA CNIC BACK",
+  //     status: true,
+  //     imagePreview: "../assets/nic_image.jpg",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Proof Of Income",
+  //     status: true,
+  //     imagePreview: "../assets/nic_image.jpg",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Active Filer Certificate",
+  //     status: false,
+  //     imagePreview: "../assets/nic_image.jpg",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Upload Signature on White Paper",
+  //     status: false,
+  //     imagePreview: "../assets/nic_image.jpg",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Zakaat Affidavit - If Applicable",
+  //     status: false,
+  //     picturePreview: ,
+  //   },
+  // ]);
+
+const abc = "../assets/nic_image.jpg"
   const Uploader = ({
-    id,
     title,
-    status,
-    description,
-    collapsed,
-    toggleExpanded,
+    imagePreview,
+    setState,
+    state
   }) => {
     return (
       <Stack
@@ -85,22 +161,22 @@ const BeginDocumentSubmission = ({ navigation }) => {
         borderColor="#13B995"
         borderRadius="lg"
         borderWidth={1}
-        shadow={4}
         mb={4}
         width={{base: "100%", md: "md"}}
       >
         <Box flex={1}>
           <Text color="#13B995">{title}</Text>
-          <Text color="#565656">{description}</Text>
+          {!imagePreview.taken ? <Text>No image</Text> : <Image source={{uri: imagePreview.image}} alt="Alternate Text" size="xl" resizeMode="contain" zIndex={10} />}
         </Box>
-        <Box alignItems="flex-end">
-          <MaterialIcons name="file-upload" size={24} color="blue" />
+        <Box alignItems="flex-end" >
+          <Icon as={MaterialIcons} name="camera-alt" size={6} color="emerald.500" />
+          {imagePreview.taken && <Icon as={MaterialIcons} name="delete" size={6} color="red.800" mt={10} onPress={() => {setState({...state, taken: false, image: null})}}/>}
         </Box>
       </Stack>
     );
   };
 
-  
+  if(!startCamera) {
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
@@ -124,7 +200,7 @@ const BeginDocumentSubmission = ({ navigation }) => {
           <StepHeader
             title="Upload Documents"
             nextTitle="Next: Foreign Account Tax Compliance"
-            step="5"
+            step="4"
           />
         </Box>
         <Box
@@ -143,16 +219,43 @@ const BeginDocumentSubmission = ({ navigation }) => {
             }}
           >
             <Box flex={1} alignItems={{md: "center"}}>
-              {list.map((item) => (
+                <Pressable onPress={() => __startCamera(nicFront, setNicFront) }>
                 <Uploader
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  status={item.status}
-                  description={item.description}
+                  title="Nadrda NIC Front"
+                  imagePreview={nicFront}
+                  state={nicFront}
+                  setState={setNicFront}
                 />
-              ))}
-              <Stack
+                </Pressable>
+
+                <Pressable onPress={() => __startCamera(nicBack, setNicBack) }>
+                <Uploader
+                  title="Nadra NIC Back"
+                  imagePreview={nicBack}
+                  state={nicBack}
+                  setState={setNicBack}
+                />
+                </Pressable>
+
+                <Pressable onPress={() => __startCamera(poi, setPoi) }>
+                <Uploader
+                  title="Proof of Income"
+                  imagePreview={poi}
+                  state={poi}
+                  setState={setPoi}
+                />
+                </Pressable>
+
+                <Pressable onPress={() => __startCamera(signature, setSigntaure) }>
+                <Uploader
+                  title="Upload Signtaure on White Paper"
+                  imagePreview={signature}
+                  state={signature}
+                  setState={setSigntaure}
+                />
+                </Pressable>
+                
+              {/* <Stack
                 direction="row"
                 p={3}
                 textAlign="center"
@@ -164,13 +267,23 @@ const BeginDocumentSubmission = ({ navigation }) => {
                 mb={4}
                 width={{base: "100%", md: "md"}}
               >
-                <Box flex={1} alignItems="center">
-                  <Text color="blue.600" fontWeight="bold">
-                    <MaterialIcons name="add" size={15} color="blue" />
+                <Box flex={1} alignItems="center" alignContent="center">
+                <HStack space={1}>
+                              <Icon
+                      as={MaterialIcons}
+                      name={'add'}
+                      size="15"
+                      color="emerald.500"
+                      position="relative"
+                      top={1}
+                      
+                    />
+                  <Text color="black" fontWeight="bold">
                     Additional Documents
                   </Text>
+                  </HStack>
                 </Box>
-              </Stack>
+              </Stack> */}
             </Box>
             <Box flex={1} justifyContent="flex-end">
               <Button
@@ -194,6 +307,72 @@ const BeginDocumentSubmission = ({ navigation }) => {
         </Box>
       </Box>
     );
+  } if (previewVisible && capturedImage) {
+      return (
+        <CameraPreview photo={capturedImage} retakePicture={__retakePicture} />
+      );
+    } else {
+      return (
+        <Camera
+          style={{ flex: 1, width: "100%" }}
+          ref={(r) => {
+            camera = r;
+          }}
+        >
+          <Box
+            alignItems="flex-end"
+            width="100%"
+            minHeight="100%"
+            flexDirection="row"
+            justifyContent="space-between"
+            px={10}
+          >
+            {/* <Pressable onPressOut={__retakePicture}>
+              {({ isHovered, isFocused, isPressed }) => {
+                return (
+                  <Text
+                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                    borderWidth="2"
+                    borderColor={isPressed ? "white" : "black"}
+                    mb="2"
+                  >
+                    Retake
+                  </Text>
+                );
+              }}
+            </Pressable>
+            <Pressable onPressOut={__takePicture}>
+              {({ isHovered, isFocused, isPressed }) => {
+                return (
+                  <Circle
+                    size={98}
+                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                    borderWidth="2"
+                    borderColor={isPressed ? "white" : "black"}
+                    mb="2"
+                    opacity={0.5}
+                  />
+                );
+              }}
+            </Pressable>
+            <Pressable onPressOut={__takePicture}>
+              {({ isHovered, isFocused, isPressed }) => {
+                return (
+                  <Circle
+                    size={98}
+                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
+                    borderWidth="2"
+                    borderColor={isPressed ? "white" : "black"}
+                    mb="2"
+                    opacity={0.5}
+                  />
+                );
+              }}
+            </Pressable> */}
+          </Box>
+        </Camera>
+      );
+    }
 };
 
 const styles = StyleSheet.create({

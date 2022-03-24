@@ -206,7 +206,7 @@ const NextOfKin = ({ navigation }) => {
           <StepHeader
             title="Next Of Kin Details"
             nextTitle="Next: PEP"
-            step="7"
+            step="6"
           />
         </Box>
         <Box

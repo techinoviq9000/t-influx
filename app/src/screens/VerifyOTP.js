@@ -242,6 +242,11 @@ const VerifyOTP = ({ route, navigation }) => {
       translationX(500, 500, 0)
   };
 
+  const animateFront = () => {
+    translationX(-500, 500, 0)
+};
+
+
   useFocusEffect(
     React.useCallback(() => {
       Animated.parallel([
@@ -399,7 +404,8 @@ const VerifyOTP = ({ route, navigation }) => {
             <Box>
               <Text color="#13B995" fontSize="md" textAlign="center">
                 The OTP has been sent on your email address{" "}
-                <Text fontWeight="bold">{data?.email}</Text>
+                {/* <Text fontWeight="bold">{data?.email}</Text> */}
+                <Text fontWeight="bold">example@gmail.com</Text>
               </Text>
               {otpError && (
                 <Text
@@ -469,7 +475,7 @@ const VerifyOTP = ({ route, navigation }) => {
               () => {
                 // resendOTP();
                 // setDisabled(true);
-              navigation.navigate("Basic Account Details")
+              // navigation.navigate("Basic Account Details")
               }
               // navigation.goBack()
             }
@@ -487,19 +493,12 @@ const VerifyOTP = ({ route, navigation }) => {
             //mb={25}
             // shadow={5}
             onPress={() => {
-              console.log(parseInt(getDifference()))
-              if (parseInt(getDifference()) >= parseInt(expiryDuration)) {
-                clearOTP();
-                setOtpError("OTP Expired");
-              } else {
-                setShowLoadingModal(true);
-                verifyOTP({
-                  variables: {
-                    email: data.email,
-                    otp: finalOTP.toString(),
-                  },
-                });
-              }
+              
+              animateFront();
+              navigation.navigate("Basic Account Details", {
+                data: verifyOTPData
+              }); //navigate if otp correct
+               
             }}
           >
             CONFIRM

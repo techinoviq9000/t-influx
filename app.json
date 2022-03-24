@@ -4,11 +4,10 @@
     "slug": "T-Influx",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/src/assets/icon.png",
+    "icon": "./app/src/assets/ic_launcher.png",
     "splash": {
-      "image": "./app/src/assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./app/src/assets/splash_custom.png",
+      "resizeMode": "cover"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,8 +20,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/src/assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./app/src/assets/ic_launcher_adaptive_fore.png",
+        "backgroundColor": "#34D3C2"
       },
       "package": "com.salman9000.TInflux"
     },

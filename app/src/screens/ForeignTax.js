@@ -209,7 +209,7 @@ const ForeignTax = ({ navigation }) => {
           <StepHeader
             title="Foreign Account Tax Compliance"
             nextTitle="Next: Next Of Kin"
-            step="6"
+            step="5"
           />
         </Box>
         <Box
@@ -232,6 +232,7 @@ const ForeignTax = ({ navigation }) => {
               <HStack alignItems="center" space={2}>
                 <Text color={foreignTax ? "black" : "#13B995"}>No</Text>
                 <Switch
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
                   size="sm"
                   mb={0}
                   isChecked={foreignTax}

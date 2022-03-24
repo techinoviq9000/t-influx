@@ -19,6 +19,7 @@ import {
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import SelectFieldNoFormik from "../CustomComponents/SelectFieldNoFormik";
 
 const Services = ({ navigation }) => {
  
@@ -27,33 +28,32 @@ const Services = ({ navigation }) => {
   const [chequeBookShow, setChequeBookShow] = useState(false);
   const [atmCardShow, setAtmCardShow] = useState(false);
   const [zakatExemption, setzakatExemption] = useState(false);
-  
-  const registerValidationSchema = yup.object().shape({
-    atmCard: yup
-      .string()
-      .required('Please Select'),
-    chequeBook: yup
-    .string()
-    .required('Please Select'),
-  })
+  const [formValues, setFormValues] = useState({atmCard: "", chequeBook: ""})
+  const [errors, setErrors] = useState({})
+  const handleChange = (value, name) => {
+    setFormValues({...formValues, [name]: value })
+    setErrors({...errors, [name]: null})
+    // console.log(value, name)
+  }
 
-  
+  const handleSubmit = () => {
+    let tempError = {}
+console.log(formValues)
+    if(chequeBookShow && formValues.chequeBook=="") {
+      console.log(chequeBookShow,  formValues.chequeBook, "ASdsa")
+      tempError.chequeBook = "Please select chequebook"
+    }
+    if(atmCardShow && formValues.atmCard=="") {
+      tempError.atmCard= "Please select atm card"
+    }
+    console.log(tempError)
+    setErrors(tempError)
+
+    if(Object.keys(tempError).length < 1) {
+      navigation.navigate("Personal Details")
+    }
+  }
     return (
-      <Formik
-      id="sign-in-button"
-      initialValues={{ atmCard: "asd", chequeBook: "No Chequebook"}}
-      validationSchema={registerValidationSchema}
-      onSubmit={(values) => navigation.navigate("Personal Details")}
-    >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-        isValid,
-      }) => (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
         <Pressable>
@@ -103,24 +103,25 @@ const Services = ({ navigation }) => {
                 <Text color={chequeBookShow ? "black" : "#13B995"}>No</Text>
                 <Switch
                   size="sm"
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
+
                   mb={0}
                   isChecked={chequeBookShow}
                   onToggle={() => {
                     setChequeBookShow(!chequeBookShow);
-                    if(chequeBookShow) handleChange("chequeBook")(null)
+                    if(chequeBookShow) handleChange("", "chequeBook")
                   }}
                 />
                 <Text color={chequeBookShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
-              <SelectField
-                isDisabled={!chequeBookShow}
+              <SelectFieldNoFormik
                 title={"Cheque Book Leafs"}
                 name={"chequeBook"}
-                handleChange={handleChange("chequeBook")}
-                errors={errors}
-                touched={touched}
                 placeholder={"Select Cheque Book Leafs"}
-                selectValue={["25", "50", "100"]}
+                handleChange={handleChange}
+                isDisabled={!chequeBookShow}
+                errors={errors}
+                selectValue={chequeBookShow ? ["25", "50", "100"] : []}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -131,22 +132,24 @@ const Services = ({ navigation }) => {
                 <Text color={atmCardShow ? "black" : "#13B995"}>No</Text>
                 <Switch
                   size="sm"
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
+
                   mb={0}
                   isChecked={atmCardShow}
                   onToggle={() => {
                     setAtmCardShow(!atmCardShow);
+                    if(atmCardShow) handleChange("", "atmCard")
                   }}
                 />
                 <Text color={atmCardShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
-              <SelectField
-                isDisabled={!atmCardShow}
+              <SelectFieldNoFormik
                 title={"ATM / Debit Card"}
                 name={"atmCard"}
                 placeholder={"Select ATM / Debit Card"}
-                handleChange={handleChange("atmCard")}
+                handleChange={handleChange}
+                isDisabled={!atmCardShow}
                 errors={errors}
-                touched={touched}
                 selectValue={["Master Card", "Paypak"]}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
@@ -159,6 +162,8 @@ const Services = ({ navigation }) => {
 
                 <Switch
                   size="sm"
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
+
                   mb={0}
                   isChecked={zakatExemption}
                   onToggle={() => {
@@ -175,6 +180,8 @@ const Services = ({ navigation }) => {
                 <Text color={smsAlert ? "black" : "#13B995"}>No</Text>
                 <Switch
                   size="sm"
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
+
                   mb={0}
                   isChecked={smsAlert}
                   onToggle={() => {
@@ -192,6 +199,8 @@ const Services = ({ navigation }) => {
                 </Text>
                 <Switch
                   size="sm"
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
+
                   mb={0}
                   isChecked={communicateViaEmail}
                   onToggle={() => {
@@ -249,9 +258,7 @@ const Services = ({ navigation }) => {
           </Stack>
         </Box>
       </Box>
-     )}
-     </Formik>
-   );
+    )
 };
 
 export default Services;

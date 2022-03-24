@@ -209,7 +209,7 @@ const PEP = ({ navigation }) => {
           <StepHeader
             title="Politically Exposed Persons (PEP)"
             nextTitle="Next: Declaration of beneficial Owner"
-            step="8"
+            step="7"
           />
         </Box>
         <Box
@@ -238,6 +238,7 @@ const PEP = ({ navigation }) => {
               <HStack alignItems="center" space={2}>
                 <Text color={pep ? "black" : "#13B995"}>No</Text>
                 <Switch
+                onTrackColor="emerald.300" onThumbColor="emerald.600"
                   size="sm"
                   mb={0}
                   isChecked={pep}
@@ -247,7 +248,8 @@ const PEP = ({ navigation }) => {
                 />
                 <Text color={pep ? "#13B995" : "black"}>Yes</Text>
               </HStack>
-
+                  {pep &&
+                  <Box>
               <InputFields
                 fields={fields}
                 title={"Position"}
@@ -275,6 +277,8 @@ const PEP = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
+              </Box>
+              }
               <Stack direction="row" width={{base: "100%", md: "md"}} mt={4} alignItems="center" flex={1} >
                 <Text flex={1} >Click here to view more details about PEP</Text>
                 <Box>

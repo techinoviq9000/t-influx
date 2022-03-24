@@ -34,6 +34,7 @@ const InputFields = ({
         color="darkBlue.900"
         placeholderTextColor="#ccc"
         type="text"
+        autoComplete={name}
         onChangeText={onChangeText}
         onBlur={onBlur}
         value={value}
@@ -41,8 +42,8 @@ const InputFields = ({
           <>
             {touched?.[name] && errors?.[name] ? (
               <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-            ) : !isValid ? (
-              <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4" />
+            ) : touched?.[name] ? (
+              <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
             ) : (
               <></>
             )}

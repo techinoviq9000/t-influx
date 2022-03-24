@@ -17,14 +17,10 @@ const BasicAccountDetails = ({ route, navigation }) => {
   const translateX = React.useRef(new Animated.Value(500)).current
   const data = route?.params?.data?.applicants[0]
   const registerValidationSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("Please enter valid email")
-      .required("Email Address is Required"),
     branchName: yup.string().required("Please select"),
     custRel: yup.string().required("Please select"),
     purposeOfAcc: yup.string().required("Please select"),
-    accType1: yup.string().required("Please select")
+    accType1: yup.string().required("Please select"),
   });
 
     
@@ -41,20 +37,15 @@ const animateBack = () => {
     translationX(500, 500, 0)
 };
 
-useFocusEffect(
-  React.useCallback(() => {
-    Animated.parallel([
-      translationX(0, 50),
-    ]).start()
-  }, [])
-);
 
   return (
     <Formik
       id="sign-in-button"
-      initialValues={{ email: data?.email, branchName: "2", custRel: "2", purposeOfAcc: "2", accType1: "2"}}
+      initialValues={{ branchName: "", custRel: "", purposeOfAcc: "", accType1: ""}}
       validationSchema={registerValidationSchema}
-      onSubmit={(values) => navigation.navigate("Services")}
+      validateOnChange={false}
+      validateOnBlur={true}
+      onSubmit={(values) => {console.log(values); navigation.navigate("Services")}}
     >
       {({
         handleChange,
@@ -83,7 +74,6 @@ useFocusEffect(
               }}
             </Pressable>
           </Box> */}
-          <SharedElement id="stepHeader">
           <Box alignItems="center">
             <StepHeader
               title="Basic Account Details"
@@ -91,8 +81,6 @@ useFocusEffect(
               step="1"
             />
           </Box>
-          </SharedElement>
-          <SharedElement id="1" style={{flex: 1}}>
           <Box
             backgroundColor="white"
             rounded="xl"
@@ -109,38 +97,24 @@ useFocusEffect(
                 pb: 8,
               }}
             >
-              <Animated.View style={{transform:[{translateX}]}}>
-                {/* City name */}
-
-                <InputFields
-                  title={"Email"}
-                  name={"email"}
-                  errors={errors}
-                  touched={touched}
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  placeholder={"example@email.com"}
-                  icon={<MaterialIcons name="email" size={23} color="black" />}
-                />
                 <SelectField
                   title={"Branch Name"}
                   name={"branchName"}
+                  placeholder={"Select Branch Name"}
                   handleChange={handleChange("branchName")}
                   errors={errors}
                   touched={touched}
-                  placeholder={"Select Branch Name"}
-                  selectValue={["Area Names"]}
+                  selectValue={["Clifton", "Tariq Road", "Bahadurabad"]}
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 />
 
                 <SelectField
-                  title={"Customer's Relationship"}
-                  name={"custRel"}
-                  handleChange={handleChange("custRel")}
+                  title={"Customer Type"}
+                  name={"custType"}
+                  placeholder={"Select Type"}
+                  handleChange={handleChange("custType")}
                   errors={errors}
                   touched={touched}
-                  placeholder={"Select Relationship"}
                   selectValue={[
                     "Individual (Single)",
                     "Joint (Either/Survivor)",
@@ -152,10 +126,10 @@ useFocusEffect(
                 <SelectField
                   title={"Purpose of Account"}
                   name={"purposeOfAcc"}
+                  placeholder={"Select Purpose of Account"}
                   handleChange={handleChange("purposeOfAcc")}
                   errors={errors}
                   touched={touched}
-                  placeholder={"Select Purpose of Account"}
                   selectValue={[
                     "Salary Transfer",
                     "Savings",
@@ -170,10 +144,10 @@ useFocusEffect(
                 <SelectField
                   title={"Account Type (1)"}
                   name={"accType1"}
+                  placeholder={"Select Account Type (1)"}
                   handleChange={handleChange("accType1")}
                   errors={errors}
                   touched={touched}
-                  placeholder={"Select Account Type (1)"}
                   selectValue={[
                     "PKR Current Account",
                     "PKR Savings Account (Monthly)",
@@ -238,12 +212,9 @@ useFocusEffect(
                   ]}
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 /> */}
-              </Animated.View>
             </ScrollView>
           </Box>
-          </SharedElement>
           <Box justifyContent="flex-end">
-          <SharedElement id="footer">
             <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
               <Button
                 flex={1}
@@ -285,7 +256,6 @@ useFocusEffect(
                 CONFIRM
               </Button>
             </Stack>
-            </SharedElement>
           </Box>
         </Box>
       )}

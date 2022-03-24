@@ -90,7 +90,7 @@ const ProductSelection = ({ navigation }) => {
                 return (
                   <Stack
                     direction="row"
-                    alignItems={`${!recommended && "center"}`}
+                    alignItems={!recommended ? "center" : "flex-start"}
                     py={5}
                     px={4}
                     // backgroundColor="white"

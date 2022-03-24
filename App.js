@@ -52,6 +52,7 @@ import Address from "./app/src/screens/Address";
 // import { initializeApp } from "firebase/app";
 // import { getAnalytics } from "firebase/analytics";
 import Scanner from "./app/src/screens/Scanner";
+import EndScreen from "./app/src/screens/EndScreen";
 // import Environment from "./app/src/utils/environment";
 // // TODO: Add SDKs for Firebase products that you want to use
 // // https://firebase.google.com/docs/web/setup#available-libraries
@@ -213,30 +214,6 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="Basic Account Details"
       component={BasicAccountDetails}
-      sharedElements={(route, otherRoute, showing) => {
-        return [
-          {
-            id: "backButton1",
-            animation: "move",
-            // resize: "none",
-            // align: "right-bottom"
-          },
-          {
-            id: "1",
-            animation: "move",
-            // resize: "none",
-            // align: "right-bottom"
-          },
-          {
-            id: "stepHeader",
-            animation: "fade"
-          },
-          {
-            id: "footer",
-            animation: "fade"
-          }
-        ]
-      }}
       options={{
         gestureEnabled: false,
 
@@ -347,6 +324,15 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="ToC"
       component={ToC}
+      options={
+        {
+          //...TransitionPresets.SlideFromRightIOS,
+        }
+      }
+    />
+    <NewCustomerStack.Screen
+      name="EndScreen"
+      component={EndScreen}
       options={
         {
           //...TransitionPresets.SlideFromRightIOS,
