@@ -18,7 +18,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
   const data = route?.params?.data?.applicants[0]
   const registerValidationSchema = yup.object().shape({
     branchName: yup.string().required("Please select"),
-    custRel: yup.string().required("Please select"),
+    custType: yup.string().required("Please select"),
     purposeOfAcc: yup.string().required("Please select"),
     accType1: yup.string().required("Please select"),
   });
@@ -41,7 +41,7 @@ const animateBack = () => {
   return (
     <Formik
       id="sign-in-button"
-      initialValues={{ branchName: "", custRel: "", purposeOfAcc: "", accType1: ""}}
+      initialValues={{ branchName: "", custType: "", purposeOfAcc: "", accType1: ""}}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
       validateOnBlur={true}
