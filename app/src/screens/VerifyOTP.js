@@ -55,6 +55,18 @@ const GET_CONFIG = gql`
   }
 `;
 
+const INSERT_APPLICANT_ID = gql`mutation insertApplicantId($user_id: Int!) {
+  insert_applicant_id_one(object: {user_id: $user_id}) {
+    applicant_id
+    user_id
+    applicant {
+      email
+    }
+  }
+}
+
+`
+
 const VerifyOTP = ({ route, navigation }) => {
   const data = route?.params?.data?.insert_applicants_one;
   const mountedAnimation = React.useRef(new Animated.Value(0)).current
@@ -70,19 +82,33 @@ const VerifyOTP = ({ route, navigation }) => {
   };
 
   const [getConfig, { data: config }] = useLazyQuery(GET_CONFIG);
+  const [insertApplicantId] = useMutation(INSERT_APPLICANT_ID, {
+    onCompleted: data => {
+      setShowLoadingModal(false);
+      navigation.navigate("Basic Account Details", {
+        data,
+        fields: route?.params?.fields
+      }); //navigate if otp correct
+    },
+    onError: (error) => {
+      setShowLoadingModal(false);
+      console.log(error);
+      return setOtpError("Something went wrong");
+    }
+  });
   let expiryDuration = config?.config[0]?.otp_expiry_duration;
-  // useEffect(() => {
-  //   getConfig();
-  //   const backHandler = BackHandler.addEventListener(
-  //     "hardwareBackPress",
-  //     () => true
-  //   );
-  //   return () =>
-  //     BackHandler.removeEventListener(
-  //       "hardwareBackPress",
-  //       backHandler.remove()
-  //     );
-  // }, []);
+  useEffect(() => {
+    getConfig();
+    // const backHandler = BackHandler.addEventListener(
+    //   "hardwareBackPress",
+    //   () => true
+    // );
+    // return () =>
+    //   BackHandler.removeEventListener(
+    //     "hardwareBackPress",
+    //     backHandler.remove()
+    //   );
+  }, []);
 
   const [otpError, setOtpError] = useState(null);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
@@ -91,11 +117,12 @@ const VerifyOTP = ({ route, navigation }) => {
     notifyOnNetworkStatusChange: true,
     nextFetchPolicy: "network-only",
     fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      setShowLoadingModal(false);
-      navigation.navigate("Basic Account Details", {
-        data: verifyOTPData
-      }); //navigate if otp correct
+    onCompleted: data  => {
+      insertApplicantId({
+          variables: {
+            user_id: verifyOTPData.applicants[0].id
+          }
+      })
     },
     onError: (error) => {
       setShowLoadingModal(false);
@@ -404,8 +431,7 @@ const VerifyOTP = ({ route, navigation }) => {
             <Box>
               <Text color="#13B995" fontSize="md" textAlign="center">
                 The OTP has been sent on your email address{" "}
-                {/* <Text fontWeight="bold">{data?.email}</Text> */}
-                <Text fontWeight="bold">example@gmail.com</Text>
+                <Text fontWeight="bold">{data?.email}</Text>
               </Text>
               {otpError && (
                 <Text
@@ -456,7 +482,7 @@ const VerifyOTP = ({ route, navigation }) => {
             rounded="md"
             backgroundColor="#f7f7f7"
             border={1}
-            // disabled={disabled}
+            disabled={disabled}
             borderWidth="1"
             borderColor="#f7f7f7"
             _text={
@@ -473,8 +499,8 @@ const VerifyOTP = ({ route, navigation }) => {
             // shadow={5}
             onPress={
               () => {
-                // resendOTP();
-                // setDisabled(true);
+                resendOTP();
+                setDisabled(true);
               // navigation.navigate("Basic Account Details")
               }
               // navigation.goBack()
@@ -493,12 +519,18 @@ const VerifyOTP = ({ route, navigation }) => {
             //mb={25}
             // shadow={5}
             onPress={() => {
-              
-              animateFront();
-              navigation.navigate("Basic Account Details", {
-                data: verifyOTPData
-              }); //navigate if otp correct
-               
+              if (parseInt(getDifference()) >= parseInt(expiryDuration)) {
+                clearOTP();
+                setOtpError("OTP Expired");
+              } else {
+                setShowLoadingModal(true);
+                verifyOTP({
+                  variables: {
+                    email: data.email,
+                    otp: finalOTP.toString(),
+                  },
+                });
+              }
             }}
           >
             CONFIRM

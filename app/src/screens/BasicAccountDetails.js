@@ -1,4 +1,4 @@
-import { Box, Button, ScrollView, Stack, Pressable } from "native-base";
+import { Box, Button, ScrollView, Stack, useToast } from "native-base";
 import React, { useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -9,43 +9,155 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import SelectField from "../CustomComponents/SelectField";
 import { SharedElement } from "react-navigation-shared-element";
-import {  Animated } from "react-native";
+import { Animated } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import moment from "moment";
+import { gql, useMutation } from "@apollo/client";
+import LoadingModal from "../CustomComponents/LoadingModal";
 
+const INSERT_DATA = gql`
+mutation MyMutation(
+  $value_1: String!
+  $field_id_1: Int!
+  $applicant_id_1: uuid!
+  $value_2: String!
+  $field_id_2: Int!
+  $applicant_id_2: uuid!
+  $value_3: String!
+  $field_id_3: Int!
+  $applicant_id_3: uuid!
+  $value_4: String!
+  $field_id_4: Int!
+  $applicant_id_4: uuid!
+) {
+  one: insert_data_table_one(
+    object: {
+      value: $value_1
+      field_id: $field_id_1
+      applicant_id: $applicant_id_1
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_1}}}
+  ) {
+    id
+  }
+  two: insert_data_table_one(
+    object: {
+      value: $value_2
+      field_id: $field_id_2
+      applicant_id: $applicant_id_2
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_2}}}
+  ) {
+    id
+  }
+  three: insert_data_table_one(
+    object: {
+      value: $value_3
+      field_id: $field_id_3
+      applicant_id: $applicant_id_3
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_3}}}
+  ) {
+    id
+  }
+  four: insert_data_table_one(
+    object: {
+      value: $value_4
+      field_id: $field_id_4
+      applicant_id: $applicant_id_4
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_4}}}
+  ) {
+    id
+  }
+}
+`;
 const BasicAccountDetails = ({ route, navigation }) => {
-  const mountedAnimation = React.useRef(new Animated.Value(0)).current
-  const translateX = React.useRef(new Animated.Value(500)).current
-  const data = route?.params?.data?.applicants[0]
+  const mountedAnimation = React.useRef(new Animated.Value(0)).current;
+  const translateX = React.useRef(new Animated.Value(500)).current;
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.data?.insert_applicant_id_one;
+  const applicant_id = applicantData?.applicant_id;
+  const email = applicantData?.applicant.email;
+  const user_id = applicantData?.user_id;
+  const toast = useToast();
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+
+
   const registerValidationSchema = yup.object().shape({
-    branchName: yup.string().required("Please select"),
+    branchName: yup
+      .string()
+      .required(`Please select ${fieldsArray[0].field_name}`),
     custType: yup.string().required("Please select"),
     purposeOfAcc: yup.string().required("Please select"),
     accType1: yup.string().required("Please select"),
   });
 
-    
   const translationX = (toValue, delay) => {
     Animated.timing(translateX, {
       toValue,
       duration: 500,
       delay,
-      useNativeDriver: true 
-    }).start()
-}
+      useNativeDriver: true,
+    }).start();
+  };
 
-const animateBack = () => {
-    translationX(500, 500, 0)
-};
+  const animateBack = () => {
+    translationX(500, 500, 0);
+  };
 
+  const [insertData, { data }] = useMutation(INSERT_DATA, {
+    onCompleted: (data) => {
+      setShowLoadingModal(false);
+      navigation.navigate("Services", {
+        data: applicantData,
+        fields: fieldsArray
+      }); //navigate if otp correct
+    },
+    onError: (error) => {
+      setShowLoadingModal(false);
+      console.log(error);
+      toast.show({
+        title: "Error",
+        placement: "top",
+        status: "error",
+        description: "Unable to proceed. Please contact support at support@techinoviq.com"
+      })
+    },
+  });
+  console.log(moment({}));
 
   return (
     <Formik
       id="sign-in-button"
-      initialValues={{ branchName: "", custType: "", purposeOfAcc: "", accType1: ""}}
+      initialValues={{
+        branchName: "",
+        custType: "",
+        purposeOfAcc: "",
+        accType1: "",
+      }}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
       validateOnBlur={true}
-      onSubmit={(values) => {console.log(values); navigation.navigate("Services")}}
+      onSubmit={(values) => {
+        console.log(values);
+        insertData({
+          variables: {
+            value_1: values.branchName,
+            field_id_1: fieldsArray[0].id,
+            applicant_id_1: applicant_id,
+            value_2: values.custType,
+            field_id_2: fieldsArray[1].id,
+            applicant_id_2: applicant_id,
+            value_3: values.purposeOfAcc,
+            field_id_3: fieldsArray[2].id,
+            applicant_id_3: applicant_id,
+            value_4: values.accType1,
+            field_id_4: fieldsArray[3].id,
+            applicant_id_4: applicant_id
+          },
+        });
+      }}
     >
       {({
         handleChange,
@@ -97,75 +209,51 @@ const animateBack = () => {
                 pb: 8,
               }}
             >
-                <SelectField
-                  title={"Branch Name"}
-                  name={"branchName"}
-                  placeholder={"Select Branch Name"}
-                  handleChange={handleChange("branchName")}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={["Clifton", "Tariq Road", "Bahadurabad"]}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              <SelectField
+                title={fieldsArray[0].field_name}
+                name={"branchName"}
+                placeholder={fieldsArray[0].place_holder}
+                handleChange={handleChange("branchName")}
+                errors={errors}
+                touched={touched}
+                selectValue={fieldsArray[0].dropdown_values}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-                <SelectField
-                  title={"Customer Type"}
-                  name={"custType"}
-                  placeholder={"Select Type"}
-                  handleChange={handleChange("custType")}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={[
-                    "Individual (Single)",
-                    "Joint (Either/Survivor)",
-                    "Minor (Joint)",
-                  ]}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              <SelectField
+                title={fieldsArray[1].field_name}
+                name={"custType"}
+                placeholder={fieldsArray[1].place_holder}
+                handleChange={handleChange("custType")}
+                errors={errors}
+                touched={touched}
+                selectValue={fieldsArray[1].dropdown_values}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-                <SelectField
-                  title={"Purpose of Account"}
-                  name={"purposeOfAcc"}
-                  placeholder={"Select Purpose of Account"}
-                  handleChange={handleChange("purposeOfAcc")}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={[
-                    "Salary Transfer",
-                    "Savings",
-                    "Business",
-                    "Consumer Loans",
-                    "Investment",
-                    "Others",
-                  ]}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              <SelectField
+                title={fieldsArray[2].field_name}
+                name={"purposeOfAcc"}
+                placeholder={fieldsArray[2].place_holder}
+                handleChange={handleChange("purposeOfAcc")}
+                errors={errors}
+                touched={touched}
+                selectValue={fieldsArray[2].dropdown_values}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-                <SelectField
-                  title={"Account Type (1)"}
-                  name={"accType1"}
-                  placeholder={"Select Account Type (1)"}
-                  handleChange={handleChange("accType1")}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={[
-                    "PKR Current Account",
-                    "PKR Savings Account (Monthly)",
-                    "USD Current Account",
-                    "USD Savings Account (Monthly)",
-                    "AED Current Account",
-                    "AED Savings Account (Monthly)",
-                    "Euro Current Account",
-                    "Euro Savings Account (Monthly)",
-                    "SAR Current Account",
-                    "SAR Savings Account (Monthly)",
-                    "GBP Current Account",
-                    "GBP Savings Account (Monthly)",
-                  ]}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
+              <SelectField
+                title={fieldsArray[3].field_name}
+                name={"accType1"}
+                placeholder={fieldsArray[3].place_holder}
+                handleChange={handleChange("accType1")}
+                errors={errors}
+                touched={touched}
+                selectValue={fieldsArray[3].dropdown_values}
+                icon={<MaterialIcons name="person" size={23} color="black" />}
+              />
 
-                {/* Account Type (2)
+              {/* Account Type (2)
                  <SelectField
 
                   title={"Account Type (2)"}
@@ -189,8 +277,8 @@ const animateBack = () => {
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 /> */}
 
-                {/* Account Type (3) */}
-                {/* <SelectField
+              {/* Account Type (3) */}
+              {/* <SelectField
 
                   title={"Account Type (3)"}
                   name={"accType3"}
@@ -246,17 +334,18 @@ const animateBack = () => {
                 borderColor="white"
                 //mb={25}
                 // shadow={5}
-                onPress={
-                  () =>
-                    // navigation.goBack()
-                    // navigation.navigate("Services")
+                onPress={() => {
+                  setShowLoadingModal(true);
                   handleSubmit()
+                }
                 }
               >
                 CONFIRM
               </Button>
             </Stack>
           </Box>
+      <LoadingModal showModal={showLoadingModal} />
+
         </Box>
       )}
     </Formik>

@@ -46,13 +46,19 @@ const SelectField = ({
             InputRightElement={
               <>
                 {touched?.[name] && errors?.[name] ? (
+                  <>
                   <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
+                  <ChevronDownIcon size="5" color="red.500" mr="2"/>
+                  </>
                 ) : touched?.[name] ? (
+                  <> 
                   <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4" />
+                  <ChevronDownIcon size="5" color="emerald.400" mr="2"/>
+                  </>
                 ) : (
-                  <></>
+                  <ChevronDownIcon size="5" color="emerald.400" mr="2"/>
                 )}
-                <ChevronDownIcon size="5" color="#13B995" mr="2"/>
+                
               </>
             }
             fontSize="18px"

@@ -105,6 +105,7 @@ const NewCustomerStackScreen = () => (
     <NewCustomerStack.Screen
       name="Registration"
       component={Registration}
+      params={"abc"}
       sharedElements={(route, otherRoute, showing) => {
         return [
           {
@@ -396,7 +397,7 @@ const ExistingCustomerStackScreen = () => (
   </ExistingCustomerStack.Navigator>
 );
 
-export default function App() {
+export default function App() {  
   return (
     <NhostAuthProvider nhost={nhost}>
       <NhostApolloProvider nhost={nhost}>

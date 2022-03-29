@@ -82,7 +82,8 @@ const Registration = ({ route, navigation }) => {
         setTimeout(() => {
           navigation.navigate("VerifyOTP", {
             fromRegister: true,
-            data
+            data,
+            fields: route?.params?.fields
           });
         },);
         
@@ -139,13 +140,13 @@ const Registration = ({ route, navigation }) => {
     console.log("inside submitform loop")
       setShowModal(true)
       try {
-        // const response = await getApplicant({
-        //   variables: {
-        //     cnic: values.cnic,
-        //     email: values.email,
-        //     mobile_number: values.mobile_number,
-        //   },
-        // });
+        const response = await getApplicant({
+          variables: {
+            cnic: values.cnic,
+            email: values.email,
+            mobile_number: values.mobile_number,
+          },
+        });
         console.log("hasura data")
         return onCompleteGetApplicant(response.data, values);
       } catch (e) {
@@ -161,15 +162,15 @@ const Registration = ({ route, navigation }) => {
 
   const onCompleteGetApplicant = (data, formValues) => {
     const errors = {};
-    // if (data.applicants[0]?.cnic === formValues.cnic) {
-    //   errors.cnic = "Cnic exists";
-    // } 
-    // if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
-    //   errors.mobile_number = "Mobile exists";
-    // } 
-    // if (data.applicants[0]?.email === formValues.email) {
-    //   errors.email = "Email Exists";
-    // }
+    if (data.applicants[0]?.cnic === formValues.cnic) {
+      errors.cnic = "Cnic exists";
+    } 
+    if (data.applicants[0]?.mobile_number === formValues.mobile_number) {
+      errors.mobile_number = "Mobile exists";
+    } 
+    if (data.applicants[0]?.email === formValues.email) {
+      errors.email = "Email Exists";
+    }
     console.log("close modal");
     setShowModal(false)
     return errors;
@@ -229,31 +230,27 @@ const Registration = ({ route, navigation }) => {
     <Formik
       id="sign-in-button"
       initialValues={{
-        email: "",
-        mobile_number: "",
-        cnic: "",
+        email: "salmanhanif133@gmail.com",
+        mobile_number: "03222681575",
+        cnic: "4230161551219",
       }}
       validateOnChange={false}
-      // validate
-      // validateOnBlur={false}
-      // validationSchema={registerValidationSchema}
       validate={(values) => validate(values)}
       onSubmit={(values) => {
         //Register new user
-        // addApplicant({
-        //   variables: {
-        //     email: values.email.trim().toLowerCase(),
-        //     cnic: values.cnic,
-        //     mobile_number: values.mobile_number
-        //   }
-        
-        // })
-        setTimeout(() => {
-          navigation.navigate("VerifyOTP", {
-            fromRegister: true,
-            // data
-          });
-        },);
+        addApplicant({
+          variables: {
+            email: values.email.trim().toLowerCase(),
+            cnic: values.cnic,
+            mobile_number: values.mobile_number
+          }
+        })
+        // setTimeout(() => {
+        //   navigation.navigate("VerifyOTP", {
+        //     fromRegister: true,
+        //     data
+        //   });
+        // },);
       }}
     >
       {({
@@ -351,11 +348,7 @@ const Registration = ({ route, navigation }) => {
                   icon={<Icon as={MaterialIcons} name="email" size="23" color="darkBlue.900" />}
                 />
               </Animated.View>
-              {/* <Box>
-                {Object.values(invalidInput).map((value, index) => {
-                  return <Text key={index}>{value}</Text>;
-                })}
-              </Box> */}
+  
             </ScrollView>
           </Animated.View>
           </SharedElement>

@@ -7,6 +7,7 @@ import {
   Stack,
   Pressable,
   Switch,
+  useToast
 } from "native-base";
 import React, { useState } from "react";
 
@@ -18,39 +19,106 @@ import {
 } from "@expo/vector-icons";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
-import SelectField from "../CustomComponents/SelectField";
+import { gql, useMutation } from "@apollo/client";
+import LoadingModal from "../CustomComponents/LoadingModal";
 import SelectFieldNoFormik from "../CustomComponents/SelectFieldNoFormik";
 
-const Services = ({ navigation }) => {
- 
+
+const INSERT_DATA = gql`
+mutation MyMutation(
+  $value_1: String
+  $field_id_1: Int!
+  $applicant_id_1: uuid!
+  $value_2: String
+  $field_id_2: Int!
+  $applicant_id_2: uuid!
+) {
+  one: insert_data_table_one(
+    object: {
+      value: $value_1
+      field_id: $field_id_1
+      applicant_id: $applicant_id_1
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_1}}}
+  ) {
+    id
+  }
+  two: insert_data_table_one(
+    object: {
+      value: $value_2
+      field_id: $field_id_2
+      applicant_id: $applicant_id_2
+    },
+    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_2}}}
+  ) {
+    id
+  }
+}
+`;
+
+const Services = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  // const applicantData = route?.params?.data;
+  // const applicant_id = applicantData?.applicant_id;
+  // const email = applicantData?.applicant.email;
+  // const user_id = applicantData?.user_id;
+  const toast = useToast();
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [insertData, { data }] = useMutation(INSERT_DATA, {
+    onCompleted: (data) => {
+      setShowLoadingModal(false);
+      navigation.navigate("Personal Details", {
+        // data: applicantData,
+        fields: fieldsArray
+      })
+    },
+    onError: (error) => {
+      setShowLoadingModal(false);
+      console.log(error);
+      toast.show({
+        title: "Error",
+        placement: "top",
+        status: "error",
+        description: "Unable to proceed. Please contact support at support@techinoviq.com"
+      })
+    },
+  });
   const [communicateViaEmail, setcommunicateViaEmail] = useState(false);
   const [smsAlert, setsmsAlert] = useState(false);
   const [chequeBookShow, setChequeBookShow] = useState(false);
   const [atmCardShow, setAtmCardShow] = useState(false);
   const [zakatExemption, setzakatExemption] = useState(false);
-  const [formValues, setFormValues] = useState({atmCard: "", chequeBook: ""})
+  const [formValues, setFormValues] = useState({atmCard: null, chequeBook: null})
   const [errors, setErrors] = useState({})
   const handleChange = (value, name) => {
     setFormValues({...formValues, [name]: value })
     setErrors({...errors, [name]: null})
-    // console.log(value, name)
+    console.log(value, name)
   }
 
   const handleSubmit = () => {
     let tempError = {}
-console.log(formValues)
-    if(chequeBookShow && formValues.chequeBook=="") {
-      console.log(chequeBookShow,  formValues.chequeBook, "ASdsa")
+    console.log(formValues);
+    if(chequeBookShow && !formValues.chequeBook) {
       tempError.chequeBook = "Please select chequebook"
     }
-    if(atmCardShow && formValues.atmCard=="") {
+    if(atmCardShow && !formValues.atmCard) {
       tempError.atmCard= "Please select atm card"
     }
-    console.log(tempError)
     setErrors(tempError)
 
     if(Object.keys(tempError).length < 1) {
-      navigation.navigate("Personal Details")
+      const vairables = {}
+      if(formValues.chequeBook != "") {vairables.value_1 = formValues.chequeBook}
+      if(formValues.atmCard != "") {vairables.value_2 = formValues.atmCard}
+      vairables.field_id_1= fieldsArray[4].id,
+      vairables.field_id_2= fieldsArray[5].id,
+      vairables.applicant_id_1= "3dda825b-b52b-44c8-9956-e63a65ed25c8",
+      vairables.applicant_id_2= "3dda825b-b52b-44c8-9956-e63a65ed25c8",
+
+      insertData({
+        variables: vairables
+      })
     }
   }
     return (
@@ -115,13 +183,13 @@ console.log(formValues)
                 <Text color={chequeBookShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
               <SelectFieldNoFormik
-                title={"Cheque Book Leafs"}
+                title={fieldsArray[4].field_name}
                 name={"chequeBook"}
-                placeholder={"Select Cheque Book Leafs"}
+                placeholder={fieldsArray[4].place_holder}
                 handleChange={handleChange}
                 isDisabled={!chequeBookShow}
                 errors={errors}
-                selectValue={chequeBookShow ? ["25", "50", "100"] : []}
+                selectValue={chequeBookShow ? fieldsArray[4].dropdown_values : []}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -144,13 +212,13 @@ console.log(formValues)
                 <Text color={atmCardShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
               <SelectFieldNoFormik
-                title={"ATM / Debit Card"}
+                title={fieldsArray[5].field_name}
                 name={"atmCard"}
-                placeholder={"Select ATM / Debit Card"}
+                placeholder={fieldsArray[5].place_holder}
                 handleChange={handleChange}
                 isDisabled={!atmCardShow}
                 errors={errors}
-                selectValue={["Master Card", "Paypak"]}
+                selectValue={atmCardShow ? fieldsArray[5].dropdown_values : []}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -257,6 +325,8 @@ console.log(formValues)
             </Button>
           </Stack>
         </Box>
+      <LoadingModal showModal={showLoadingModal} />
+
       </Box>
     )
 };

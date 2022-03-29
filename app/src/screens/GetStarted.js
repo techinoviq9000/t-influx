@@ -1,10 +1,40 @@
 import { useFocusEffect } from "@react-navigation/native";
-import { Box, Button, CheckIcon, HStack, Image, Text } from "native-base";
+import { Box, Button, CheckIcon, HStack, Image, Text, useToast} from "native-base";
 import React, { useState, useRef, useEffect } from "react";
 import { Animated, View } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import * as Animatable from "react-native-animatable";
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import * as Network from 'expo-network';
+import moment from "moment";
+
+const GET_APPLICANT = gql`
+query getFields {
+  fields(order_by: {id: asc}) {
+    id
+    field_name
+    place_holder
+    dropdown_values
+  }
+}
+`;
+
 const GetStarted = ({ route, navigation }) => {
+  const toast = useToast();
+  
+  const [nextPage, setNextPage] = useState("Loading Please Wait")
+
+  const [getFields, { data: fieldArray, loading }] = useLazyQuery(
+    GET_APPLICANT,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+      onCompleted: data => {
+        setNextPage("I'M READY")
+      }
+    }
+  );
+
   const mountedAnimation = useRef(new Animated.Value(0)).current;
 
   const animation = {
@@ -32,6 +62,30 @@ const GetStarted = ({ route, navigation }) => {
       fadeIn();
     }, [])
   );
+
+  const startTime = moment()
+  setTimeout(() => {
+let  endTime = moment()
+
+  console.log(endTime.diff(startTime, 'seconds'))
+  }, 5000);
+  console.log("hi");
+  const getNetworkStatus = async () => {
+    const res = await Network.getNetworkStateAsync();
+    if(!res.isConnected) {
+      toast.show({
+        title: "No internet connection",
+        placement: "top",
+        status: "error",
+        description: "Please connect to the internet"
+      })
+    } else {
+      getFields()
+    }
+  }
+  useEffect(() => {
+    getNetworkStatus()
+  }, [])
 
   const textArray = [
     "Active Mobile number & Email ID",
@@ -113,10 +167,11 @@ const GetStarted = ({ route, navigation }) => {
         <Button
           size="md"
           rounded="md"
-          backgroundColor="white"
+          backgroundColor={nextPage === "Loading Please Wait" ? "gray.400" : "white"}
           border={1}
+          disabled={nextPage === "Loading Please Wait"}
           borderWidth="1"
-          borderColor="white"
+          borderColor={nextPage === "Loading Please Wait" ? "gray.400" : "white"}
           shadow={5}
           _text={{
             color: "darkBlue.900",
@@ -124,11 +179,11 @@ const GetStarted = ({ route, navigation }) => {
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Registration", { id: 1 });
+              navigation.navigate("Services", { id: 1, fields: fieldArray.fields });
             }, 200);
           }}
         >
-          I'M READY
+          {nextPage}
         </Button>
         </SharedElement>
       </Box>

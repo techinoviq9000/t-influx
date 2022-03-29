@@ -6,39 +6,241 @@ import {
   Stack,
   Pressable,
   Divider,
+  useToast,
 } from "native-base";
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Animated,
-} from "react-native";
+import { StyleSheet, Animated } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 
 import { Ionicons } from "@expo/vector-icons";
-import {
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as yup from "yup";
 
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import { gql, useMutation } from "@apollo/client";
+import LoadingModal from "../CustomComponents/LoadingModal";
 import { useFocusEffect } from "@react-navigation/native";
 
-const PersonalDetails = ({ navigation }) => {
-  const translateX = React.useRef(new Animated.Value(500)).current
+const INSERT_DATA = gql`
+  mutation MyMutation(
+    $value_1: String
+    $field_id_1: Int!
+    $applicant_id_1: uuid!
+    $value_2: String
+    $field_id_2: Int!
+    $applicant_id_2: uuid!
+    $value_3: String
+    $field_id_3: Int!
+    $applicant_id_3: uuid!
+    $value_4: String
+    $field_id_4: Int!
+    $applicant_id_4: uuid!
+    $value_5: String
+    $field_id_5: Int!
+    $applicant_id_5: uuid!
+    $value_6: String
+    $field_id_6: Int!
+    $applicant_id_6: uuid!
+    $value_7: String
+    $field_id_7: Int!
+    $applicant_id_7: uuid!
+    $value_8: String
+    $field_id_8: Int!
+    $applicant_id_8: uuid!
+    $value_9: String
+    $field_id_9: Int!
+    $applicant_id_9: uuid!
+    $value_10: String
+    $field_id_10: Int!
+    $applicant_id_10: uuid!
+  ) {
+    one: insert_data_table_one(
+      object: {
+        value: $value_1
+        field_id: $field_id_1
+        applicant_id: $applicant_id_1
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_1 } }
+      }
+    ) {
+      id
+    }
+    two: insert_data_table_one(
+      object: {
+        value: $value_2
+        field_id: $field_id_2
+        applicant_id: $applicant_id_2
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_2 } }
+      }
+    ) {
+      id
+    }
+    three: insert_data_table_one(
+      object: {
+        value: $value_3
+        field_id: $field_id_3
+        applicant_id: $applicant_id_3
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_3 } }
+      }
+    ) {
+      id
+    }
+    four: insert_data_table_one(
+      object: {
+        value: $value_4
+        field_id: $field_id_4
+        applicant_id: $applicant_id_4
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_4 } }
+      }
+    ) {
+      id
+    }
+    five: insert_data_table_one(
+      object: {
+        value: $value_5
+        field_id: $field_id_5
+        applicant_id: $applicant_id_5
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_5 } }
+      }
+    ) {
+      id
+    }
+    six: insert_data_table_one(
+      object: {
+        value: $value_6
+        field_id: $field_id_6
+        applicant_id: $applicant_id_6
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_6 } }
+      }
+    ) {
+      id
+    }
+    seven: insert_data_table_one(
+      object: {
+        value: $value_7
+        field_id: $field_id_7
+        applicant_id: $applicant_id_7
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_7 } }
+      }
+    ) {
+      id
+    }
+    eight: insert_data_table_one(
+      object: {
+        value: $value_8
+        field_id: $field_id_8
+        applicant_id: $applicant_id_8
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_8 } }
+      }
+    ) {
+      id
+    }
+    nine: insert_data_table_one(
+      object: {
+        value: $value_9
+        field_id: $field_id_9
+        applicant_id: $applicant_id_9
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_9 } }
+      }
+    ) {
+      id
+    }
+    ten: insert_data_table_one(
+      object: {
+        value: $value_10
+        field_id: $field_id_10
+        applicant_id: $applicant_id_10
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_10 } }
+      }
+    ) {
+      id
+    }
+  }
+`;
 
+const PersonalDetails = ({ route, navigation }) => {
+  const translateX = React.useRef(new Animated.Value(500)).current;
+  const fieldsArray = route?.params?.fields;
+  // const applicantData = route?.params?.data;
+  // const applicant_id = applicantData?.applicant_id;
+  const applicant_id = "3dda825b-b52b-44c8-9956-e63a65ed25c8";
+  // const email = applicantData?.applicant.email;
+  // const user_id = applicantData?.user_id;
+  const toast = useToast();
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [insertData, { data }] = useMutation(INSERT_DATA, {
+    onCompleted: (data) => {
+      setShowLoadingModal(false);
+      console.log(data);
+      // navigation.navigate("Personal Details", {
+      //   // data: applicantData,
+      //   fields: fieldsArray,
+      // });
+    },
+    onError: (error) => {
+      setShowLoadingModal(false);
+      console.log(error);
+      toast.show({
+        title: "Error",
+        placement: "top",
+        status: "error",
+        description:
+          "Unable to proceed. Please contact support at support@techinoviq.com",
+      });
+    },
+  });
   const registerValidationSchema = yup.object().shape({
-    name: yup
+    name: yup.string().required("Name is Requried"),
+    motherName: yup.string().required("Mother Name is Requried"),
+    placeOfBirth: yup.string().required("Place of Birth is Requried"),
+    nationality: yup.string().required("Nationalilty is Requried"),
+    mailingAddress: yup.string().required("Mailing Address is Required"),
+    permanantAddress: yup.string().required("Permanant Address is Requried"),
+    postalCommunication: yup
       .string()
-      .required("Name is Requried"),
-      motherName: yup.string().required("Mother Name is Requried"),
-      placeOfBirth: yup.string().required("Place of Birth is Requried"),
-      nationality: yup.string().required("Nationalilty is Requried"),
-      mailingAddress: yup.string().required("Mailing Address is Required"),
-      permanantAddress: yup.string().required("Permanant Address is Requried"),
-      postalCommunication: yup.string().required("Postal Communication is Requried")
+      .required("Postal Communication is Requried"),
   });
 
   const translationX = (toValue, delay) => {
@@ -46,234 +248,338 @@ const PersonalDetails = ({ navigation }) => {
       toValue,
       duration: 500,
       delay,
-      useNativeDriver: true 
-    }).start()
-}
+      useNativeDriver: true,
+    }).start();
+  };
 
-const animateBack = () => {
-    translationX(500, 500, 0)
-};
+  const animateBack = () => {
+    translationX(500, 500, 0);
+  };
 
-useFocusEffect(
-  React.useCallback(() => {
-    Animated.parallel([
-      translationX(0, 50),
-    ]).start()
-  }, [])
-);
+  useFocusEffect(
+    React.useCallback(() => {
+      Animated.parallel([translationX(0, 50)]).start();
+    }, [])
+  );
   return (
     <Formik
-    id="sign-in-button"
-    validateOnChange={false}
-    initialValues={{ motherName: "", name: "", placeOfBirth: "", nationality: "", mailingAddress: "", permanantAddress: "",  postalCommunication: ""}}
-    validationSchema={registerValidationSchema}
-    onSubmit={(values) => navigation.navigate("Begin Document Submission")}
-  >
-    {({
-      handleChange,
-      handleBlur,
-      handleSubmit,
-      values,
-      errors,
-      touched,
-      isValid,
-    }) => (
-    <Box flex={1} minHeight="100%" safeAreaTop={5}>
-      <Box alignItems="flex-start" px={6} mt={6}>
-      <SharedElement id="backButton1">
-        <Pressable>
-          {({ isHovered, isFocused, isPressed }) => {
-            return (
-              <Ionicons
-                name="arrow-back-circle-sharp"
-                size={36}
-                color={isFocused ? "#87e3ff" : "white"}
-                onPress={
-                  () => navigation.goBack()
-                  // navigation.navigate("Welcome")
-                }
+      id="sign-in-button"
+      validateOnChange={false}
+      initialValues={{
+        dob: "12-12-2022",
+        gender: "Male",
+        fatherName: "Hanif",
+        motherName: "Rubina",
+        name: "Salman",
+        placeOfBirth: "Karachi",
+        nationality: "Pakistani",
+        mailingAddress: "abc",
+        permanantAddress: "abc",
+        postalCommunication: "Permanant",
+      }}
+      validationSchema={registerValidationSchema}
+      onSubmit={(values) => {
+        navigation.navigate("Begin Document Submission");
+        insertData({
+          variables: {
+            value_1: values.name,
+            field_id_1: fieldsArray[6].id,
+            applicant_id_1: applicant_id,
+            value_2: values.fatherName,
+            field_id_2: fieldsArray[7].id,
+            applicant_id_2: applicant_id,
+            value_3: values.motherName,
+            field_id_3: fieldsArray[8].id,
+            applicant_id_3: applicant_id,
+            value_4: values.gender,
+            field_id_4: fieldsArray[9].id,
+            applicant_id_4: applicant_id,
+            value_5: values.dob,
+            field_id_5: fieldsArray[10].id,
+            applicant_id_5: applicant_id,
+            value_6: values.placeOfBirth,
+            field_id_6: fieldsArray[11].id,
+            applicant_id_6: applicant_id,
+            value_7: values.nationality,
+            field_id_7: fieldsArray[12].id,
+            applicant_id_7: applicant_id,
+            value_8: values.mailingAddress,
+            field_id_8: fieldsArray[13].id,
+            applicant_id_8: applicant_id,
+            value_9: values.permanantAddress,
+            field_id_9: fieldsArray[14].id,
+            applicant_id_9: applicant_id,
+            value_10: values.postalCommunication,
+            field_id_10: fieldsArray[15].id,
+            applicant_id_10: applicant_id,
+          }
+        });
+      }}
+    >
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        isValid,
+      }) => (
+        <Box flex={1} minHeight="100%" safeAreaTop={5}>
+          <Box alignItems="flex-start" px={6} mt={6}>
+            <SharedElement id="backButton1">
+              <Pressable>
+                {({ isHovered, isFocused, isPressed }) => {
+                  return (
+                    <Ionicons
+                      name="arrow-back-circle-sharp"
+                      size={36}
+                      color={isFocused ? "#87e3ff" : "white"}
+                      onPress={
+                        () => navigation.goBack()
+                        // navigation.navigate("Welcome")
+                      }
+                    />
+                  );
+                }}
+              </Pressable>
+            </SharedElement>
+          </Box>
+          <SharedElement id="stepHeader">
+            <Box alignItems="center">
+              <StepHeader
+                title="Personal Details"
+                nextTitle="Next: Upload Documents"
+                step="3"
               />
-            );
-          }}
-        </Pressable>
-        </SharedElement>
-      </Box>
-      <SharedElement id="stepHeader">
-      <Box alignItems="center">
-        <StepHeader
-          title="Personal Details"
-          nextTitle="Next: Upload Documents"
-          step="3"
-        />
-      </Box>
-      </SharedElement>
-      <SharedElement id="1" style={{flex: 1}}>
-      <Box
-        backgroundColor="white"
-        rounded="xl"
-        roundedBottom="none"
-        pt={8}
-        flex={1}
-        // minHeight="100%"
-        mt={5}
-      >
-        <ScrollView
-          _contentContainerStyle={{
-            flexGrow: 1,
-            px: 6,
-            pb: 8,
-          }}
-        >
-          <Animated.View style={{transform:[{translateX}]}}>
-            {/* First name */}
-            <InputFields
-              title={"Customer Name as per CNIC"}
-              name={"name"}
-              placeholder={"Customer Name as per CNIC"}
-              value={values.name}
-              onChangeText={handleChange("name")}
-              onBlur={handleBlur("name")}
-              errors={errors}
-              touched={touched}
-              isValid={isValid}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
+            </Box>
+          </SharedElement>
+          <SharedElement id="1" style={{ flex: 1 }}>
+            <Box
+              backgroundColor="white"
+              rounded="xl"
+              roundedBottom="none"
+              pt={8}
+              flex={1}
+              // minHeight="100%"
+              mt={5}
+            >
+              <ScrollView
+                _contentContainerStyle={{
+                  flexGrow: 1,
+                  px: 6,
+                  pb: 8,
+                }}
+              >
+                <Animated.View style={{ transform: [{ translateX }] }}>
+                  <InputFields
+                    title={"Customer Name as per CNIC"}
+                    name={"name"}
+                    placeholder={"Customer Name as per CNIC"}
+                    value={values.name}
+                    onChangeText={handleChange("name")}
+                    onBlur={handleBlur("name")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-            {/* last name */}
-            <InputFields
-              title={"Mother's Maiden name"}
-              name={"motherName"}
-              placeholder={"Mother's Maiden name"}
-              value={values.motherName}
-              onChangeText={handleChange("motherName")}
-              onBlur={handleBlur("motherName")}
-              errors={errors}
-              touched={touched}
-              isValid={isValid}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
+                  <InputFields
+                    title={"Father Name as per CNIC"}
+                    name={"fatherName"}
+                    placeholder={"Father Name as per CNIC"}
+                    value={values.fatherName}
+                    onChangeText={handleChange("fatherName")}
+                    onBlur={handleBlur("fatherName")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
+                  <InputFields
+                    title={"Mother's Maiden name"}
+                    name={"motherName"}
+                    placeholder={"Mother's Maiden name"}
+                    value={values.motherName}
+                    onChangeText={handleChange("motherName")}
+                    onBlur={handleBlur("motherName")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-            <SelectField
-              title={"Place of Birth"}
-              name={"placeOfBirth"}
-              placeholder={"Place of Birth"}
-              handleChange={handleChange("placeOfBirth")}
-              errors={errors}
-              touched={touched}
-              selectValue={[
-                "Pakistan",
-                "United Arab Emirates",
-                "India",
-                "America",
-              ]}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
+                  <SelectField
+                    title={"Gender"}
+                    name={"gender"}
+                    placeholder={"Gender"}
+                    handleChange={handleChange("gender")}
+                    errors={errors}
+                    touched={touched}
+                    selectValue={["Male", "Female", "Other"]}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-            <SelectField
-              title={"Other Nationality if any"}
-              name={"nationality"}
-              placeholder={"Other Nationality if any"}
-              handleChange={handleChange("nationality")}
-              errors={errors}
-              touched={touched}
-              selectValue={["United Arab Emirates", "India", "America", "None"]}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
-            <Divider mt="4" mb="2" bgColor="#c7c7c7" />
-            <Text fontSize="2xl" fontWeight="bold">
-              Address
-            </Text>
-            <InputFields
-              title={"Residence/ Correspondence (Mailing) Address"}
-              name={"mailingAddress"}
-              placeholder={"Residence/ Correspondence (Mailing) Address"}
-              value={values.mailingAddress}
-              onChangeText={handleChange("mailingAddress")}
-              onBlur={handleBlur("mailingAddress")}
-              errors={errors}
-              touched={touched}
-              isValid={isValid}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
+                  <InputFields
+                    title={"Date of Birth"}
+                    name={"dob"}
+                    placeholder={"Date of Birth"}
+                    value={values.dob}
+                    onChangeText={handleChange("dob")}
+                    onBlur={handleBlur("dob")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-            <InputFields
-              title={"Permanant Address"}
-              name={"permanantAddress"}
-              placeholder={"Permanant Address"}
-              value={values.permanantAddress}
-              onChangeText={handleChange("permanantAddress")}
-              onBlur={handleBlur("permanantAddress")}
-              errors={errors}
-              touched={touched}
-              isValid={isValid}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
+                  <SelectField
+                    title={"Place of Birth"}
+                    name={"placeOfBirth"}
+                    placeholder={"Place of Birth"}
+                    handleChange={handleChange("placeOfBirth")}
+                    errors={errors}
+                    touched={touched}
+                    selectValue={[
+                      "Pakistan",
+                      "United Arab Emirates",
+                      "India",
+                      "America",
+                    ]}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-            <SelectField
+                  <SelectField
+                    title={"Other Nationality if any"}
+                    name={"nationality"}
+                    placeholder={"Other Nationality if any"}
+                    handleChange={handleChange("nationality")}
+                    errors={errors}
+                    touched={touched}
+                    selectValue={[
+                      "United Arab Emirates",
+                      "India",
+                      "America",
+                      "None",
+                    ]}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
+                  <Divider mt="4" mb="2" bgColor="#c7c7c7" />
+                  <Text fontSize="2xl" fontWeight="bold">
+                    Address
+                  </Text>
+                  <InputFields
+                    title={"Residence/ Correspondence (Mailing) Address"}
+                    name={"mailingAddress"}
+                    placeholder={"Residence/ Correspondence (Mailing) Address"}
+                    value={values.mailingAddress}
+                    onChangeText={handleChange("mailingAddress")}
+                    onBlur={handleBlur("mailingAddress")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
 
-              title={"Preferred Postal Communication"}
-              name={"postalCommunication"}
-              placeholder={"Preferred Postal Communication"}
-              handleChange={handleChange("postalCommunication")}
-              touched={touched}
-              errors={errors}
-              selectValue={["Residence Address", "Permanent Address"]}
-              icon={<MaterialIcons name="person" size={23} color="black" />}
-            />
-          </Animated.View>
-        </ScrollView>
-      </Box>
-      </SharedElement>
-      <Box justifyContent="flex-end">
-      <SharedElement id="footer">
-        <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
-          <Button
-            flex={1}
-            size="md"
-            rounded="md"
-            backgroundColor="#f7f7f7"
-            border={1}
-            borderWidth="1"
-            borderColor="#f7f7f7"
-            _text={{
-              color: "#13B995",
-            }}
-            //mb={25}
-            // shadow={5}
-            onPress={() =>
-              // navigation.goBack()
-              navigation.navigate("VerifyOTP")
-            }
-          >
-            I NEED HELP
-          </Button>
-          <Button
-            flex={1}
-            size="md"
-            rounded="md"
-            backgroundColor="#317F6E"
-            border={1}
-            borderWidth="1"
-            borderColor="white"
-            //mb={25}
-            // shadow={5}
-            onPress={
-              () =>
-                // navigation.goBack()
-                // navigation.navigate("Upload Documents"
-                
-              // submitForm()
-              handleSubmit()
-            }
-          >
-            CONFIRM
-          </Button>
-        </Stack>
-        </SharedElement>
-      </Box>
-    </Box>
-    )}
+                  <InputFields
+                    title={"Permanant Address"}
+                    name={"permanantAddress"}
+                    placeholder={"Permanant Address"}
+                    value={values.permanantAddress}
+                    onChangeText={handleChange("permanantAddress")}
+                    onBlur={handleBlur("permanantAddress")}
+                    errors={errors}
+                    touched={touched}
+                    isValid={isValid}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
+
+                  <SelectField
+                    title={"Preferred Postal Communication"}
+                    name={"postalCommunication"}
+                    placeholder={"Preferred Postal Communication"}
+                    handleChange={handleChange("postalCommunication")}
+                    touched={touched}
+                    errors={errors}
+                    selectValue={["Residence Address", "Permanent Address"]}
+                    icon={
+                      <MaterialIcons name="person" size={23} color="black" />
+                    }
+                  />
+                </Animated.View>
+              </ScrollView>
+            </Box>
+          </SharedElement>
+          <Box justifyContent="flex-end">
+            <SharedElement id="footer">
+              <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+                <Button
+                  flex={1}
+                  size="md"
+                  rounded="md"
+                  backgroundColor="#f7f7f7"
+                  border={1}
+                  borderWidth="1"
+                  borderColor="#f7f7f7"
+                  _text={{
+                    color: "#13B995",
+                  }}
+                  //mb={25}
+                  // shadow={5}
+                  onPress={() =>
+                    // navigation.goBack()
+                    navigation.navigate("VerifyOTP")
+                  }
+                >
+                  I NEED HELP
+                </Button>
+                <Button
+                  flex={1}
+                  size="md"
+                  rounded="md"
+                  backgroundColor="#317F6E"
+                  border={1}
+                  borderWidth="1"
+                  borderColor="white"
+                  //mb={25}
+                  // shadow={5}
+                  onPress={() =>
+                    // navigation.goBack()
+                    // navigation.navigate("Upload Documents"
+
+                    // submitForm()
+                    handleSubmit()
+                  }
+                >
+                  CONFIRM
+                </Button>
+              </Stack>
+            </SharedElement>
+          </Box>
+      <LoadingModal showModal={showLoadingModal} />
+
+        </Box>
+      )}
     </Formik>
   );
 };
