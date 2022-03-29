@@ -1,4 +1,5 @@
 import { Box, CheckIcon, Text, Input, CloseIcon } from "native-base";
+import moment from "moment";
 import React, { useState } from "react";
 
 const InputFields = ({
@@ -10,6 +11,8 @@ const InputFields = ({
   onChangeText,
   onBlur,
   value,
+  analysisOnFocus,
+  analysisOnBlur,
   isValid,
   touched
 }) => {
@@ -36,7 +39,8 @@ const InputFields = ({
         type="text"
         autoComplete={name}
         onChangeText={onChangeText}
-        onBlur={onBlur}
+        onBlur={(e) => {onBlur(e); analysisOnBlur(name, null, moment())}}
+        onFocus={() => analysisOnFocus(name, moment(), moment())}
         value={value}
         InputRightElement={
           <>
