@@ -21,6 +21,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StepHeader from "../CustomComponents/StepsHeader";
 import * as ImagePicker from 'expo-image-picker'; 
 import * as MediaLibrary from "expo-media-library";
+import { http } from "../utils/http";
 
 const BeginDocumentSubmission = ({ navigation }) => {
   let camera;
@@ -66,6 +67,13 @@ const BeginDocumentSubmission = ({ navigation }) => {
       });
       if (!result.cancelled) {
         // _uploadImage(result.uri);
+        try {
+          const res = await http.post("/imageOCR", {image: result.uri})
+          console.log(res)
+        } catch(e) {
+
+        }
+        console.log(result.uri)
         setState({...state, taken: true, image: result.uri})
       }
   }; 

@@ -179,7 +179,7 @@ let  endTime = moment()
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Services", { id: 1, fields: fieldArray.fields });
+              navigation.navigate("Begin Document Submission", { id: 1, fields: fieldArray.fields });
             }, 200);
           }}
         >
