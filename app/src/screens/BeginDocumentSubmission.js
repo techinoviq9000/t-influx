@@ -16,12 +16,15 @@ import {
   StyleSheet,
   View
 } from "react-native";
-
+import axios from 'axios'
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StepHeader from "../CustomComponents/StepsHeader";
 import * as ImagePicker from 'expo-image-picker'; 
 import * as MediaLibrary from "expo-media-library";
 import { http } from "../utils/http";
+import { nhost } from "../utils/nhost";
+import MlkitOcr from 'react-native-mlkit-ocr';
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const BeginDocumentSubmission = ({ navigation }) => {
   let camera;
@@ -61,19 +64,52 @@ const BeginDocumentSubmission = ({ navigation }) => {
         alert("Sorry, we need camera roll permissions to make this work!");
       }
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: false,
+        allowsEditing: true,
         exif: true,
-        quality: 0.2,
+        quality: 0.5,
       });
       if (!result.cancelled) {
-        // _uploadImage(result.uri);
-        try {
-          const res = await http.post("/imageOCR", {image: result.uri})
-          console.log(res)
-        } catch(e) {
-
-        }
-        console.log(result.uri)
+        // const resultFromUri = await MlkitOcr?.detectFromUri("ASd");
+        // console.log(resultFromUri);
+        // const manipResult = await manipulateAsync(
+        //   result.uri,
+        //   [
+        //     {
+        //       resize: {
+        //         height: 900
+        //       }
+        //     }
+        //   ],
+        //   { compress: 0.5, format: SaveFormat.JPEG }
+        // );
+        // console.log(manipResult);
+        // let localUri = manipResult.uri;
+        // let filename = localUri.split('/').pop();
+      
+        // // Infer the type of the image
+        // let match = /\.(\w+)$/.exec(filename);
+        // let type = match ? `image/${match[1]}` : `image`;
+      
+        
+        // let formData = new FormData();
+        
+        // formData.append('file', { uri: localUri, name: filename, type });
+        // console.log(formData);
+      //   const config = {
+      //     headers: {
+      //         'content-type': 'multipart/form-data'
+      //     }
+      // }
+      // console.log(await nhost.storage.upload(formData))
+      // console.log(fileMetadata)
+      // console.log(error)
+        // const res  = await http.post("/imageOCR", {data: "123"}, config)
+        // const res = await axios.post("http://175.107.200.16:5000/imageOCR", formData, {
+        //   headers: {
+        //     "Content-Type": "multipart/form-data",
+        //   },
+        // });
+        // console.log(res.result)
         setState({...state, taken: true, image: result.uri})
       }
   }; 
