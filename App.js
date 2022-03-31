@@ -185,6 +185,33 @@ const NewCustomerStackScreen = () => (
         
       }}
     />
+      <NewCustomerStack.Screen
+        name="Basic Account Details"
+        component={BasicAccountDetails}
+        options={{
+          gestureEnabled: false,
+          cardOverlayEnabled: false,
+        }}
+      />
+      <NewCustomerStack.Screen
+        name="Services"
+        component={Services}
+        options={
+          {
+            cardOverlayEnabled: false,
+
+          }
+        }
+      />
+        <NewCustomerStack.Screen
+          name="Personal Details"
+          component={PersonalDetails}
+          options={
+            {
+              //...TransitionPresets.SlideFromRightIOS,
+            }
+          }
+        />
     <NewCustomerStack.Screen
       name="Scanner"
       component={Scanner}
@@ -213,36 +240,8 @@ const NewCustomerStackScreen = () => (
       }
     />
     <NewCustomerStack.Screen
-      name="Basic Account Details"
-      component={BasicAccountDetails}
-      options={{
-        gestureEnabled: false,
-
-        cardOverlayEnabled: false,
-        
-      }}
-    />
-    <NewCustomerStack.Screen
-      name="Services"
-      component={Services}
-      options={
-        {
-          //...TransitionPresets.SlideFromRightIOS,
-        }
-      }
-    />
-    <NewCustomerStack.Screen
       name="Address"
       component={Address}
-      options={
-        {
-          //...TransitionPresets.SlideFromRightIOS,
-        }
-      }
-    />
-    <NewCustomerStack.Screen
-      name="Personal Details"
-      component={PersonalDetails}
       options={
         {
           //...TransitionPresets.SlideFromRightIOS,

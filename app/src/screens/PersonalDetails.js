@@ -216,9 +216,8 @@ const INSERT_DATA = gql`
 const PersonalDetails = ({ route, navigation }) => {
   const translateX = React.useRef(new Animated.Value(500)).current;
   const fieldsArray = route?.params?.fields;
-  // const applicantData = route?.params?.data;
-  // const applicant_id = applicantData?.applicant_id;
-  const applicant_id = "3dda825b-b52b-44c8-9956-e63a65ed25c8";
+  const applicantData = route?.params?.data;
+  const applicant_id = applicantData?.applicant_id;
   // const email = applicantData?.applicant.email;
   // const user_id = applicantData?.user_id;
   const toast = useToast();
@@ -227,10 +226,10 @@ const PersonalDetails = ({ route, navigation }) => {
     onCompleted: (data) => {
       setShowLoadingModal(false);
       console.log(data);
-      // navigation.navigate("Personal Details", {
-      //   // data: applicantData,
-      //   fields: fieldsArray,
-      // });
+      navigation.navigate("Begin Document Submission", {
+        data: applicantData,
+        fields: fieldsArray,
+      });
     },
     onError: (error) => {
       setShowLoadingModal(false);

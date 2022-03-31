@@ -63,13 +63,6 @@ const GetStarted = ({ route, navigation }) => {
     }, [])
   );
 
-  const startTime = moment()
-  setTimeout(() => {
-let  endTime = moment()
-
-  console.log(endTime.diff(startTime, 'seconds'))
-  }, 5000);
-  console.log("hi");
   const getNetworkStatus = async () => {
     const res = await Network.getNetworkStateAsync();
     if(!res.isConnected) {
@@ -179,7 +172,7 @@ let  endTime = moment()
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Begin Document Submission", { id: 1, fields: fieldArray.fields });
+              navigation.navigate("Registration", { id: 1, fields: fieldArray.fields });
             }, 200);
           }}
         >

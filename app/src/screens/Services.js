@@ -58,8 +58,8 @@ mutation MyMutation(
 
 const Services = ({ route, navigation }) => {
   const fieldsArray = route?.params?.fields;
-  // const applicantData = route?.params?.data;
-  // const applicant_id = applicantData?.applicant_id;
+  const applicantData = route?.params?.data;
+  const applicant_id = applicantData?.applicant_id;
   // const email = applicantData?.applicant.email;
   // const user_id = applicantData?.user_id;
   const toast = useToast();
@@ -68,7 +68,7 @@ const Services = ({ route, navigation }) => {
     onCompleted: (data) => {
       setShowLoadingModal(false);
       navigation.navigate("Personal Details", {
-        // data: applicantData,
+        data: applicantData,
         fields: fieldsArray
       })
     },
@@ -113,8 +113,8 @@ const Services = ({ route, navigation }) => {
       if(formValues.atmCard != "") {vairables.value_2 = formValues.atmCard}
       vairables.field_id_1= fieldsArray[4].id,
       vairables.field_id_2= fieldsArray[5].id,
-      vairables.applicant_id_1= "3dda825b-b52b-44c8-9956-e63a65ed25c8",
-      vairables.applicant_id_2= "3dda825b-b52b-44c8-9956-e63a65ed25c8",
+      vairables.applicant_id_1= applicant_id,
+      vairables.applicant_id_2= applicant_id,
 
       insertData({
         variables: vairables

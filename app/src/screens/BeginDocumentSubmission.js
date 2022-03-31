@@ -23,7 +23,6 @@ import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from "expo-media-library";
 import { http } from "../utils/http";
 import { nhost } from "../utils/nhost";
-import MlkitOcr from 'react-native-mlkit-ocr';
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const BeginDocumentSubmission = ({ navigation }) => {
@@ -69,8 +68,6 @@ const BeginDocumentSubmission = ({ navigation }) => {
         quality: 0.5,
       });
       if (!result.cancelled) {
-        // const resultFromUri = await MlkitOcr?.detectFromUri("ASd");
-        // console.log(resultFromUri);
         // const manipResult = await manipulateAsync(
         //   result.uri,
         //   [

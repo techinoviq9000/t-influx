@@ -85,12 +85,12 @@ const BasicAccountDetails = ({ route, navigation }) => {
 
 
   const registerValidationSchema = yup.object().shape({
-    branchName: yup
+    field_1: yup
       .string()
       .required(`Please select ${fieldsArray[0].field_name}`),
-    custType: yup.string().required("Please select"),
-    purposeOfAcc: yup.string().required("Please select"),
-    accType1: yup.string().required("Please select"),
+    field_2: yup.string().required(`Please select ${fieldsArray[1].field_name}`),
+    field_3: yup.string().required(`Please select ${fieldsArray[2].field_name}`),
+    field_4: yup.string().required(`Please select ${fieldsArray[3].field_name}`),
   });
 
   const translationX = (toValue, delay) => {
@@ -131,10 +131,10 @@ const BasicAccountDetails = ({ route, navigation }) => {
     <Formik
       id="sign-in-button"
       initialValues={{
-        branchName: "",
-        custType: "",
-        purposeOfAcc: "",
-        accType1: "",
+        field_1: "",
+        field_2: "",
+        field_3: "",
+        field_4: "",
       }}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
@@ -143,16 +143,16 @@ const BasicAccountDetails = ({ route, navigation }) => {
         console.log(values);
         insertData({
           variables: {
-            value_1: values.branchName,
+            value_1: values.field_1,
             field_id_1: fieldsArray[0].id,
             applicant_id_1: applicant_id,
-            value_2: values.custType,
+            value_2: values.field_2,
             field_id_2: fieldsArray[1].id,
             applicant_id_2: applicant_id,
-            value_3: values.purposeOfAcc,
+            value_3: values.field_3,
             field_id_3: fieldsArray[2].id,
             applicant_id_3: applicant_id,
-            value_4: values.accType1,
+            value_4: values.field_4,
             field_id_4: fieldsArray[3].id,
             applicant_id_4: applicant_id
           },
@@ -211,9 +211,9 @@ const BasicAccountDetails = ({ route, navigation }) => {
             >
               <SelectField
                 title={fieldsArray[0].field_name}
-                name={"branchName"}
+                name={"field_1"}
                 placeholder={fieldsArray[0].place_holder}
-                handleChange={handleChange("branchName")}
+                handleChange={handleChange("field_1")}
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[0].dropdown_values}
@@ -222,9 +222,9 @@ const BasicAccountDetails = ({ route, navigation }) => {
 
               <SelectField
                 title={fieldsArray[1].field_name}
-                name={"custType"}
+                name={"field_2"}
                 placeholder={fieldsArray[1].place_holder}
-                handleChange={handleChange("custType")}
+                handleChange={handleChange("field_2")}
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[1].dropdown_values}
@@ -233,9 +233,9 @@ const BasicAccountDetails = ({ route, navigation }) => {
 
               <SelectField
                 title={fieldsArray[2].field_name}
-                name={"purposeOfAcc"}
+                name={"field_3"}
                 placeholder={fieldsArray[2].place_holder}
-                handleChange={handleChange("purposeOfAcc")}
+                handleChange={handleChange("field_3")}
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[2].dropdown_values}
@@ -244,9 +244,9 @@ const BasicAccountDetails = ({ route, navigation }) => {
 
               <SelectField
                 title={fieldsArray[3].field_name}
-                name={"accType1"}
+                name={"field_4"}
                 placeholder={fieldsArray[3].place_holder}
-                handleChange={handleChange("accType1")}
+                handleChange={handleChange("field_4")}
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[3].dropdown_values}
