@@ -325,7 +325,7 @@ const Services = ({ route, navigation }) => {
             </Button>
           </Stack>
         </Box>
-      <LoadingModal showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
 
       </Box>
     )

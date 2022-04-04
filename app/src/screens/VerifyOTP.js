@@ -24,9 +24,9 @@ import { http } from "../utils/http";
 import { useFocusEffect } from "@react-navigation/native";
 
 const VERIFY_OTP = gql`
-  query verifyOTP($otp: String = "", $email: String = "") {
+  query verifyOTP($otp: String = "", $cnic: String = "") {
     applicants(
-      where: { _and: [{ email: { _eq: $email } }, { otp: { _eq: $otp } }] }
+      where: { _and: [{ cnic: { _eq: $cnic } }, { otp: { _eq: $otp } }] }
     ) {
       cnic
       email
@@ -37,9 +37,9 @@ const VERIFY_OTP = gql`
 `;
 
 const UPDATE_STATUS = gql`
-  mutation updateStatus($status: String = "", $email: String = "") {
+  mutation updateStatus($status: String = "", $cnic: String = "") {
     update_applicants(
-      where: { email: { _eq: $email } }
+      where: { cnic: { _eq: $cnic } }
       _set: { status: $status }
     ) {
       affected_rows
@@ -75,7 +75,6 @@ const VerifyOTP = ({ route, navigation }) => {
   const [disabled, setDisabled] = useState(true);
   const [countDownId, setCountDownId] = useState(1);
   const getDifference = () => {
-    console.log(updated_at)
     const created_at = updated_at ? moment(updated_at) : moment(data?.updated_at)
     let diffInMinutes = moment().diff(created_at, "minutes");
     return Math.abs(diffInMinutes);
@@ -85,9 +84,8 @@ const VerifyOTP = ({ route, navigation }) => {
   const [insertApplicantId] = useMutation(INSERT_APPLICANT_ID, {
     onCompleted: data => {
       setShowLoadingModal(false);
-      navigation.navigate("Basic Account Details", {
-        data,
-        fields: route?.params?.fields
+      navigation.navigate("Get Started", {
+        data
       }); //navigate if otp correct
     },
     onError: (error) => {
@@ -149,7 +147,7 @@ const VerifyOTP = ({ route, navigation }) => {
           updateApplicantStatus({
             //Change status to approved
             variables: {
-              email: data.applicants[0].email,
+              cnic: data.applicants[0].cnic,
               status: "Approved",
             },
           });
@@ -224,10 +222,8 @@ const VerifyOTP = ({ route, navigation }) => {
       const res = await http.post("/resendOTPEmail", {
         email: data?.email,
       });
-      console.log(res.data)
       setUpdated_at(res.data.data)
       setCountDownId((prevState) => {
-        console.log(countDownId);
         return prevState + 1;
       });
       setShowLoadingModal(false);
@@ -421,7 +417,7 @@ const VerifyOTP = ({ route, navigation }) => {
                 mb={4}
                 maxLength={1}
                 fontSize="4xl"
-                keyboardType="numeric"
+                keyboardType="phone-pad"
                 type="text"
                 _focus={{
                   borderColor: "#13B995",
@@ -526,7 +522,7 @@ const VerifyOTP = ({ route, navigation }) => {
                 setShowLoadingModal(true);
                 verifyOTP({
                   variables: {
-                    email: data.email,
+                    cnic: data.cnic,
                     otp: finalOTP.toString(),
                   },
                 });
@@ -538,7 +534,7 @@ const VerifyOTP = ({ route, navigation }) => {
         </Stack>
         </SharedElement>
       </Box>
-      <LoadingModal showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
       <ModalOverlay />
     </Box>
   );

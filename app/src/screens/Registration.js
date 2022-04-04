@@ -23,6 +23,7 @@ import InputFields from "../CustomComponents/InputFields";
 import LoadingModal from "../CustomComponents/LoadingModal";
 import { SharedElement } from "react-navigation-shared-element";
 import { useFocusEffect } from "@react-navigation/native";
+import InputFieldsNoAnalysis from "./InputFieldsNoAnalysis";
 
 const GET_APPLICANT = gql`
   query MyQuery(
@@ -63,6 +64,7 @@ mutation addApplicant($cnic: String = "", $email: String = "", $mobile_number: S
 `;
 
 const Registration = ({ route, navigation }) => {
+  const cnic = route?.params?.cnic
   const mountedAnimation = React.useRef(new Animated.Value(0)).current
   const translateY = React.useRef(new Animated.Value(500)).current
   const translateX = React.useRef(new Animated.Value(0)).current
@@ -232,7 +234,7 @@ const Registration = ({ route, navigation }) => {
       initialValues={{
         email: "salmanhanif133@gmail.com",
         mobile_number: "03222681575",
-        cnic: "4230161551219",
+        cnic: cnic,
       }}
       validateOnChange={false}
       validate={(values) => validate(values)}
@@ -305,7 +307,7 @@ const Registration = ({ route, navigation }) => {
             >
               <Animated.View style={{opacity: mountedAnimation, transform:[{translateY}, {translateX}]}}>
                 {/* Mobile Number */}
-                <InputFields
+                <InputFieldsNoAnalysis
                   title={"Mobile Number"}
                   name={"mobile_number"}
                   placeholder={"03XX-XXXXXX"}
@@ -320,7 +322,7 @@ const Registration = ({ route, navigation }) => {
                 />
 
                 {/* CNIC NUMBER */}
-                <InputFields
+                <InputFieldsNoAnalysis
                   title={"CNIC Number"}
                   name={"cnic"}
                   placeholder={"XXXXX-XXXXXXX-X"}
@@ -335,7 +337,7 @@ const Registration = ({ route, navigation }) => {
                 />
 
                 {/* Email  */}
-                <InputFields
+                <InputFieldsNoAnalysis
                   title={"Email ID"}
                   name={"email"}
                   placeholder={"example@email.com"}
@@ -403,7 +405,7 @@ const Registration = ({ route, navigation }) => {
             </SharedElement>
           </Box>
           
-          <LoadingModal showModal={showModal} />
+          <LoadingModal message="Saving information. Please wait." showModal={showModal} />
         </Box>
       )}
     </Formik>

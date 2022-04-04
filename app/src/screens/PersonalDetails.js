@@ -693,7 +693,7 @@ const PersonalDetails = ({ route, navigation }) => {
                 </Stack>
               </SharedElement>
             </Box>
-            <LoadingModal showModal={showLoadingModal} />
+            <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
           </Box>
         );
       }}

@@ -21,7 +21,7 @@ query getFields {
 
 const GetStarted = ({ route, navigation }) => {
   const toast = useToast();
-  
+  const data =  route?.params?.data
   const [nextPage, setNextPage] = useState("Loading Please Wait")
 
   const [getFields, { data: fieldArray, loading }] = useLazyQuery(
@@ -172,7 +172,7 @@ const GetStarted = ({ route, navigation }) => {
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Registration", { id: 1, fields: fieldArray.fields });
+              navigation.navigate("Basic Account Details", { id: 1, fields: fieldArray.fields, data });
             }, 200);
           }}
         >

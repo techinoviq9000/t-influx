@@ -30,7 +30,7 @@ const OtpFields = ({otpRef, secondRef, otp, handleChange, index}) => {
     mb={4}
     maxLength={1}
     fontSize="4xl"
-    keyboardType="numeric"
+    keyboardType="phone-pad"
     type="text"
     _focus={{
       borderColor: "#13B995",
