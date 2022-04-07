@@ -54,6 +54,7 @@ import Address from "./app/src/screens/Address"
 import Scanner from "./app/src/screens/Scanner"
 import EndScreen from "./app/src/screens/EndScreen"
 import VerifyOTPLogin from "./app/src/screens/VerifyOTPLogin"
+import PreviousApplications from "./app/src/screens/PreviousApplications"
 // import Environment from "./app/src/utils/environment";
 // // TODO: Add SDKs for Firebase products that you want to use
 // // https://firebase.google.com/docs/web/setup#available-libraries
@@ -394,6 +395,13 @@ export default function App() {
                     }
                   }
                 />
+                  <Stack.Screen
+                    name="VerifyOTPLogin"
+                    component={VerifyOTPLogin} />
+
+                    <Stack.Screen
+                    name="Previous Applications"
+                    component={PreviousApplications} />
                 <Stack.Screen
                   name="Continue Application"
                   component={ContinueRegistration}
@@ -403,9 +411,6 @@ export default function App() {
                     }
                   }
                 />
-                <Stack.Screen
-                  name="VerifyOTPLogin"
-                  component={VerifyOTPLogin} />
                 {/* <Stack.Screen name="Q/A" component={QuestionsAndAnswers} />
                 <Stack.Screen
                   name="Product Selection"

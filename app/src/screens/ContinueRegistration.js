@@ -11,17 +11,14 @@ import {
   Stack,
   Center,
   Pressable,
+  Icon,
 } from "native-base";
-import React, { useState } from "react";
-import {
-  ImageBackground,
-  StyleSheet,
-  View,
-  SafeAreaViewBase,
-} from "react-native";
-import AppLoading from "expo-app-loading";
+import React, { useState, useEffect } from "react";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client"
+
+
+import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Collapse } from "native-base";
 
@@ -30,9 +27,51 @@ import Collapsible from "react-native-collapsible";
 import { boxShadow } from "styled-system";
 import StepHeader from "../CustomComponents/StepsHeader";
 
-const ContinueRegistration = ({ navigation }) => {
- 
+const GET_DATA = gql`
+query getData($applicant_id: uuid = "") {
+  pages(order_by: {id: asc}) {
+    id
+    name
+    fields(order_by: {id: asc}) {
+      id
+      field_name
+      data_table(where: {applicant_id: {_eq: $applicant_id}}) {
+        id
+        value
+      }
+    }
+  }
+}`
 
+const ContinueRegistration = ({ route, navigation }) => {
+  const data = route?.params?.data
+  console.log(data.applicant_id)
+  const [dataList, setDataList] = useState([])
+  const [getData, { loading }] = useLazyQuery(GET_DATA, {
+    notifyOnNetworkStatusChange: true,
+    nextFetchPolicy: "network-only",
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      const newList = []
+      data?.pages?.map(page => {
+        let status = false
+        if(page.fields.length == 0) {
+          newList.push({id: page.id, title: page.name, description: "asd", status, collapsed: false})
+        } else if(page.fields[0]?.data_table.length == 0) {
+          newList.push({id: page.id, title: page.name, description: "asd", status, collapsed: false})
+        } else {
+          newList.push({id: page.id, title: page.name, description: "asd", status: true, collapsed: false})
+        }
+      })
+
+      setDataList(newList)
+      // setRefreshing(false)
+      // setApplicantIdData(data.applicant_id)
+    },
+    onError: (data) => {
+      console.log(data)
+    }
+  })
   const [list, setList] = useState([
     {
       id: 0,
@@ -82,7 +121,15 @@ const ContinueRegistration = ({ navigation }) => {
       })
     );
   };
-  console.log(list);
+  
+  useEffect(() => {
+    getData({
+      variables: {
+        applicant_id: data.applicant_id
+      }
+    })
+  }, [])
+  
   const CheckList = ({
     id,
     title,
@@ -121,12 +168,13 @@ const ContinueRegistration = ({ navigation }) => {
           </VStack>
         </Box>
         <Box alignItems="flex-end">
-          <Ionicons
-            name={`chevron-${collapsed ? "up" : "down"}-circle-outline`}
-            size={24}
-            color="blue"
-            onPress={() => toggleExpanded(id)}
-          />
+        <Icon
+                        as={MaterialIcons}
+                        name="navigate-next"
+                        size="30"
+                        color="emerald.400"
+                      />
+          
         </Box>
       </Stack>
     );
@@ -171,7 +219,7 @@ const ContinueRegistration = ({ navigation }) => {
             }}
           >
             <Box flex={1}>
-              {list.map((item) => (
+              {dataList.map((item) => (
                 <CheckList
                   key={item.id}
                   id={item.id}
@@ -180,7 +228,7 @@ const ContinueRegistration = ({ navigation }) => {
                   description={item.description}
                   collapsed={item.collapsed}
                   toggleExpanded={toggleExpanded}
-                  k
+                  
                 />
               ))}
             </Box>
@@ -208,10 +256,5 @@ const ContinueRegistration = ({ navigation }) => {
     );
 };
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-  },
-});
 
 export default ContinueRegistration;

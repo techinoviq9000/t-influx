@@ -10,7 +10,7 @@ import LoadingModal from "../CustomComponents/LoadingModal"
 import { http } from "../utils/http"
 
 const GET_CNIC = gql`
-  query GetCnic($cnic: String = "4230161551219") {
+  query GetCnic($cnic: String!) {
     applicants(where: { cnic: { _eq: $cnic } }) {
       id
       email
@@ -24,13 +24,13 @@ const GET_CNIC = gql`
 `
 
 const WelcomeScreen = ({ navigation }) => {
-  const [cnic, setCnic] = useState("4230161551228")
+  const [cnic, setCnic] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [getApplicant] = useLazyQuery(GET_CNIC, {
+    notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
     nextFetchPolicy: "network-only",
     onCompleted: async (data) => {
-      setShowModal(false)
       const applicantData = data.applicants
       if (applicantData.length == 0) {
         navigation.navigate("Registration", {
@@ -39,12 +39,14 @@ const WelcomeScreen = ({ navigation }) => {
       } else {
         try {
           const res = await http.post("/sendVerifyLoginEmail", {
-            email: data?.email
+            email: data?.applicants[0].email
           })
+          setShowModal(false)
           navigation.navigate("VerifyOTPLogin", {
-            data: data.applicants[0]
+            data: applicantData[0]
           })
         } catch (e) {
+          setShowModal(false)
           console.log(e)
         }
       }

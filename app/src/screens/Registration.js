@@ -71,12 +71,14 @@ const Registration = ({ route, navigation }) => {
   const [getApplicant, { data: applicantData, loading }] = useLazyQuery(
     GET_APPLICANT,
     {
+      notifyOnNetworkStatusChange: true,
       fetchPolicy: "network-only",
       nextFetchPolicy: "network-only",
     }
   );
 
   const [addApplicant, {data: addApplicantData}] = useMutation(ADD_APPLICANT, {
+    notifyOnNetworkStatusChange: true,
     onCompleted: data => {
       setIsOpen(false);
       setShowModal(false);

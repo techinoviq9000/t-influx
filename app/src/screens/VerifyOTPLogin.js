@@ -32,6 +32,9 @@ const VERIFY_OTP = gql`
       email
       mobile_number
       id
+      applicant_ids {
+        applicant_id
+      }
     }
   }
 `
@@ -68,7 +71,7 @@ const INSERT_APPLICANT_ID = gql`
 `
 
 const VerifyOTPLogin = ({ route, navigation }) => {
-  const data = route?.params?.data?.insert_applicants_one
+  const data = route?.params?.data
   const mountedAnimation = React.useRef(new Animated.Value(0)).current
   const translateX = React.useRef(new Animated.Value(500)).current
   const [updated_at, setUpdated_at] = useState(null)
@@ -83,19 +86,7 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   }
 
   const [getConfig, { data: config }] = useLazyQuery(GET_CONFIG)
-  const [insertApplicantId] = useMutation(INSERT_APPLICANT_ID, {
-    onCompleted: (data) => {
-      setShowLoadingModal(false)
-      navigation.navigate("Get Started", {
-        data
-      }) //navigate if otp correct
-    },
-    onError: (error) => {
-      setShowLoadingModal(false)
-      console.log(error)
-      return setOtpError("Something went wrong")
-    }
-  })
+
   let expiryDuration = config?.config[0]?.otp_expiry_duration
   useEffect(() => {
     getConfig()
@@ -113,23 +104,6 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   const [otpError, setOtpError] = useState(null)
   const [showLoadingModal, setShowLoadingModal] = useState(false)
 
-  const [updateApplicantStatus] = useMutation(UPDATE_STATUS, {
-    notifyOnNetworkStatusChange: true,
-    nextFetchPolicy: "network-only",
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      insertApplicantId({
-        variables: {
-          user_id: verifyOTPData.applicants[0].id
-        }
-      })
-    },
-    onError: (error) => {
-      setShowLoadingModal(false)
-      console.log(error)
-      return setOtpError("Something went wrong")
-    }
-  })
 
   const [verifyOTP, { data: verifyOTPData, loading }] = useLazyQuery(
     VERIFY_OTP,
@@ -146,13 +120,9 @@ const VerifyOTPLogin = ({ route, navigation }) => {
         } else {
           //Otp exists
           setOtpError(null)
-          updateApplicantStatus({
-            //Change status to approved
-            variables: {
-              cnic: data.applicants[0].cnic,
-              status: "Approved"
-            }
-          })
+          navigation.navigate("Previous Applications", {
+            data: data.applicants[0]
+          }) 
         }
       },
       onError: (error) => {
@@ -221,7 +191,7 @@ const VerifyOTPLogin = ({ route, navigation }) => {
       setShowLoadingModal(true)
       setOtpError(null)
       clearOTP()
-      const res = await http.post("/resendOTPEmail", {
+      const res = await http.post("/resendOTPLoginEmail", {
         email: data?.email
       })
       setUpdated_at(res.data.data)
