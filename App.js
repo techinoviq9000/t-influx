@@ -55,6 +55,7 @@ import Scanner from "./app/src/screens/Scanner"
 import EndScreen from "./app/src/screens/EndScreen"
 import VerifyOTPLogin from "./app/src/screens/VerifyOTPLogin"
 import PreviousApplications from "./app/src/screens/PreviousApplications"
+import BasicAccountDetailsLogin from "./app/src/screens/LoginScreens/BasicAccountDetailsLogin"
 // import Environment from "./app/src/utils/environment";
 // // TODO: Add SDKs for Firebase products that you want to use
 // // https://firebase.google.com/docs/web/setup#available-libraries
@@ -405,6 +406,15 @@ export default function App() {
                 <Stack.Screen
                   name="Continue Application"
                   component={ContinueRegistration}
+                  options={
+                    {
+                      //...TransitionPresets.SlideFromRightIOS,
+                    }
+                  }
+                />
+                  <Stack.Screen
+                  name="Basic Account Details LoginRoute"
+                  component={BasicAccountDetailsLogin}
                   options={
                     {
                       //...TransitionPresets.SlideFromRightIOS,

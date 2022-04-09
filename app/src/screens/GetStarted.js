@@ -160,11 +160,11 @@ const GetStarted = ({ route, navigation }) => {
         <Button
           size="md"
           rounded="md"
-          backgroundColor={nextPage === "Loading Please Wait" ? "gray.400" : "white"}
+          backgroundColor={"white"}
           border={1}
-          disabled={nextPage === "Loading Please Wait"}
+          isDisabled={nextPage == "Loading Please Wait"}
           borderWidth="1"
-          borderColor={nextPage === "Loading Please Wait" ? "gray.400" : "white"}
+          borderColor="white"
           shadow={5}
           _text={{
             color: "darkBlue.900",

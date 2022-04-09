@@ -31,6 +31,7 @@ const InputFieldsNoFormik = ({
         color="white"
         selectionColor="white"
         placeholderTextColor="white"
+        backgroundColor="white:alpha.20"
         type="text"
         autoComplete={name}
         onChangeText={onChangeText}

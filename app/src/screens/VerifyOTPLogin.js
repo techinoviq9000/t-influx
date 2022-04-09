@@ -38,18 +38,6 @@ const VERIFY_OTP = gql`
     }
   }
 `
-
-const UPDATE_STATUS = gql`
-  mutation updateStatus($status: String = "", $cnic: String = "") {
-    update_applicants(
-      where: { cnic: { _eq: $cnic } }
-      _set: { status: $status }
-    ) {
-      affected_rows
-    }
-  }
-`
-
 const GET_CONFIG = gql`
   query getConfig {
     config {
@@ -58,17 +46,6 @@ const GET_CONFIG = gql`
   }
 `
 
-const INSERT_APPLICANT_ID = gql`
-  mutation insertApplicantId($user_id: Int!) {
-    insert_applicant_id_one(object: { user_id: $user_id }) {
-      applicant_id
-      user_id
-      applicant {
-        email
-      }
-    }
-  }
-`
 
 const VerifyOTPLogin = ({ route, navigation }) => {
   const data = route?.params?.data
@@ -243,7 +220,12 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       Animated.parallel([translationX(0, 50)]).start()
-    }, [])
+      const unsubscribe = navigation.addListener("focus", () => {
+        setShowModal(false)
+      })
+  
+      return unsubscribe
+    }, [navigation])
   )
 
   const ModalOverlay = () => {
@@ -498,10 +480,10 @@ const VerifyOTPLogin = ({ route, navigation }) => {
           </Stack>
         </SharedElement>
       </Box>
-      <LoadingModal
-        message="Saving information. Please wait."
+      {/* <LoadingModal
+        message="Saving information. Please wait. otplogin page" 
         showModal={showLoadingModal}
-      />
+      /> */}
       <ModalOverlay />
     </Box>
   )

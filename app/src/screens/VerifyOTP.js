@@ -534,7 +534,7 @@ const VerifyOTP = ({ route, navigation }) => {
         </Stack>
         </SharedElement>
       </Box>
-      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait. otp page" showModal={showLoadingModal} />
       <ModalOverlay />
     </Box>
   );

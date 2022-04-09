@@ -20,6 +20,7 @@ const SelectField = ({
   icon,
   touched,
   errors,
+  value,
   name,
 }) => {
     return (
@@ -43,6 +44,7 @@ const SelectField = ({
             }}
             borderRadius="lg"
             borderWidth={1}
+            selectedValue={value ?? ""}
             InputRightElement={
               <>
                 {touched?.[name] && errors?.[name] ? (

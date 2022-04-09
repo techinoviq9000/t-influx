@@ -407,7 +407,7 @@ const Registration = ({ route, navigation }) => {
             </SharedElement>
           </Box>
           
-          <LoadingModal message="Saving information. Please wait." showModal={showModal} />
+          <LoadingModal message="Saving information. Please wait. Registration page" showModal={showModal} />
         </Box>
       )}
     </Formik>

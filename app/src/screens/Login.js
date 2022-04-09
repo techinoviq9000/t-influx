@@ -341,7 +341,7 @@ const Login = ({ route, navigation }) => {
               </Button>
             </Stack>
           </Box>
-          <LoadingModal message="Saving information. Please wait." showModal={showModal} />
+          <LoadingModal message="Saving information. Please wait. Login Page" showModal={showModal} />
         </Box>
       )}
     </Formik>

@@ -300,10 +300,10 @@ const Services = ({ route, navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                handleSubmit()
+                navigation.navigate("Welcome")
               }
             >
-              I NEED HELP
+              SAVE & EXIT
             </Button>
             <Button
               flex={1}
@@ -325,7 +325,7 @@ const Services = ({ route, navigation }) => {
             </Button>
           </Stack>
         </Box>
-      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait. servicves page" showModal={showLoadingModal} />
 
       </Box>
     )

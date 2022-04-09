@@ -1,101 +1,131 @@
-import { Box, Button, Pressable, ScrollView, Stack, useToast } from "native-base";
+import {
+  Box,
+  Button,
+  Pressable,
+  ScrollView,
+  Stack,
+  useToast,
+} from "native-base";
 import React, { useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
-import InputFields from "../CustomComponents/InputFields";
-import StepHeader from "../CustomComponents/StepsHeader";
+import StepHeader from "../../CustomComponents/StepsHeader";
 import { Formik } from "formik";
 import * as yup from "yup";
-import SelectField from "../CustomComponents/SelectField";
+import SelectField from "../../CustomComponents/SelectField";
 import { SharedElement } from "react-navigation-shared-element";
 import { Animated } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import moment from "moment";
 import { gql, useMutation } from "@apollo/client";
-import LoadingModal from "../CustomComponents/LoadingModal";
+import LoadingModal from "../../CustomComponents/LoadingModal";
 
 const INSERT_DATA = gql`
-mutation MyMutation(
-  $value_1: String!
-  $field_id_1: Int!
-  $applicant_id_1: uuid!
-  $value_2: String!
-  $field_id_2: Int!
-  $applicant_id_2: uuid!
-  $value_3: String!
-  $field_id_3: Int!
-  $applicant_id_3: uuid!
-  $value_4: String!
-  $field_id_4: Int!
-  $applicant_id_4: uuid!
-) {
-  one: insert_data_table_one(
-    object: {
-      value: $value_1
-      field_id: $field_id_1
-      applicant_id: $applicant_id_1
-    },
-    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_1}}}
+  mutation MyMutation(
+    $value_1: String!
+    $field_id_1: Int!
+    $applicant_id_1: uuid!
+    $value_2: String!
+    $field_id_2: Int!
+    $applicant_id_2: uuid!
+    $value_3: String!
+    $field_id_3: Int!
+    $applicant_id_3: uuid!
+    $value_4: String!
+    $field_id_4: Int!
+    $applicant_id_4: uuid!
   ) {
-    id
+    one: insert_data_table_one(
+      object: {
+        value: $value_1
+        field_id: $field_id_1
+        applicant_id: $applicant_id_1
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_1 } }
+      }
+    ) {
+      id
+    }
+    two: insert_data_table_one(
+      object: {
+        value: $value_2
+        field_id: $field_id_2
+        applicant_id: $applicant_id_2
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_2 } }
+      }
+    ) {
+      id
+    }
+    three: insert_data_table_one(
+      object: {
+        value: $value_3
+        field_id: $field_id_3
+        applicant_id: $applicant_id_3
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_3 } }
+      }
+    ) {
+      id
+    }
+    four: insert_data_table_one(
+      object: {
+        value: $value_4
+        field_id: $field_id_4
+        applicant_id: $applicant_id_4
+      }
+      on_conflict: {
+        constraint: data_table_field_id_applicant_id_key
+        update_columns: value
+        where: { field_id: { _eq: $field_id_4 } }
+      }
+    ) {
+      id
+    }
   }
-  two: insert_data_table_one(
-    object: {
-      value: $value_2
-      field_id: $field_id_2
-      applicant_id: $applicant_id_2
-    },
-    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_2}}}
-  ) {
-    id
-  }
-  three: insert_data_table_one(
-    object: {
-      value: $value_3
-      field_id: $field_id_3
-      applicant_id: $applicant_id_3
-    },
-    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_3}}}
-  ) {
-    id
-  }
-  four: insert_data_table_one(
-    object: {
-      value: $value_4
-      field_id: $field_id_4
-      applicant_id: $applicant_id_4
-    },
-    on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_4}}}
-  ) {
-    id
-  }
-}
 `;
-const BasicAccountDetails = ({ route, navigation }) => {
+const BasicAccountDetailsLogin = ({ route, navigation }) => {
   const mountedAnimation = React.useRef(new Animated.Value(0)).current;
   const translateX = React.useRef(new Animated.Value(500)).current;
   const fieldsArray = route?.params?.fields;
-  const applicantData = route?.params?.data?.insert_applicant_id_one;
+  const applicantData = route?.params?.applicantData;
   let applicant_id = applicantData?.applicant_id;
-  if(!applicant_id) {
-    applicant_id = route?.params?.applicant_id
-  }
-  const email = applicantData?.applicant.email;
-  const user_id = applicantData?.user_id;
-  const preFilledFields = route?.params?.data
-  console.log(preFilledFields)
+  let preFilledFields = route?.params?.data;
+  preFilledFields = preFilledFields.map((data) => {
+    return { field_name: data.field_name, value: data.data_table[0].value };
+  });
+  console.log({
+    field_1: preFilledFields[0].value,
+    field_2: preFilledFields[1].value,
+    field_3: preFilledFields[2].value,
+    field_4: preFilledFields[3].value,
+  });
   const toast = useToast();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
-
 
   const registerValidationSchema = yup.object().shape({
     field_1: yup
       .string()
       .required(`Please select ${fieldsArray[0].field_name}`),
-    field_2: yup.string().required(`Please select ${fieldsArray[1].field_name}`),
-    field_3: yup.string().required(`Please select ${fieldsArray[2].field_name}`),
-    field_4: yup.string().required(`Please select ${fieldsArray[3].field_name}`),
+    field_2: yup
+      .string()
+      .required(`Please select ${fieldsArray[1].field_name}`),
+    field_3: yup
+      .string()
+      .required(`Please select ${fieldsArray[2].field_name}`),
+    field_4: yup
+      .string()
+      .required(`Please select ${fieldsArray[3].field_name}`),
   });
 
   const translationX = (toValue, delay) => {
@@ -116,7 +146,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
       setShowLoadingModal(false);
       navigation.navigate("Services", {
         data: applicantData,
-        fields: fieldsArray
+        fields: fieldsArray,
       }); //navigate if otp correct
     },
     onError: (error) => {
@@ -126,8 +156,9 @@ const BasicAccountDetails = ({ route, navigation }) => {
         title: "Error",
         placement: "top",
         status: "error",
-        description: "Unable to proceed. Please contact support at support@techinoviq.com"
-      })
+        description:
+          "Unable to proceed. Please contact support at support@techinoviq.com",
+      });
     },
   });
   console.log(moment({}));
@@ -136,10 +167,10 @@ const BasicAccountDetails = ({ route, navigation }) => {
     <Formik
       id="sign-in-button"
       initialValues={{
-        field_1: "",
-        field_2: "",
-        field_3: "",
-        field_4: "",
+        field_1: preFilledFields[0].value,
+        field_2: preFilledFields[1].value,
+        field_3: preFilledFields[2].value,
+        field_4: preFilledFields[3].value,
       }}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
@@ -159,7 +190,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
             applicant_id_3: applicant_id,
             value_4: values.field_4,
             field_id_4: fieldsArray[3].id,
-            applicant_id_4: applicant_id
+            applicant_id_4: applicant_id,
           },
         });
       }}
@@ -222,6 +253,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[0].dropdown_values}
+                value={values.field_1}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -233,6 +265,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[1].dropdown_values}
+                value={values.field_2}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -244,6 +277,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[2].dropdown_values}
+                value={values.field_3}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -255,6 +289,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[3].dropdown_values}
+                value={values.field_4}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -341,20 +376,21 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 // shadow={5}
                 onPress={() => {
                   setShowLoadingModal(true);
-                  handleSubmit()
-                }
-                }
+                  handleSubmit();
+                }}
               >
                 CONFIRM
               </Button>
             </Stack>
           </Box>
-      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
-
+          <LoadingModal
+            message="Saving information. Please wait."
+            showModal={showLoadingModal}
+          />
         </Box>
       )}
     </Formik>
   );
 };
 
-export default BasicAccountDetails;
+export default BasicAccountDetailsLogin;

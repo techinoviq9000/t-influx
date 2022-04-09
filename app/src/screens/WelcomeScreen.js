@@ -24,7 +24,7 @@ const GET_CNIC = gql`
 `
 
 const WelcomeScreen = ({ navigation }) => {
-  const [cnic, setCnic] = useState("")
+  const [cnic, setCnic] = useState("4230161551219")
   const [showModal, setShowModal] = useState(false)
   const [getApplicant] = useLazyQuery(GET_CNIC, {
     notifyOnNetworkStatusChange: true,
@@ -58,8 +58,8 @@ const WelcomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // setShowModal(false)
-      setCnic("4230161551211")
+      setShowModal(false)
+      setCnic("")
     })
 
     return unsubscribe
