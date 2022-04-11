@@ -24,24 +24,25 @@ const GET_CNIC = gql`
 `
 
 const WelcomeScreen = ({ navigation }) => {
-  const [cnic, setCnic] = useState("4230161551219")
+  const [backspace, setBackspace] = useState(false)
+  const [cnic, setCnic] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [getApplicant] = useLazyQuery(GET_CNIC, {
     notifyOnNetworkStatusChange: true,
     fetchPolicy: "network-only",
     nextFetchPolicy: "network-only",
     onCompleted: async (data) => {
+      setShowModal(false)
       const applicantData = data.applicants
       if (applicantData.length == 0) {
         navigation.navigate("Registration", {
-          cnic
+          cnic: cnic.replace(/-/g,"")
         })
       } else {
         try {
           const res = await http.post("/sendVerifyLoginEmail", {
             email: data?.applicants[0].email
           })
-          setShowModal(false)
           navigation.navigate("VerifyOTPLogin", {
             data: applicantData[0]
           })
@@ -56,6 +57,38 @@ const WelcomeScreen = ({ navigation }) => {
     }
   })
 
+  const changeText = (text) => {
+    if(text.length == 5 && !backspace) {
+      setCnic((prevState) => {
+        if(prevState.length < text.length) {
+          return text+"-"
+        } else {
+          return text
+        }
+      })
+    } else if(text.length == 13 && !backspace) {
+      setCnic((prevState) => {
+        if(prevState.length < text.length) {
+          return text+"-"
+        } else {
+          return text
+        }
+      })
+    } else {
+      setCnic(text)
+    }
+  }
+  const changeTextOnBackPress = () => {
+    return ({nativeEvent: {key: value}}) => {
+      if(value == "Backspace") {
+        let charAt = cnic.charAt(cnic.length-1)
+        setBackspace(true)
+        if(charAt != '-') {
+          setBackspace(false)
+        }
+    }
+  }
+}
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setShowModal(false)
@@ -91,7 +124,8 @@ const WelcomeScreen = ({ navigation }) => {
           name={"cnic"}
           placeholder={"XXXXX-XXXXXXX-X"}
           value={cnic}
-          onChangeText={(text) => setCnic(text)}
+          onChangeText={(text) => changeText(text)}
+          onKeyPress={changeTextOnBackPress()}
           icon={
             <Icon
               as={MaterialIcons}
@@ -120,7 +154,7 @@ const WelcomeScreen = ({ navigation }) => {
           shadow={5}
           mt={5}
           backgroundColor="white"
-          isDisabled={cnic.length != 13}
+          isDisabled={cnic.replace(/-/g,"").length != 13}
           _disabled={{
             backgroundColor: "gray.400"
           }}
@@ -133,7 +167,7 @@ const WelcomeScreen = ({ navigation }) => {
 
             getApplicant({
               variables: {
-                cnic
+                cnic: cnic.replace(/-/g,"")
               }
             })
           }}

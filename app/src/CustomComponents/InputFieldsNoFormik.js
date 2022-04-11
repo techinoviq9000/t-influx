@@ -8,8 +8,11 @@ const InputFieldsNoFormik = ({
   placeholder,
   icon,
   onChangeText,
+  onKeyPress,
+  changeTextOnBackPress,
   value,
 }) => {
+  let length = value.replace(/-/g,"").length
   return (
     <Box width={{md: "400px"}}>
       <Text
@@ -35,11 +38,12 @@ const InputFieldsNoFormik = ({
         type="text"
         autoComplete={name}
         onChangeText={onChangeText}
+        onKeyPress={onKeyPress}
         value={value}
         keyboardType='phone-pad'
         InputRightElement={
           <>
-           <Text pr={4} fontWeight="bold" color={value.length != 13 && value.length != 0 ? "red.300" : "white"}>{`${value.length}/13`}</Text>
+           <Text pr={4} fontWeight="bold" color={length != 13 && length != 0 ? "red.300" : "white"}>{`${length}/13`}</Text>
           </>
         }
         InputLeftElement={<Box pl="5">{icon}</Box>}

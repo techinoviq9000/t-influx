@@ -25,22 +25,20 @@ const INSERT_DATA = gql`
   mutation MyMutation(
     $value_1: String!
     $field_id_1: Int!
-    $applicant_id_1: uuid!
+    $applicant_id: uuid!
     $value_2: String!
     $field_id_2: Int!
-    $applicant_id_2: uuid!
     $value_3: String!
     $field_id_3: Int!
-    $applicant_id_3: uuid!
     $value_4: String!
     $field_id_4: Int!
-    $applicant_id_4: uuid!
+    $status: String!
   ) {
     one: insert_data_table_one(
       object: {
         value: $value_1
         field_id: $field_id_1
-        applicant_id: $applicant_id_1
+        applicant_id: $applicant_id
       }
       on_conflict: {
         constraint: data_table_field_id_applicant_id_key
@@ -54,7 +52,7 @@ const INSERT_DATA = gql`
       object: {
         value: $value_2
         field_id: $field_id_2
-        applicant_id: $applicant_id_2
+        applicant_id: $applicant_id
       }
       on_conflict: {
         constraint: data_table_field_id_applicant_id_key
@@ -68,7 +66,7 @@ const INSERT_DATA = gql`
       object: {
         value: $value_3
         field_id: $field_id_3
-        applicant_id: $applicant_id_3
+        applicant_id: $applicant_id
       }
       on_conflict: {
         constraint: data_table_field_id_applicant_id_key
@@ -82,7 +80,7 @@ const INSERT_DATA = gql`
       object: {
         value: $value_4
         field_id: $field_id_4
-        applicant_id: $applicant_id_4
+        applicant_id: $applicant_id
       }
       on_conflict: {
         constraint: data_table_field_id_applicant_id_key
@@ -92,8 +90,12 @@ const INSERT_DATA = gql`
     ) {
       id
     }
+    five:update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status}) {
+      affected_rows
+    }
   }
 `;
+
 const BasicAccountDetailsLogin = ({ route, navigation }) => {
   const mountedAnimation = React.useRef(new Animated.Value(0)).current;
   const translateX = React.useRef(new Animated.Value(500)).current;
@@ -103,12 +105,6 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
   let preFilledFields = route?.params?.data;
   preFilledFields = preFilledFields.map((data) => {
     return { field_name: data.field_name, value: data.data_table[0].value };
-  });
-  console.log({
-    field_1: preFilledFields[0].value,
-    field_2: preFilledFields[1].value,
-    field_3: preFilledFields[2].value,
-    field_4: preFilledFields[3].value,
   });
   const toast = useToast();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
@@ -181,16 +177,14 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
           variables: {
             value_1: values.field_1,
             field_id_1: fieldsArray[0].id,
-            applicant_id_1: applicant_id,
+            applicant_id: applicant_id,
             value_2: values.field_2,
             field_id_2: fieldsArray[1].id,
-            applicant_id_2: applicant_id,
             value_3: values.field_3,
             field_id_3: fieldsArray[2].id,
-            applicant_id_3: applicant_id,
             value_4: values.field_4,
             field_id_4: fieldsArray[3].id,
-            applicant_id_4: applicant_id,
+            status: "Incomplete"
           },
         });
       }}
