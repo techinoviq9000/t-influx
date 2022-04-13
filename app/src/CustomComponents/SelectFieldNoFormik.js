@@ -18,6 +18,7 @@ const SelectFieldNoFormik = ({
   isDisabled = false,
   icon,
   errors,
+  value,
   name,
   handleChange,
 }) => {
@@ -53,6 +54,7 @@ const SelectFieldNoFormik = ({
             }}
             borderRadius="lg"
             borderWidth={1}
+            selectedValue={value}
             InputRightElement={
               <>
                 {errors?.[name] ? (
@@ -80,7 +82,7 @@ const SelectFieldNoFormik = ({
             px={4}
           >
             {selectValue.map((value, index) => (
-              <Select.Item key={index} label={value} value={value} />
+              <Select.Item key={`${value}-${index}`} label={value} value={value} />
             ))}
           </Select>
         </FormControl>

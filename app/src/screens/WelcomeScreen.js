@@ -1,6 +1,6 @@
 import { Box, Button, Circle, Icon, Image, Pressable, Text } from "native-base"
 import React, { useState, useEffect } from "react"
-
+import moment from "moment"
 import { gql, useQuery, useLazyQuery } from "@apollo/client"
 import { ImageBackground, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
@@ -25,7 +25,7 @@ const GET_CNIC = gql`
 
 const WelcomeScreen = ({ navigation }) => {
   const [backspace, setBackspace] = useState(false)
-  const [cnic, setCnic] = useState("")
+  const [cnic, setCnic] = useState("4230161551219")
   const [showModal, setShowModal] = useState(false)
   const [getApplicant] = useLazyQuery(GET_CNIC, {
     notifyOnNetworkStatusChange: true,
@@ -39,13 +39,17 @@ const WelcomeScreen = ({ navigation }) => {
           cnic: cnic.replace(/-/g,"")
         })
       } else {
+        const updated_at = moment(new Date(), "DATETIME_LOCAL_SECONDS").toString()
+        navigation.navigate("VerifyOTPLogin", {
+          data: applicantData[0],
+          updated_at: updated_at
+        })
+        // 2022-04-13T10:19:38.627806+00:00
         try {
           const res = await http.post("/sendVerifyLoginEmail", {
             email: data?.applicants[0].email
           })
-          navigation.navigate("VerifyOTPLogin", {
-            data: applicantData[0]
-          })
+          // console.log(res)
         } catch (e) {
           setShowModal(false)
           console.log(e)
@@ -92,7 +96,7 @@ const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setShowModal(false)
-      setCnic("")
+      setCnic("4230161551219")
     })
 
     return unsubscribe

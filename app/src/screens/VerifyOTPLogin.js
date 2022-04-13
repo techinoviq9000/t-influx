@@ -49,6 +49,7 @@ const GET_CONFIG = gql`
 
 const VerifyOTPLogin = ({ route, navigation }) => {
   const data = route?.params?.data
+  const data_updated = route?.params?.updated_at
   const mountedAnimation = React.useRef(new Animated.Value(0)).current
   const translateX = React.useRef(new Animated.Value(500)).current
   const [updated_at, setUpdated_at] = useState(null)
@@ -57,7 +58,7 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   const getDifference = () => {
     const created_at = updated_at
       ? moment(updated_at)
-      : moment(data?.updated_at)
+      : data_updated
     let diffInMinutes = moment().diff(created_at, "minutes")
     return Math.abs(diffInMinutes)
   }
@@ -114,19 +115,19 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   const [otp, setOtp] = useState([
     {
       id: 0,
-      value: ""
+      value: "0"
     },
     {
       id: 1,
-      value: ""
+      value: "0"
     },
     {
       id: 2,
-      value: ""
+      value: "0"
     },
     {
       id: 3,
-      value: ""
+      value: "0"
     }
   ])
 
@@ -461,6 +462,8 @@ const VerifyOTPLogin = ({ route, navigation }) => {
               //mb={25}
               // shadow={5}
               onPress={() => {
+                console.log(parseInt(getDifference()), "difference")
+                console.log(parseInt(expiryDuration));
                 if (parseInt(getDifference()) >= parseInt(expiryDuration)) {
                   clearOTP()
                   setOtpError("OTP Expired")

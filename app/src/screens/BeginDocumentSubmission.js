@@ -23,14 +23,19 @@ import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from "expo-media-library";
 import { http } from "../utils/http";
 import { nhost } from "../utils/nhost";
+import { HASURA } from "../config"
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
-const BeginDocumentSubmission = ({ navigation }) => {
-  let camera;
-  const [startCamera, setStartCamera] = React.useState(false);
-  const [previewVisible, setPreviewVisible] = React.useState(false);
-  const [capturedImage, setCapturedImage] = React.useState(null);
-
+const BeginDocumentSubmission = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.applicantData;
+  let applicant_id = applicantData?.applicant_id;
+  let preFilledFields = route?.params?.data;
+  if(preFilledFields) {
+    preFilledFields = preFilledFields.map((data) => {
+      return { field_name: data.field_name, value: data.data_table[0].value };
+    });
+  }
   const [nicFront, setNicFront] = useState({
     taken: false,
     image: null
@@ -68,125 +73,30 @@ const BeginDocumentSubmission = ({ navigation }) => {
         quality: 0.5,
       });
       if (!result.cancelled) {
-        // const manipResult = await manipulateAsync(
-        //   result.uri,
-        //   [
-        //     {
-        //       resize: {
-        //         height: 900
-        //       }
-        //     }
-        //   ],
-        //   { compress: 0.5, format: SaveFormat.JPEG }
-        // );
-        // console.log(manipResult);
-        // let localUri = manipResult.uri;
-        // let filename = localUri.split('/').pop();
+
+        let localUri = result.uri;
+        let filename = localUri.split('/').pop();
       
-        // // Infer the type of the image
-        // let match = /\.(\w+)$/.exec(filename);
-        // let type = match ? `image/${match[1]}` : `image`;
+        // Infer the type of the image
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
       
-        
-        // let formData = new FormData();
-        
-        // formData.append('file', { uri: localUri, name: filename, type });
-        // console.log(formData);
+        let formData = new FormData();
+        const file = {
+          uri: localUri, name: filename, type
+        }
       //   const config = {
       //     headers: {
       //         'content-type': 'multipart/form-data'
       //     }
       // }
-      // console.log(await nhost.storage.upload(formData))
-      // console.log(fileMetadata)
-      // console.log(error)
-        // const res  = await http.post("/imageOCR", {data: "123"}, config)
-        // const res = await axios.post("http://175.107.200.16:5000/imageOCR", formData, {
-        //   headers: {
-        //     "Content-Type": "multipart/form-data",
-        //   },
-        // });
-        // console.log(res.result)
-        setState({...state, taken: true, image: result.uri})
+        const res = await nhost.storage.upload({file})
+        console.log(res);
+        setState({...state, taken: true, image: result.uri, uri: localUri, name: filename, type, value: `${HASURA}/v1/storage/files/${res.id}`})
       }
   }; 
 
-  
-  const CameraPreview = ({ photo }) => {
-    return (
-      <View
-        style={{
-          backgroundColor: "transparent",
-          flex: 1,
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <ImageBackground
-          source={{ uri: photo && photo.uri }}
-          style={{
-            flex: 1,
-          }}
-        />
 
-        <Pressable onPressOut={__retakePicture}>
-          {({ isHovered, isFocused, isPressed }) => {
-            return (
-              <Text
-                bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
-                borderWidth="2"
-                borderColor={isPressed ? "white" : "black"}
-                mb="2"
-              >
-                Retake
-              </Text>
-            );
-          }}
-        </Pressable>
-      </View>
-    );
-  };
-
-  // const [list, setList] = useState([
-  //   {
-  //     id: 0,
-  //     title: "NADRA CNIC FRONT",
-  //     status: true,
-  //     imagePreview: "../assets/nic_image.jpg",
-  //   },
-  //   {
-  //     id: 1,
-  //     title: "NADRA CNIC BACK",
-  //     status: true,
-  //     imagePreview: "../assets/nic_image.jpg",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Proof Of Income",
-  //     status: true,
-  //     imagePreview: "../assets/nic_image.jpg",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Active Filer Certificate",
-  //     status: false,
-  //     imagePreview: "../assets/nic_image.jpg",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Upload Signature on White Paper",
-  //     status: false,
-  //     imagePreview: "../assets/nic_image.jpg",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Zakaat Affidavit - If Applicable",
-  //     status: false,
-  //     picturePreview: ,
-  //   },
-  // ]);
-
-const abc = "../assets/nic_image.jpg"
   const Uploader = ({
     title,
     imagePreview,
@@ -217,7 +127,6 @@ const abc = "../assets/nic_image.jpg"
     );
   };
 
-  if(!startCamera) {
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
@@ -262,7 +171,7 @@ const abc = "../assets/nic_image.jpg"
             <Box flex={1} alignItems={{md: "center"}}>
                 <Pressable onPress={() => __startCamera(nicFront, setNicFront) }>
                 <Uploader
-                  title="Nadrda NIC Front"
+                  title={fieldsArray[16].field_name}
                   imagePreview={nicFront}
                   state={nicFront}
                   setState={setNicFront}
@@ -271,7 +180,7 @@ const abc = "../assets/nic_image.jpg"
 
                 <Pressable onPress={() => __startCamera(nicBack, setNicBack) }>
                 <Uploader
-                  title="Nadra NIC Back"
+                  title={fieldsArray[17].field_name}
                   imagePreview={nicBack}
                   state={nicBack}
                   setState={setNicBack}
@@ -280,7 +189,7 @@ const abc = "../assets/nic_image.jpg"
 
                 <Pressable onPress={() => __startCamera(poi, setPoi) }>
                 <Uploader
-                  title="Proof of Income"
+                  title={fieldsArray[18].field_name}
                   imagePreview={poi}
                   state={poi}
                   setState={setPoi}
@@ -289,7 +198,7 @@ const abc = "../assets/nic_image.jpg"
 
                 <Pressable onPress={() => __startCamera(signature, setSigntaure) }>
                 <Uploader
-                  title="Upload Signtaure on White Paper"
+                  title={fieldsArray[19].field_name}
                   imagePreview={signature}
                   state={signature}
                   setState={setSigntaure}
@@ -348,72 +257,6 @@ const abc = "../assets/nic_image.jpg"
         </Box>
       </Box>
     );
-  } if (previewVisible && capturedImage) {
-      return (
-        <CameraPreview photo={capturedImage} retakePicture={__retakePicture} />
-      );
-    } else {
-      return (
-        <Camera
-          style={{ flex: 1, width: "100%" }}
-          ref={(r) => {
-            camera = r;
-          }}
-        >
-          <Box
-            alignItems="flex-end"
-            width="100%"
-            minHeight="100%"
-            flexDirection="row"
-            justifyContent="space-between"
-            px={10}
-          >
-            {/* <Pressable onPressOut={__retakePicture}>
-              {({ isHovered, isFocused, isPressed }) => {
-                return (
-                  <Text
-                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
-                    borderWidth="2"
-                    borderColor={isPressed ? "white" : "black"}
-                    mb="2"
-                  >
-                    Retake
-                  </Text>
-                );
-              }}
-            </Pressable>
-            <Pressable onPressOut={__takePicture}>
-              {({ isHovered, isFocused, isPressed }) => {
-                return (
-                  <Circle
-                    size={98}
-                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
-                    borderWidth="2"
-                    borderColor={isPressed ? "white" : "black"}
-                    mb="2"
-                    opacity={0.5}
-                  />
-                );
-              }}
-            </Pressable>
-            <Pressable onPressOut={__takePicture}>
-              {({ isHovered, isFocused, isPressed }) => {
-                return (
-                  <Circle
-                    size={98}
-                    bg={isPressed ? "red.500" : isHovered ? "cyan.900" : "white"}
-                    borderWidth="2"
-                    borderColor={isPressed ? "white" : "black"}
-                    mb="2"
-                    opacity={0.5}
-                  />
-                );
-              }}
-            </Pressable> */}
-          </Box>
-        </Camera>
-      );
-    }
 };
 
 const styles = StyleSheet.create({

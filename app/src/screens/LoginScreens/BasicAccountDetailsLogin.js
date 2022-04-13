@@ -33,6 +33,7 @@ const INSERT_DATA = gql`
     $value_4: String!
     $field_id_4: Int!
     $status: String!
+    $custom_updated_at: String!
   ) {
     one: insert_data_table_one(
       object: {
@@ -90,7 +91,7 @@ const INSERT_DATA = gql`
     ) {
       id
     }
-    five:update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status}) {
+    five:update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status, , custom_updated_at: $custom_updated_at}) {
       affected_rows
     }
   }
@@ -103,9 +104,12 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
   const applicantData = route?.params?.applicantData;
   let applicant_id = applicantData?.applicant_id;
   let preFilledFields = route?.params?.data;
-  preFilledFields = preFilledFields.map((data) => {
-    return { field_name: data.field_name, value: data.data_table[0].value };
-  });
+  console.log(route?.params?.data)
+  if(preFilledFields) {
+    preFilledFields = preFilledFields.map((data) => {
+      return { field_name: data.field_name, value: data.data_table[0].value };
+    });
+  }
   const toast = useToast();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
 
@@ -140,9 +144,8 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
   const [insertData, { data }] = useMutation(INSERT_DATA, {
     onCompleted: (data) => {
       setShowLoadingModal(false);
-      navigation.navigate("Services", {
+      navigation.navigate("Continue Application", {
         data: applicantData,
-        fields: fieldsArray,
       }); //navigate if otp correct
     },
     onError: (error) => {
@@ -163,10 +166,10 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
     <Formik
       id="sign-in-button"
       initialValues={{
-        field_1: preFilledFields[0].value,
-        field_2: preFilledFields[1].value,
-        field_3: preFilledFields[2].value,
-        field_4: preFilledFields[3].value,
+        field_1: preFilledFields?.[0].value ?? "",
+        field_2: preFilledFields?.[1].value ?? "",
+        field_3: preFilledFields?.[2].value ?? "",
+        field_4: preFilledFields?.[3].value ?? "",
       }}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
@@ -184,7 +187,8 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
             field_id_3: fieldsArray[2].id,
             value_4: values.field_4,
             field_id_4: fieldsArray[3].id,
-            status: "Incomplete"
+            status: "Incomplete",
+            custom_updated_at:  moment(new Date(), "DATETIME_LOCAL_SECONDS").toString()
           },
         });
       }}

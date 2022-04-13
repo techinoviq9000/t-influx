@@ -29,6 +29,7 @@ const GET_APPLICANT_ID = gql`
       status
       created_at
       updated_at
+      custom_updated_at
       user_id
     }
   }
@@ -67,13 +68,16 @@ const PreviousApplications = ({ route, navigation }) => {
     // })
     return finalID
   }
-  useEffect(() => {
-    getApplicantId({
-      variables: {
-        user_id: data.id
-      }
-    })
-  }, [])
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getApplicantId({
+        variables: {
+          user_id: data.id
+        }
+      })
+    }, [])
+  );
 
   return (
     <Box flex={1} alignItems="center" minHeight="100%" px={3}>
@@ -164,9 +168,9 @@ const PreviousApplications = ({ route, navigation }) => {
                         <Text fontSize="xs" color="coolGray.400">
                           Created: {moment(item.created_at).fromNow()}
                         </Text>
-                        {item.updated_at != item.created_at && (
+                        {item.custom_updated_at != item.created_at && (
                           <Text fontSize="xs" color="coolGray.400">
-                            Updated: {moment(item.updated_at).fromNow()}
+                            Updated: {moment(item.custom_updated_at).fromNow()}
                           </Text>
                         )}
                       </VStack>

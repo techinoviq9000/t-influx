@@ -16,6 +16,8 @@ import {
   FlatList,
   Spacer,
 } from "native-base";
+import { RefreshControl } from "react-native"
+
 import React, { useState, useEffect } from "react";
 
 import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
@@ -25,6 +27,7 @@ import { Ionicons, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import StepHeader from "../CustomComponents/StepsHeader";
 import LoadingModal from "../CustomComponents/LoadingModal";
 import { iterateObserversSafely } from "@apollo/client/utilities";
+import { useFocusEffect } from "@react-navigation/native";
 
 const GET_DATA = gql`
   query getData($applicant_id: uuid = "") {
@@ -56,8 +59,17 @@ const GET_APPLICANT = gql`
 
 const ContinueRegistration = ({ route, navigation }) => {
   const applicantData = route?.params?.data;
-  console.log(applicantData.applicant_id, "asdas")
   const [dataList, setDataList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true)
+    getData({
+      variables: {
+        applicant_id: applicantData.applicant_id,
+      },
+    });
+  }, [])
 
   const [getFields, { data: fieldArray, loading }] = useLazyQuery(
     GET_APPLICANT,
@@ -75,6 +87,7 @@ const ContinueRegistration = ({ route, navigation }) => {
     nextFetchPolicy: "network-only",
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      setRefreshing(false)
       const newList = [];
       data?.pages?.map((page) => {
         let status = false;
@@ -110,18 +123,22 @@ const ContinueRegistration = ({ route, navigation }) => {
       // setRefreshing(false)
       // setApplicantIdData(data.applicant_id)
     },
-    onError: (data) => {
-      console.log(data);
+    onError: (error) => {
+      setRefreshing(false)
+      console.log(error);
     },
   });
 
-  useEffect(() => {
-    getData({
-      variables: {
-        applicant_id: applicantData.applicant_id,
-      },
-    });
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getData({
+        variables: {
+          applicant_id: applicantData.applicant_id,
+        },
+      });
+    }, [])
+  );
+
 
   return (
     <Box flex={1} minHeight="100%" safeAreaTop={5}>
@@ -134,7 +151,9 @@ const ContinueRegistration = ({ route, navigation }) => {
                 size={36}
                 color={isFocused ? "#87e3ff" : "white"}
                 onPress={
-                  () => navigation.goBack()
+                  () => navigation.navigate("Previous Applications", {
+                    data: applicantData.applicant_id
+                  })
                   // navigation.navigate("Welcome")
                 }
               />
@@ -162,6 +181,10 @@ const ContinueRegistration = ({ route, navigation }) => {
             showsVerticalScrollIndicator={false}
             p={4}
             data={dataList}
+            refreshing={refreshing}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
             renderItem={({ item }) => (
               <Pressable
                 onPress={() => {
@@ -174,9 +197,10 @@ const ContinueRegistration = ({ route, navigation }) => {
                       });
                       break;
                     case "Services":
-                      navigation.navigate("Services", {
-                        data: item,
-                        fields: fieldArray.fields
+                      navigation.navigate("Services LoginRoute", {
+                        data: item.data,
+                        fields: fieldArray.fields,
+                        applicantData: applicantData
                       });
                       break;
                     case "Personal Details":
@@ -186,9 +210,10 @@ const ContinueRegistration = ({ route, navigation }) => {
                       });
                       break;
                     case "Upload Documents":
-                      navigation.navigate("Upload Documents", {
-                        data: item,
-                        fields: fieldArray.fields
+                      navigation.navigate("Begin Document Submission", {
+                        data: item.data,
+                        fields: fieldArray.fields,
+                        applicantData: applicantData
                       });
                       break;
                   }
@@ -207,14 +232,16 @@ const ContinueRegistration = ({ route, navigation }) => {
                         <Icon
                           as={Ionicons}
                           name="checkmark-circle"
-                          size="37"
+                          size={8}
+                          alignSelf="center"
                           color="#317F6E"
                         />
                       ) : (
                         <Icon
                           as={FontAwesome5}
                           name="exclamation-circle"
-                          size="34"
+                          size={8}
+                          alignSelf="center"
                           color="amber.300"
                         />
                       )}

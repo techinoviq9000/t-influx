@@ -69,7 +69,7 @@ const SelectField = ({
             placeholderTextColor="#ccc"
             
             _selectedItem={{
-              bg: "teal.600",
+              bg: "emerald.300",
               endIcon: <CheckIcon size={5} />,
               fontSize: "xs"
             }}
