@@ -8,6 +8,7 @@ import {
   Stack,
   Pressable,
   Icon,
+  useToast
 } from "native-base";
 import React, { useState } from "react";
 import { Camera } from "expo-camera";
@@ -18,14 +19,14 @@ import {
 } from "react-native";
 import axios from 'axios'
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import StepHeader from "../CustomComponents/StepsHeader";
+import StepHeader from "../../CustomComponents/StepsHeader";
 import * as ImagePicker from 'expo-image-picker'; 
 import * as MediaLibrary from "expo-media-library";
-import { http } from "../utils/http";
-import { nhost } from "../utils/nhost";
-import { HASURA } from "../config"
+import { http } from "../../utils/http";
+import { nhost } from "../../utils/nhost";
+import { HASURA } from "../../config"
 import { gql, useMutation } from "@apollo/client";
-import LoadingModal from "../CustomComponents/LoadingModal";
+import LoadingModal from "../../CustomComponents/LoadingModal";
 
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
@@ -40,6 +41,8 @@ const INSERT_DATA = gql`
     $field_id_3: Int!
     $value_4: String!
     $field_id_4: Int!
+    $status: String!
+    $custom_updated_at: String!
   ) {
     one: insert_data_table_one(
       object: {
@@ -97,11 +100,14 @@ const INSERT_DATA = gql`
     ) {
       id
     }
+    five:update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status, , custom_updated_at: $custom_updated_at}) {
+      affected_rows
+    }
   }
 `;
 
 
-const BeginDocumentSubmission = ({ route, navigation }) => {
+const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
   const fieldsArray = route?.params?.fields;
   const applicantData = route?.params?.applicantData;
   let applicant_id = applicantData?.applicant_id;
@@ -112,6 +118,7 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
     });
   }
   const toast = useToast();
+  console.log(preFilledFields);
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [nicFront, setNicFront] = useState({
     taken: false,
@@ -154,34 +161,35 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
   });
 
   const __startCamera = async (state, setState) => {
-      const { status } = await MediaLibrary.requestPermissionsAsync();
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-  
-      const { status: status2 } = await Camera.requestCameraPermissionsAsync();
-      if (status2 !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        exif: true,
-        quality: 0.5,
-      });
-      if (!result.cancelled) {
+    console.log("here");
+      // const { status } = await MediaLibrary.requestPermissionsAsync();
+      // if (status !== "granted") {
+      //   alert("Sorry, we need camera roll permissions to make this work!");
+      // }
+      // console.log(status, "status");
+      // const { status: status2 } = await Camera.requestCameraPermissionsAsync();
+      // if (status2 !== "granted") {
+      //   alert("Sorry, we need camera roll permissions to make this work!");
+      // }
+      // log(status2, "status2")
+      // const result = await ImagePicker.launchCameraAsync({
+      //   allowsEditing: true,
+      //   exif: true,
+      //   quality: 0.5,
+      // });
+      // if (!result.cancelled) {
 
-        let localUri = result.uri;
-        let filename = localUri.split('/').pop();
+      //   let localUri = result.uri;
+      //   let filename = localUri.split('/').pop();
       
-        // Infer the type of the image
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-      
-        const file = {
-          uri: localUri, name: filename, type
-        }
-        setState({...state, taken: true, image: result.uri, file})
-      }
+      //   // Infer the type of the image
+      //   let match = /\.(\w+)$/.exec(filename);
+      //   let type = match ? `image/${match[1]}` : `image`;
+      //   const file = {
+      //     uri: localUri, name: filename, type
+      //   }
+      //   setState({...state, taken: true, image: result.uri})
+      // }
   }; 
 
 
@@ -215,30 +223,32 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
     );
   };
 
-  const handleSubmit = async () => {
-      const valuesArray = [nicFront, nicBack, poi, signature]
-      let values = []
-      await Promise.all(valuesArray.map(async (item) => {
-        let file = item.file
-        const res = await nhost.storage.upload({file})
-        console.log(res.id);
-        values.push(`${HASURA}/v1/storage/files/${res.id}`)
-      }))
-    insertData({
-        variables: {
-          value_1: values[0],
-          field_id_1: fieldsArray[16].id,
-          value_2: values[1],
-          field_id_2: fieldsArray[17].id,
-          value_3: values[2],
-          field_id_3: fieldsArray[18].id,
-          value_4: values[3],
-          field_id_4: fieldsArray[19].id,
-          applicant_id: applicant_id
-        },
-      });
+  // const handleSubmit = async () => {
+  //     const valuesArray = [nicFront, nicBack, poi, signature]
+  //     let values = []
+  //     await Promise.all(valuesArray.map(async (item) => {
+  //       let file = item.file
+  //       const res = await nhost.storage.upload({file})
+  //       console.log(res.id);
+  //       values.push(`${HASURA}/v1/storage/files/${res.id}`)
+  //     }))
+  //       insertData({
+  //           variables: {
+  //             value_1: values[0],
+  //             field_id_1: fieldsArray[16].id,
+  //             value_2: values[1],
+  //             field_id_2: fieldsArray[17].id,
+  //             value_3: values[2],
+  //             field_id_3: fieldsArray[18].id,
+  //             value_4: values[3],
+  //             field_id_4: fieldsArray[19].id,
+  //             applicant_id: applicant_id,
+  //             status: "Incomplete",
+  //             custom_updated_at:  moment(new Date(), "DATETIME_LOCAL_SECONDS").toString()
+  //           },
+  //         });
    
-  }
+  // }
     return (
       <Box flex={1} minHeight="100%" safeAreaTop={5}>
         <Box alignItems="flex-start" px={6} mt={6}>
@@ -281,7 +291,7 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
             }}
           >
             <Box flex={1} alignItems={{md: "center"}}>
-                <Pressable onPress={() => __startCamera(nicFront, setNicFront) }>
+                <Pressable onPress={() => {console.log("pressed"); __startCamera()} }>
                 <Uploader
                   title={fieldsArray[16].field_name}
                   imagePreview={nicFront}
@@ -361,7 +371,7 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
                   // navigation.goBack()
                 //   navigation.navigate("Foreign Tax")
                 {
-                    handleSubmit()
+                    // handleSubmit()
                 }
                 }
               >
@@ -384,4 +394,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BeginDocumentSubmission;
+export default BeginDocumentSubmissionLogin;

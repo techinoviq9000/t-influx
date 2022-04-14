@@ -104,7 +104,6 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
   const applicantData = route?.params?.applicantData;
   let applicant_id = applicantData?.applicant_id;
   let preFilledFields = route?.params?.data;
-  console.log(route?.params?.data)
   if(preFilledFields) {
     preFilledFields = preFilledFields.map((data) => {
       return { field_name: data.field_name, value: data.data_table[0].value };
@@ -160,7 +159,6 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
       });
     },
   });
-  console.log(moment({}));
 
   return (
     <Formik
@@ -175,18 +173,17 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
       validateOnChange={false}
       validateOnBlur={true}
       onSubmit={(values) => {
-        console.log(values);
         insertData({
           variables: {
             value_1: values.field_1,
             field_id_1: fieldsArray[0].id,
-            applicant_id: applicant_id,
             value_2: values.field_2,
             field_id_2: fieldsArray[1].id,
             value_3: values.field_3,
             field_id_3: fieldsArray[2].id,
             value_4: values.field_4,
             field_id_4: fieldsArray[3].id,
+            applicant_id: applicant_id,
             status: "Incomplete",
             custom_updated_at:  moment(new Date(), "DATETIME_LOCAL_SECONDS").toString()
           },

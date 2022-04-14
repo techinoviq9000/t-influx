@@ -19,6 +19,7 @@
       "supportsTablet": true
     },
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./app/src/assets/ic_launcher_adaptive_fore.png",
         "backgroundColor": "#34D3C2"

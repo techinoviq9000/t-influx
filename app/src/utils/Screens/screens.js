@@ -30,6 +30,8 @@ import {
   CardStyleInterpolators
 } from "@react-navigation/stack"
 import ServicesLogin from "../../screens/LoginScreens/ServicesLogin"
+import PersonalDetailsLogin from "../../screens/LoginScreens/PersonalDetailsLogin"
+import BeginDocumentSubmissionLogin from "../../screens/LoginScreens/BeginDocumentSubmissionLogin"
 
 const screenArray = [
   {
@@ -231,6 +233,20 @@ const LoginRoute = [
   {
     name: "Services LoginRoute",
     component: ServicesLogin,
+    options: {
+      cardOverlayEnabled: false
+    }
+  },
+  {
+    name: "Personal Details LoginRoute",
+    component: PersonalDetailsLogin,
+    options: {
+      cardOverlayEnabled: false
+    }
+  },
+  {
+    name: "Begin Document Submission LoginRoute",
+    component: BeginDocumentSubmissionLogin,
     options: {
       cardOverlayEnabled: false
     }

@@ -40,6 +40,7 @@ const GET_DATA = gql`
         data_table(where: { applicant_id: { _eq: $applicant_id } }) {
           id
           value
+          analysis
         }
       }
     }
@@ -204,13 +205,14 @@ const ContinueRegistration = ({ route, navigation }) => {
                       });
                       break;
                     case "Personal Details":
-                      navigation.navigate("Personal Details", {
-                        data: item,
-                        fields: fieldArray.fields
+                      navigation.navigate("Personal Details LoginRoute", {
+                        data: item.data,
+                        fields: fieldArray.fields,
+                        applicantData: applicantData
                       });
                       break;
                     case "Upload Documents":
-                      navigation.navigate("Begin Document Submission", {
+                      navigation.navigate("Begin Document Submission LoginRoute", {
                         data: item.data,
                         fields: fieldArray.fields,
                         applicantData: applicantData
