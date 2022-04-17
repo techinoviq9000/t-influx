@@ -58,6 +58,15 @@ const GET_APPLICANT = gql`
   }
 `;
 
+const UPDATE_APPLICANT_STATUS = gql`
+mutation UpdateApplicantStatus($applicant_id: uuid = "", $status: String = "") {
+  update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status}) {
+    affected_rows
+  }
+}
+
+`
+
 const ContinueRegistration = ({ route, navigation }) => {
   const applicantData = route?.params?.data;
   const [dataList, setDataList] = useState([]);
@@ -83,6 +92,18 @@ const ContinueRegistration = ({ route, navigation }) => {
     }
   );
 
+  const [updateApplicant] = useMutation(UPDATE_APPLICANT_STATUS, {
+    variables: {
+      applicant_id: applicantData.applicant_id,
+      status: "Completed"
+    },
+    notifyOnNetworkStatusChange: true,
+    nextFetchPolicy: "network-only",
+    fetchPolicy: "network-only",
+    onError: (error) => {
+      console.log(error);
+    }
+  })
   const [getData, { loading: dataLoading }] = useLazyQuery(GET_DATA, {
     notifyOnNetworkStatusChange: true,
     nextFetchPolicy: "network-only",
@@ -90,6 +111,7 @@ const ContinueRegistration = ({ route, navigation }) => {
     onCompleted: (data) => {
       setRefreshing(false)
       const newList = [];
+      const statuses = [];
       data?.pages?.map((page) => {
         let status = false;
         if (page.fields.length == 0) {
@@ -100,6 +122,7 @@ const ContinueRegistration = ({ route, navigation }) => {
             collapsed: false,
             applicantData
           });
+          statuses.push(status)
         } else if (page.fields[0]?.data_table.length == 0) {
           newList.push({
             id: page.id,
@@ -108,6 +131,7 @@ const ContinueRegistration = ({ route, navigation }) => {
             collapsed: false,
             applicantData
           });
+          statuses.push(status)
         } else {
           newList.push({
             id: page.id,
@@ -117,9 +141,14 @@ const ContinueRegistration = ({ route, navigation }) => {
             data: page.fields,
             applicantData
           });
+          statuses.push(true)
         }
       });
       setDataList(newList);
+      console.log(statuses);
+      if(!statuses.includes(false)) {
+        updateApplicant()
+      }
       getFields();
       // setRefreshing(false)
       // setApplicantIdData(data.applicant_id)

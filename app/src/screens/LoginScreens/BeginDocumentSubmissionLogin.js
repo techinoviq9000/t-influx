@@ -8,26 +8,22 @@ import {
   Stack,
   Pressable,
   Icon,
-  useToast
+  useToast,
 } from "native-base";
 import React, { useState } from "react";
 import { Camera } from "expo-camera";
-import {
-  ImageBackground,
-  StyleSheet,
-  View
-} from "react-native";
-import axios from 'axios'
+import { ImageBackground, StyleSheet, View } from "react-native";
+import axios from "axios";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import StepHeader from "../../CustomComponents/StepsHeader";
-import * as ImagePicker from 'expo-image-picker'; 
+import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { http } from "../../utils/http";
 import { nhost } from "../../utils/nhost";
-import { HASURA } from "../../config"
+import { HASURA } from "../../config";
 import { gql, useMutation } from "@apollo/client";
 import LoadingModal from "../../CustomComponents/LoadingModal";
-
+import moment from "moment";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const INSERT_DATA = gql`
@@ -100,52 +96,71 @@ const INSERT_DATA = gql`
     ) {
       id
     }
-    five:update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status, , custom_updated_at: $custom_updated_at}) {
+    five: update_applicant_id(
+      where: { applicant_id: { _eq: $applicant_id } }
+      _set: { status: $status, custom_updated_at: $custom_updated_at }
+    ) {
       affected_rows
     }
   }
 `;
-
 
 const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
   const fieldsArray = route?.params?.fields;
   const applicantData = route?.params?.applicantData;
   let applicant_id = applicantData?.applicant_id;
   let preFilledFields = route?.params?.data;
-  if(preFilledFields) {
+  if (preFilledFields) {
     preFilledFields = preFilledFields.map((data) => {
       return { field_name: data.field_name, value: data.data_table[0].value };
     });
   }
   const toast = useToast();
-  console.log(preFilledFields);
+  // console.log(preFilledFields);
+  const [errorMessage, setErrorMessage] = useState("");
   const [showLoadingModal, setShowLoadingModal] = useState(false);
-  const [nicFront, setNicFront] = useState({
-    taken: false,
-    image: null
-  })
+  const [pictures, setPictures] = useState([])
+  const dummyFields = [
+    {
+      id: 25,
+      field_name: "Nadra NIC Front",
+      place_holder: null,
+      dropdown_values: null
+    },
+    {
+      id: 26,
+      field_name: "Nadra NIC Back",
+      place_holder: null,
+      dropdown_values: null
+    },
+    {
+      id: 27,
+      field_name: "Proof of Income",
+      place_holder: null,
+      dropdown_values: null
+    },
+    {
+      id: 28,
+      field_name:"Upload Signature on White Paper",
+      place_holder: null,
+      dropdown_values: null
+    }
+  ]
+React.useEffect(() => {
+  setPictures(dummyFields.map((item, index) => (
+    {name: item.field_name,  id: item.id, edit: false,
+      taken: preFilledFields[index]?.value ? true : false,
+      image: preFilledFields[index]?.value,}
+  )))
 
-  const [nicBack, setNicBack] = useState({
-    taken: false,
-    image: null
-  })
-
-  const [poi, setPoi] = useState({
-    taken: false,
-    image: null
-  })
-
-  const [signature, setSigntaure] = useState({
-    taken: false,
-    image: null
-  })
+}, [])
 
   const [insertData, { data }] = useMutation(INSERT_DATA, {
     onCompleted: (data) => {
       setShowLoadingModal(false);
-    //   navigation.navigate("Continue Application", {
-    //     data: applicantData,
-    //   }); //navigate if otp correct
+      navigation.navigate("Continue Application", {
+        data: applicantData,
+      }); //navigate if otp correct
     },
     onError: (error) => {
       setShowLoadingModal(false);
@@ -159,46 +174,38 @@ const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
       });
     },
   });
+  const __startCamera = async (state, setState, name) => {
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+    }
+    const { status: status2 } = await Camera.requestCameraPermissionsAsync();
+    if (status2 !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      exif: true,
+      quality: 0.5,
+    });
+    if (!result.cancelled) {
+      let localUri = result.uri;
+      let filename = localUri.split("/").pop();
 
-  const __startCamera = async (state, setState) => {
-    console.log("here");
-      // const { status } = await MediaLibrary.requestPermissionsAsync();
-      // if (status !== "granted") {
-      //   alert("Sorry, we need camera roll permissions to make this work!");
-      // }
-      // console.log(status, "status");
-      // const { status: status2 } = await Camera.requestCameraPermissionsAsync();
-      // if (status2 !== "granted") {
-      //   alert("Sorry, we need camera roll permissions to make this work!");
-      // }
-      // log(status2, "status2")
-      // const result = await ImagePicker.launchCameraAsync({
-      //   allowsEditing: true,
-      //   exif: true,
-      //   quality: 0.5,
-      // });
-      // if (!result.cancelled) {
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      const file = {
+        uri: localUri,
+        name: filename,
+        type,
+      };
+      setErrorMessage("");
+      setState(state.map(item => {if (item.name == name) { return {...item, edit: true, taken: true, image: result.uri, file } } else {return item}}))
+    }
+  };
 
-      //   let localUri = result.uri;
-      //   let filename = localUri.split('/').pop();
-      
-      //   // Infer the type of the image
-      //   let match = /\.(\w+)$/.exec(filename);
-      //   let type = match ? `image/${match[1]}` : `image`;
-      //   const file = {
-      //     uri: localUri, name: filename, type
-      //   }
-      //   setState({...state, taken: true, image: result.uri})
-      // }
-  }; 
-
-
-  const Uploader = ({
-    title,
-    imagePreview,
-    setState,
-    state
-  }) => {
+  const Uploader = ({ title, imagePreview, name, mandtory }) => {
     return (
       <Stack
         direction="row"
@@ -209,125 +216,199 @@ const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
         borderRadius="lg"
         borderWidth={1}
         mb={4}
-        width={{base: "100%", md: "md"}}
+        width={{ base: "100%", md: "md" }}
       >
         <Box flex={1}>
-          <Text color="#13B995">{title}</Text>
-          {!imagePreview.taken ? <Text>No image</Text> : <Image source={{uri: imagePreview.image}} alt="Alternate Text" size="xl" resizeMode="contain" zIndex={10} />}
+          {mandtory ? (
+            <Text color="#13B995">
+              {title}
+              <Text color="#dc2626" fontSize="xs">
+                {" "}
+                *
+              </Text>
+            </Text>
+          ) : (
+            <Text color="#13B995">{title}</Text>
+          )}
+          {!imagePreview.taken ? (
+            <Text>No image</Text>
+          ) : (
+            <Image
+              source={{ uri: imagePreview.image }}
+              alt="Alternate Text"
+              size="xl"
+              resizeMode="contain"
+              zIndex={10}
+            />
+          )}
         </Box>
-        <Box alignItems="flex-end" >
-          <Icon as={MaterialIcons} name="camera-alt" size={6} color="emerald.500" />
-          {imagePreview.taken && <Icon as={MaterialIcons} name="delete" size={6} color="red.800" mt={10} onPress={() => {setState({...state, taken: false, image: null})}}/>}
+        <Box alignItems="flex-end">
+          <Icon
+            as={MaterialIcons}
+            name="camera-alt"
+            size={6}
+            color="emerald.500"
+          />
+          {imagePreview.taken && (
+            <Icon
+              as={MaterialIcons}
+              name="delete"
+              size={6}
+              color="red.800"
+              mt={10}
+              onPress={() => {
+                console.log(pictures.map(item => {if (item.name == name) { return {...item, edit: true, taken: false, image: null} } else {return item}}))
+                setPictures(pictures.map(item => {if (item.name == name) { return {...item, edit: true, taken: false, image: null} } else {return item}}));
+              }}
+            />
+          )}
         </Box>
       </Stack>
     );
   };
 
-  // const handleSubmit = async () => {
-  //     const valuesArray = [nicFront, nicBack, poi, signature]
-  //     let values = []
-  //     await Promise.all(valuesArray.map(async (item) => {
-  //       let file = item.file
-  //       const res = await nhost.storage.upload({file})
-  //       console.log(res.id);
-  //       values.push(`${HASURA}/v1/storage/files/${res.id}`)
-  //     }))
-  //       insertData({
-  //           variables: {
-  //             value_1: values[0],
-  //             field_id_1: fieldsArray[16].id,
-  //             value_2: values[1],
-  //             field_id_2: fieldsArray[17].id,
-  //             value_3: values[2],
-  //             field_id_3: fieldsArray[18].id,
-  //             value_4: values[3],
-  //             field_id_4: fieldsArray[19].id,
-  //             applicant_id: applicant_id,
-  //             status: "Incomplete",
-  //             custom_updated_at:  moment(new Date(), "DATETIME_LOCAL_SECONDS").toString()
-  //           },
-  //         });
-   
+  // const handleSubmit = () => {
+  //   console.log(pictures)
   // }
-    return (
-      <Box flex={1} minHeight="100%" safeAreaTop={5}>
-        <Box alignItems="flex-start" px={6} mt={6}>
-        <Pressable>
-      {({ isHovered, isFocused, isPressed }) => {
-        return (
-          <Ionicons
-          name="arrow-back-circle-sharp"
-          size={36}
-          color={isFocused ? "#87e3ff" : "white"}
-          onPress={
-            () => navigation.goBack()
-            // navigation.navigate("Welcome")
+  const handleSubmit = async () => {
+    // if (!nicFront?.image && !nicBack?.image) {
+      if (false) {
+      setErrorMessage("Please add NIC images");
+    } else {
+      // setShowLoadingModal(true);
+      setErrorMessage("");
+      // let values = []
+      let modifiedPics = await Promise.all(
+        pictures.map(async (item) => {
+          try {
+            let { file, edit, name } = item;
+            console.log(item, "item file");
+            if (file && edit) {
+              const res = await nhost.storage.upload({ file });
+              console.log(res?.fileMetadata?.id, "res");
+              let id = res?.fileMetadata?.id;
+              return {...item, image: `${HASURA}/v1/storage/files/${id}`}
+            } else {
+              return item
+            }
+          } catch (e) {
+            console.log(e);
           }
+        })
+      );
+      setPictures(modifiedPics)
+      let variables = {}
+      modifiedPics.map((pic, index) => {
+        variables[`value_${index+1}`] = pic.image
+        variables[`field_id_${index+1}`] = pic.id
+      })
+      variables.status = "Incomplete",
+      variables.custom_updated_at =  moment(
+        new Date(),
+        "DATETIME_LOCAL_SECONDS"
+      ).toString()
+      variables.applicant_id = applicant_id,
+      console.log(variables);
+      console.log("meow");
+      insertData({
+        variables
+      });
+    }
+  };
+  return (
+    <Box flex={1} minHeight="100%" safeAreaTop={5}>
+      <Box alignItems="flex-start" px={6} mt={6}>
+        <Pressable>
+          {({ isHovered, isFocused, isPressed }) => {
+            return (
+              <Ionicons
+                name="arrow-back-circle-sharp"
+                size={36}
+                color={isFocused ? "#87e3ff" : "white"}
+                onPress={
+                  () => navigation.goBack()
+                  // navigation.navigate("Welcome")
+                }
+              />
+            );
+          }}
+        </Pressable>
+      </Box>
+      <Box alignItems="center">
+        <StepHeader
+          title="Upload Documents"
+          nextTitle="Next: Foreign Account Tax Compliance"
+          step="4"
         />
-        )
-      }}
-    </Pressable>
-        </Box>
-        <Box alignItems="center">
-          <StepHeader
-            title="Upload Documents"
-            nextTitle="Next: Foreign Account Tax Compliance"
-            step="4"
-          />
-        </Box>
-        <Box
-          backgroundColor="white"
-          rounded="xl"
-          roundedBottom="none"
-          py={8}
-          width="100%"
-          flex={1}
-          mt={5}
-          px={6}
+      </Box>
+      <Box
+        backgroundColor="white"
+        rounded="xl"
+        roundedBottom="none"
+        py={8}
+        width="100%"
+        flex={1}
+        mt={5}
+        px={6}
+      >
+        <ScrollView
+          _contentContainerStyle={{
+            flexGrow: 1,
+          }}
         >
-          <ScrollView
-            _contentContainerStyle={{
-              flexGrow: 1,
-            }}
-          >
-            <Box flex={1} alignItems={{md: "center"}}>
-                <Pressable onPress={() => {console.log("pressed"); __startCamera()} }>
+          <Box flex={1} alignItems={{ md: "center" }}>
+            {pictures.map((item, index) => (
+                <Pressable onPress={() => __startCamera(pictures, setPictures, item.name)} key={index}>
                 <Uploader
-                  title={fieldsArray[16].field_name}
-                  imagePreview={nicFront}
-                  state={nicFront}
-                  setState={setNicFront}
+                  title={item.name}
+                  mandtory={true}
+                  imagePreview={item}
+                  setState={setPictures}
+                  name={item.name}
                 />
-                </Pressable>
+              </Pressable>
+            ))}
+            {/* <Pressable onPress={() => __startCamera(pictures[0]['nicFront'], setPictures, "nicFront")}>
+              <Uploader
+                title={fieldsArray[16].field_name}
+                mandtory={true}
+                imagePreview={nicFront}
+                state={nicFront}
+                setState={setNicFront}
+              />
+            </Pressable>
 
-                <Pressable onPress={() => __startCamera(nicBack, setNicBack) }>
-                <Uploader
-                  title={fieldsArray[17].field_name}
-                  imagePreview={nicBack}
-                  state={nicBack}
-                  setState={setNicBack}
-                />
-                </Pressable>
+            <Pressable onPress={() => __startCamera(pictures[0]['nicBack'], setPictures, "nicBack")}>
+              <Uploader
+                title={fieldsArray[17].field_name}
+                mandtory={true}
+                imagePreview={nicBack}
+                state={nicBack}
+                setState={setNicBack}
+              />
+            </Pressable>
 
-                <Pressable onPress={() => __startCamera(poi, setPoi) }>
-                <Uploader
-                  title={fieldsArray[18].field_name}
-                  imagePreview={poi}
-                  state={poi}
-                  setState={setPoi}
-                />
-                </Pressable>
+            <Pressable onPress={() => __startCamera(pictures[0]['poi'], setPictures, "poi")}>
+              <Uploader
+                title={fieldsArray[18].field_name}
+                imagePreview={poi}
+                state={poi}
+                setState={setPoi}
+              />
+            </Pressable>
 
-                <Pressable onPress={() => __startCamera(signature, setSigntaure) }>
-                <Uploader
-                  title={fieldsArray[19].field_name}
-                  imagePreview={signature}
-                  state={signature}
-                  setState={setSigntaure}
-                />
-                </Pressable>
-                
-              {/* <Stack
+            <Pressable onPress={() => __startCamera(pictures[0]['signature'], setPictures)}>
+              <Uploader
+                title={fieldsArray[19].field_name}
+                imagePreview={signature}
+                state={signature}
+                setState={setSigntaure}
+              />
+            </Pressable> */}
+            <Text textAlign="center" color="danger.400">
+              {errorMessage}
+            </Text>
+            {/* <Stack
                 direction="row"
                 p={3}
                 textAlign="center"
@@ -356,36 +437,36 @@ const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
                   </HStack>
                 </Box>
               </Stack> */}
-            </Box>
-            <Box flex={1} justifyContent="flex-end">
-              <Button
-                size="md"
-                rounded="md"
-                backgroundColor="#317F6E"
-                border={1}
-                borderWidth="1"
-                borderColor="white"
-                //mb={25}
-                // shadow={5}
-                onPress={() =>
-                  // navigation.goBack()
+          </Box>
+          <Box flex={1} justifyContent="flex-end">
+            <Button
+              size="md"
+              rounded="md"
+              backgroundColor="#317F6E"
+              border={1}
+              borderWidth="1"
+              borderColor="white"
+              //mb={25}
+              // shadow={5}
+              onPress={() =>
+                // navigation.goBack()
                 //   navigation.navigate("Foreign Tax")
                 {
-                    // handleSubmit()
+                  handleSubmit();
                 }
-                }
-              >
-                CONFIRM
-              </Button>
-            </Box>
-          </ScrollView>
-        </Box>
-        <LoadingModal
-            message="Saving information. Please wait."
-            showModal={showLoadingModal}
-          />
+              }
+            >
+              CONFIRM
+            </Button>
+          </Box>
+        </ScrollView>
       </Box>
-    );
+      <LoadingModal
+        message="Saving information. Please wait."
+        showModal={showLoadingModal}
+      />
+    </Box>
+  );
 };
 
 const styles = StyleSheet.create({

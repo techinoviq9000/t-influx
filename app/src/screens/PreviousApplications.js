@@ -53,6 +53,7 @@ const PreviousApplications = ({ route, navigation }) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       setRefreshing(false)
+      console.log(data);
       setApplicantIdData(data.applicant_id)
     },
     onError: (data) => {

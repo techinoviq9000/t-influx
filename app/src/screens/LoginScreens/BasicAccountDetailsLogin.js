@@ -159,16 +159,14 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
       });
     },
   });
-
+let initialValues = {}
+  preFilledFields.map((item, index) => {
+    initialValues[`field_${index+1}`] =  item?.value ?? ""
+  })
   return (
     <Formik
       id="sign-in-button"
-      initialValues={{
-        field_1: preFilledFields?.[0].value ?? "",
-        field_2: preFilledFields?.[1].value ?? "",
-        field_3: preFilledFields?.[2].value ?? "",
-        field_4: preFilledFields?.[3].value ?? "",
-      }}
+      initialValues={initialValues}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
       validateOnBlur={true}
