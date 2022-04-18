@@ -23,15 +23,14 @@ import EndScreen from "../../screens/EndScreen"
 import VerifyOTPLogin from "../../screens/VerifyOTPLogin"
 import PreviousApplications from "../../screens/PreviousApplications"
 import BasicAccountDetailsLogin from "../../screens/LoginScreens/BasicAccountDetailsLogin"
-
-import {
-  createStackNavigator,
-  TransitionPresets,
-  CardStyleInterpolators
-} from "@react-navigation/stack"
 import ServicesLogin from "../../screens/LoginScreens/ServicesLogin"
 import PersonalDetailsLogin from "../../screens/LoginScreens/PersonalDetailsLogin"
 import BeginDocumentSubmissionLogin from "../../screens/LoginScreens/BeginDocumentSubmissionLogin"
+
+import {
+  TransitionPresets
+} from "@react-navigation/stack"
+import { Easing } from 'react-native'
 
 const screenArray = [
   {

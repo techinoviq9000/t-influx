@@ -39,13 +39,45 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import { gql, useMutation } from "@apollo/client";
 
-const ToC = ({ navigation }) => {
- 
+const UPDATE_APPLICANT_STATUS = gql`
+mutation UpdateApplicantStatus($applicant_id: uuid = "f756bb11-5715-4e88-af1b-c3c7fdc4eb11", $status: String = "") {
+  update_applicant_id(where: {applicant_id: {_eq: $applicant_id}}, _set: {status: $status}) {
+    affected_rows
+  }
+}
+
+`
+
+const ToC = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.applicantData;
+  let applicant_id = applicantData?.applicant_id
+  console.log(applicant_id)
   const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+
+  const [updateApplicant] = useMutation(UPDATE_APPLICANT_STATUS, {
+    variables: {
+      applicant_id,
+      status: "Completed"
+    },
+    notifyOnNetworkStatusChange: true,
+    nextFetchPolicy: "network-only",
+    fetchPolicy: "network-only",
+    onCompleted: data => {
+      navigation.reset({
+        index: 0,
+        routes:[{name: "EndScreen"}]
+      })
+    },
+    onError: (error) => {
+      console.log(error);
+    }
+  })
 
   const [fields, setFields] = useState({
     firstName: "",
@@ -302,10 +334,10 @@ const ToC = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.navigate("Welcome")
               }
             >
-              I NEED HELP
+              SAVE & EXIT
             </Button>
             <Button
               flex={1}
@@ -320,10 +352,7 @@ const ToC = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.reset({
-                    index: 0,
-                    routes:[{name: "EndScreen"}]
-                  })
+                  updateApplicant()
                 // submitForm()
               }
             >

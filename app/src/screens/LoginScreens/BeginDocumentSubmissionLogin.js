@@ -175,10 +175,11 @@ React.useEffect(() => {
     },
   });
   const __startCamera = async (state, setState, name) => {
-    const { status } = await MediaLibrary.requestPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
-    }
+    try {
+  //  console.log(await MediaLibrary.requestPermissionsAsync())
+    // if (status !== "granted") {
+    //   alert("Sorry, we need camera roll permissions to make this work!");
+    // }
     const { status: status2 } = await Camera.requestCameraPermissionsAsync();
     if (status2 !== "granted") {
       alert("Sorry, we need camera roll permissions to make this work!");
@@ -202,6 +203,10 @@ React.useEffect(() => {
       };
       setErrorMessage("");
       setState(state.map(item => {if (item.name == name) { return {...item, edit: true, taken: true, image: result.uri, file } } else {return item}}))
+    }
+  }
+    catch(e) {
+      console.log(e);
     }
   };
 

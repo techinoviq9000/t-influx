@@ -40,7 +40,10 @@ import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
-const Declaration = ({ navigation }) => {
+const Declaration = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.applicantData;
+  let applicant_id = applicantData?.applicant_id;
   const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -352,10 +355,10 @@ const Declaration = ({ navigation }) => {
             // shadow={5}
             onPress={() =>
               // navigation.goBack()
-              navigation.navigate("VerifyOTP")
-            }
-          >
-            I NEED HELP
+              navigation.navigate("Welcome")
+              }
+            >
+              SAVE & EXIT
           </Button>
           <Button
             flex={1}
@@ -370,7 +373,10 @@ const Declaration = ({ navigation }) => {
             onPress={
               () =>
                 // navigation.goBack()
-                navigation.navigate("ToC")
+                navigation.navigate("ToC", {
+                  data: applicantData,
+                  fields: fieldsArray
+                })
               // submitForm()
             }
           >

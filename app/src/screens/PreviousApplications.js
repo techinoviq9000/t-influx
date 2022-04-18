@@ -34,11 +34,34 @@ const GET_APPLICANT_ID = gql`
     }
   }
 `
+
+const INSERT_APPLICANT_ID = gql`mutation insertApplicantId($user_id: Int!) {
+  insert_applicant_id_one(object: {user_id: $user_id}) {
+    applicant_id
+    user_id
+    applicant {
+      email
+    }
+  }
+}
+`
+
+const GET_FIELDS = gql`
+query getFields {
+  fields(order_by: {id: asc}) {
+    id
+    field_name
+    place_holder
+    dropdown_values
+  }
+}
+`;
+
 const PreviousApplications = ({ route, navigation }) => {
   const data = route?.params?.data
   const [applicantIdData, setApplicantIdData] = useState([])
   const [refreshing, setRefreshing] = React.useState(false)
-
+  const [loadingNewApplicant, setLoadingNewApplicant] = useState(false)
   const onRefresh = React.useCallback(() => {
     setRefreshing(true)
     getApplicantId({
@@ -60,6 +83,29 @@ const PreviousApplications = ({ route, navigation }) => {
       console.log(data)
     }
   })
+
+  const [getFields, { data: fieldArray }] = useLazyQuery(
+    GET_FIELDS,
+    {
+      fetchPolicy: "network-only",
+      nextFetchPolicy: "network-only",
+      onCompleted: data => {
+        setLoadingNewApplicant(false)
+        navigation.navigate("Basic Account Details", { id: 1, fields: data.fields, data: addApplicantData });
+        
+      }
+    }
+  );
+
+  const [insertApplicantId, {data: addApplicantData}] = useMutation(INSERT_APPLICANT_ID, {
+    onCompleted: data => {
+      getFields()
+    },
+    onError: (error) => {
+      setLoadingNewApplicant(false)
+      console.log(error);
+    }
+  });
 
   const friendlyId = (id) => {
     const idArray = id.split("-")
@@ -227,14 +273,12 @@ const PreviousApplications = ({ route, navigation }) => {
             color: "darkBlue.900"
           }}
           onPress={() => {
-            fadeOut()
-            setTimeout(() => {
-              navigation.navigate("Basic Account Details", {
-                id: 1,
-                fields: fieldArray.fields,
-                data
-              })
-            }, 200)
+            setLoadingNewApplicant(true)
+            insertApplicantId({
+              variables: {
+                user_id: data.id
+              }
+            })
           }}
         >
           Create New Application
@@ -243,6 +287,10 @@ const PreviousApplications = ({ route, navigation }) => {
       <LoadingModal
         message="Loading your previous applications"
         showModal={loading}
+      />
+       <LoadingModal
+        message="Creating new application"
+        showModal={loadingNewApplicant}
       />
     </Box>
   )

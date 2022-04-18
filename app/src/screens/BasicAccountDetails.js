@@ -145,7 +145,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
       validateOnChange={false}
       validateOnBlur={true}
       onSubmit={(values) => {
-        console.log(values);
+        setShowLoadingModal(true);
         insertData({
           variables: {
             value_1: values.field_1,
@@ -222,6 +222,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[0].dropdown_values}
+                value={values.field_1}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -233,6 +234,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[1].dropdown_values}
+                value={values.field_2}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -244,6 +246,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[2].dropdown_values}
+                value={values.field_3}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -255,6 +258,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 errors={errors}
                 touched={touched}
                 selectValue={fieldsArray[3].dropdown_values}
+                value={values.field_4}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -340,7 +344,6 @@ const BasicAccountDetails = ({ route, navigation }) => {
                 //mb={25}
                 // shadow={5}
                 onPress={() => {
-                  setShowLoadingModal(true);
                   handleSubmit()
                 }
                 }

@@ -38,9 +38,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import InputFieldsDumb from "../CustomComponents/InputFieldsDumb";
 
-const PEP = ({ navigation }) => {
- 
+const PEP = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.applicantData;
+  let applicant_id = applicantData?.applicant_id;
   const [pep, setpep] = useState(false);
 
   const [date, setDate] = useState(new Date());
@@ -179,7 +182,7 @@ const PEP = ({ navigation }) => {
 
   const handleChange = (field, e) => {
     let fieldsCopy = fields;
-    fieldsCopy[field] = e.nativeEvent.text;
+    fieldsCopy[field] = e
     fieldsCopy[`${field}Active`] = true;
     setFields({ ...fieldsCopy });
     handleValidation();
@@ -250,7 +253,7 @@ const PEP = ({ navigation }) => {
               </HStack>
                   {pep &&
                   <Box>
-              <InputFields
+              <InputFieldsDumb
                 fields={fields}
                 title={"Position"}
                 errors={errors}
@@ -259,7 +262,7 @@ const PEP = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-              <InputFields
+              <InputFieldsDumb
                 fields={fields}
                 title={"Name of the person"}
                 errors={errors}
@@ -268,7 +271,7 @@ const PEP = ({ navigation }) => {
                 handleChange={handleChange}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
-              <InputFields
+              <InputFieldsDumb
                 fields={fields}
                 title={"Your Relationship with the person"}
                 errors={errors}
@@ -339,10 +342,10 @@ const PEP = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.navigate("Welcome")
               }
             >
-              I NEED HELP
+              SAVE & EXIT
             </Button>
             <Button
               flex={1}
@@ -357,7 +360,10 @@ const PEP = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("Declaration")
+                  navigation.navigate("Declaration", {
+                    data: applicantData,
+                    fields: fieldsArray
+                  })
                 // submitForm()
               }
             >

@@ -307,7 +307,9 @@ console.log(formValues)
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("Welcome")
+                navigation.navigate("Continue Application", {
+                  data: applicantData
+                })
               }
             >
               SAVE & EXIT

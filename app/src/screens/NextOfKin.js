@@ -37,9 +37,12 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import InputFields from "../CustomComponents/InputFields";
 import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
+import InputFieldsDumb from "../CustomComponents/InputFieldsDumb";
 
-const NextOfKin = ({ navigation }) => {
- 
+const NextOfKin = ({ route, navigation }) => {
+  const fieldsArray = route?.params?.fields;
+  const applicantData = route?.params?.applicantData;
+  let applicant_id = applicantData?.applicant_id;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -176,7 +179,8 @@ const NextOfKin = ({ navigation }) => {
 
   const handleChange = (field, e) => {
     let fieldsCopy = fields;
-    fieldsCopy[field] = e.nativeEvent.text;
+    console.log(e);
+    fieldsCopy[field] = e;
     fieldsCopy[`${field}Active`] = true;
     setFields({ ...fieldsCopy });
     handleValidation();
@@ -227,7 +231,7 @@ const NextOfKin = ({ navigation }) => {
           >
             <Box>
               {/* First name */}
-              <InputFields
+              <InputFieldsDumb
                   fields={fields}
                   title={"Name"}
                   errors={errors}
@@ -237,7 +241,7 @@ const NextOfKin = ({ navigation }) => {
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 />
 
-<InputFields
+<InputFieldsDumb
                   fields={fields}
                   title={"Telephone"}
                   errors={errors}
@@ -267,10 +271,10 @@ const NextOfKin = ({ navigation }) => {
               // shadow={5}
               onPress={() =>
                 // navigation.goBack()
-                navigation.navigate("VerifyOTP")
+                navigation.navigate("Welcome")
               }
             >
-              I NEED HELP
+              SAVE & EXIT
             </Button>
             <Button
               flex={1}
@@ -285,7 +289,10 @@ const NextOfKin = ({ navigation }) => {
               onPress={
                 () =>
                   // navigation.goBack()
-                  navigation.navigate("PEP")
+                  navigation.navigate("PEP", {
+                    data: applicantData,
+                    fields: fieldsArray
+                  })
                 // submitForm()
               }
             >

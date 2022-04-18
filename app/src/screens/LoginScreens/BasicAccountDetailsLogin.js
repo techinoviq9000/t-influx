@@ -160,9 +160,16 @@ const BasicAccountDetailsLogin = ({ route, navigation }) => {
     },
   });
 let initialValues = {}
+ if(preFilledFields) {
   preFilledFields.map((item, index) => {
     initialValues[`field_${index+1}`] =  item?.value ?? ""
   })
+ } else {
+   fieldsArray.map((item, index) => {
+    initialValues[`field_${index+1}`] =  ""
+   })
+ }
+ 
   return (
     <Formik
       id="sign-in-button"
@@ -352,7 +359,9 @@ let initialValues = {}
                 // shadow={5}
                 onPress={() =>
                   // navigation.goBack()
-                  navigation.navigate("Welcome")
+                  navigation.navigate("Continue Application", {
+                    data: applicantData
+                  })
                 }
               >
                 SAVE & EXIT

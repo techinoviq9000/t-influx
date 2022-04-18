@@ -378,14 +378,14 @@ const PersonalDetailsLogin = ({ route, navigation }) => {
                 errorCount += 1
               }
             }
+            let timeTaken = endTime.diff(oldStartTime, "seconds", true) + prevTimeTaken
             timer = {
               startTime: oldStartTime,
               endTime,
               tapped: count,
               errorCount,
-              timeTaken:
-                endTime.diff(oldStartTime, "seconds", true) + prevTimeTaken,
-                avgTime: timeTaken/tapped
+              timeTaken,                
+              avgTime: timeTaken/count
             }
           } else {
             //onEnter
@@ -395,14 +395,14 @@ const PersonalDetailsLogin = ({ route, navigation }) => {
             } else {
               errorCount = 0
             }
+            let timeTaken = endTime.diff(startTime, "seconds", true) + prevTimeTaken
             timer = {
               startTime,
               endTime,
               tapped,
               errorCount,
-              timeTaken:
-                endTime.diff(startTime, "seconds", true) + prevTimeTaken,
-                avgTime: timeTaken/tapped
+              timeTaken,
+              avgTime: timeTaken/tapped
             }
           }
           analytics[key] = timer

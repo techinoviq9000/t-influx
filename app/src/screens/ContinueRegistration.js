@@ -93,10 +93,6 @@ const ContinueRegistration = ({ route, navigation }) => {
   );
 
   const [updateApplicant] = useMutation(UPDATE_APPLICANT_STATUS, {
-    variables: {
-      applicant_id: applicantData.applicant_id,
-      status: "Completed"
-    },
     notifyOnNetworkStatusChange: true,
     nextFetchPolicy: "network-only",
     fetchPolicy: "network-only",
@@ -145,9 +141,20 @@ const ContinueRegistration = ({ route, navigation }) => {
         }
       });
       setDataList(newList);
-      console.log(statuses);
       if(!statuses.includes(false)) {
-        updateApplicant()
+        updateApplicant({
+          variables: {
+            applicant_id: applicantData.applicant_id,
+            status: "Completed"
+          },
+        })
+      } else {
+        updateApplicant({
+          variables: {
+            applicant_id: applicantData.applicant_id,
+            status: "Incomplete"
+          },
+        })
       }
       getFields();
       // setRefreshing(false)

@@ -5,7 +5,7 @@ import { gql, useQuery, useLazyQuery } from "@apollo/client"
 import { ImageBackground, View } from "react-native"
 import { StatusBar } from "expo-status-bar"
 import { MaterialIcons } from "@expo/vector-icons"
-import InputFieldsNoFormik from "../CustomComponents/InputFieldsNoFormik"
+import InputWelcomeScreen from "../CustomComponents/InputWelcomeScreen"
 import LoadingModal from "../CustomComponents/LoadingModal"
 import { http } from "../utils/http"
 
@@ -22,10 +22,10 @@ const GET_CNIC = gql`
     }
   }
 `
-
+const VERSION = "1.0.1"
 const WelcomeScreen = ({ navigation }) => {
   const [backspace, setBackspace] = useState(false)
-  const [cnic, setCnic] = useState("4230161551219")
+  const [cnic, setCnic] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [getApplicant] = useLazyQuery(GET_CNIC, {
     notifyOnNetworkStatusChange: true,
@@ -96,7 +96,7 @@ const WelcomeScreen = ({ navigation }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setShowModal(false)
-      setCnic("4230161551219")
+      setCnic("")
     })
 
     return unsubscribe
@@ -107,6 +107,7 @@ const WelcomeScreen = ({ navigation }) => {
       <Text fontSize="7xl" color="white" zIndex={1} mt={6}>
         T Influx
       </Text>
+      <Text fontSize="xs" color="gray.100">Version: {VERSION}</Text>
       <Box>
         <Image
           source={require("../assets/undraw_on_the_office_fbfs.png")}
@@ -123,7 +124,7 @@ const WelcomeScreen = ({ navigation }) => {
         px={3}
         mb={5}
       >
-        <InputFieldsNoFormik
+        <InputWelcomeScreen
           title={"CNIC Number"}
           name={"cnic"}
           placeholder={"XXXXX-XXXXXXX-X"}

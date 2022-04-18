@@ -2,7 +2,7 @@ import { Box, CheckIcon, Text, Input, CloseIcon } from "native-base";
 import moment from "moment";
 import React, { useState } from "react";
 
-const InputFieldsNoFormik = ({
+const InputWelcomeScreen = ({
   title,
   name,
   placeholder,
@@ -61,4 +61,4 @@ const InputFieldsNoFormik = ({
   );
 };
 
-export default InputFieldsNoFormik;
+export default InputWelcomeScreen;

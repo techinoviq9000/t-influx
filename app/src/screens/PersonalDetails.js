@@ -30,14 +30,14 @@ const INSERT_DATA = gql`
     $value_1: String
     $field_id_1: Int!
     $applicant_id_1: uuid!
-    $analysis_1: json!
+    $analysis_1: json
     $value_2: String
     $field_id_2: Int!
     $applicant_id_2: uuid!
-    $analysis_2: json!
+    $analysis_2: json
     $value_3: String
     $field_id_3: Int!
-    $analysis_3: json!
+    $analysis_3: json
     $applicant_id_3: uuid!
     $value_4: String
     $field_id_4: Int!
@@ -45,7 +45,7 @@ const INSERT_DATA = gql`
     $value_5: String
     $field_id_5: Int!
     $applicant_id_5: uuid!
-    $analysis_5: json!
+    $analysis_5: json
     $value_6: String
     $field_id_6: Int!
     $applicant_id_6: uuid!
@@ -55,11 +55,11 @@ const INSERT_DATA = gql`
     $value_8: String
     $field_id_8: Int!
     $applicant_id_8: uuid!
-    $analysis_8: json!
+    $analysis_8: json
     $value_9: String
     $field_id_9: Int!
     $applicant_id_9: uuid!
-    $analysis_9: json!
+    $analysis_9: json
     $value_10: String
     $field_id_10: Int!
     $applicant_id_10: uuid!
@@ -227,7 +227,7 @@ const PersonalDetails = ({ route, navigation }) => {
       setShowLoadingModal(false);
       console.log(data);
       navigation.navigate("Begin Document Submission", {
-        data: applicantData,
+        applicantData: applicantData,
         fields: fieldsArray,
       });
     },
@@ -287,13 +287,13 @@ const PersonalDetails = ({ route, navigation }) => {
         name: "",
         fatherName: "",
         motherName: "",
-        gender: "Male",
+        gender: "",
         dob: "",
-        placeOfBirth: "Karachi",
-        nationality: "Pakistani",
+        placeOfBirth: "",
+        nationality: "",
         mailingAddress: "",
         permanantAddress: "",
-        postalCommunication: "Permanant",
+        postalCommunication: ""
       }}
       validationSchema={registerValidationSchema}
       onSubmit={(values) => {
@@ -353,49 +353,55 @@ const PersonalDetails = ({ route, navigation }) => {
         isValid,
       }) => {
         const analysis = (key, startTime, endTime) => {
-          let timer = {};
-          let count = 1;
-          let errorCount = 0;
-          let tapped = analytics[key]?.tapped;
+          let prevTimeTaken = analytics[key]?.timeTaken
+          if (!prevTimeTaken) prevTimeTaken = 0
+          let timer = {}
+          let count = 1
+          let errorCount = 0
+          let tapped = analytics[key]?.tapped
           if (typeof tapped == "number") {
-            count += tapped;
+            count += tapped
           } else {
-            tapped = 0;
+            tapped = 0
           }
           if (!startTime) {
             //onExit
-            let oldStartTime = analytics[key]?.startTime;
-            errorCount = analytics[key]?.errorCount;
+            let oldStartTime = analytics[key]?.startTime
+            errorCount = analytics[key]?.errorCount
             if (typeof errorCount == "number") {
               if (touched[key] && errors[key]) {
-                errorCount += 1;
+                errorCount += 1
               }
             }
+            let timeTaken = endTime.diff(oldStartTime, "seconds", true) + prevTimeTaken
             timer = {
               startTime: oldStartTime,
               endTime,
               tapped: count,
               errorCount,
-              timeTaken: endTime.diff(oldStartTime, "seconds", true),
-            };
+              timeTaken,                
+              avgTime: timeTaken/count
+            }
           } else {
             //onEnter
-            let previousErrorCount = analytics[key]?.errorCount;
+            let previousErrorCount = analytics[key]?.errorCount
             if (typeof previousErrorCount == "number") {
-              errorCount = previousErrorCount;
+              errorCount = previousErrorCount
             } else {
-              errorCount = 0;
+              errorCount = 0
             }
+              let timeTaken = endTime.diff(startTime, "seconds", true) + prevTimeTaken
             timer = {
               startTime,
               endTime,
               tapped,
               errorCount,
-              timeTaken: endTime.diff(startTime, "seconds", true),
-            };
+              timeTaken,
+              avgTime: timeTaken/tapped
+            }
           }
-          analytics[key] = timer;
-          return analytics;
+          analytics[key] = timer
+          return analytics
         };
         return (
           <Box flex={1} minHeight="100%" safeAreaTop={5}>
@@ -445,10 +451,10 @@ const PersonalDetails = ({ route, navigation }) => {
                   }}
                 >
                   <Animated.View style={{ transform: [{ translateX }] }}>
-                    <InputFields
-                      title={"Customer Name as per CNIC"}
+                  <InputFields
+                      title={fieldsArray[6].field_name}
                       name={"name"}
-                      placeholder={"Customer Name as per CNIC"}
+                      placeholder={fieldsArray[6].place_holder}
                       value={values.name}
                       onChangeText={handleChange("name")}
                       onBlur={handleBlur("name")}
@@ -463,9 +469,9 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <InputFields
-                      title={"Father Name as per CNIC"}
+                      title={fieldsArray[7].field_name}
                       name={"fatherName"}
-                      placeholder={"Father Name as per CNIC"}
+                      placeholder={fieldsArray[7].place_holder}
                       value={values.fatherName}
                       onChangeText={handleChange("fatherName")}
                       onBlur={handleBlur("fatherName")}
@@ -484,9 +490,9 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <InputFields
-                      title={"Mother's Maiden name"}
+                      title={fieldsArray[8].field_name}
                       name={"motherName"}
-                      placeholder={"Mother's Maiden name"}
+                      placeholder={fieldsArray[8].place_holder}
                       value={values.motherName}
                       onChangeText={handleChange("motherName")}
                       onBlur={handleBlur("motherName")}
@@ -505,22 +511,23 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <SelectField
-                      title={"Gender"}
+                      title={fieldsArray[9].field_name}
                       name={"gender"}
-                      placeholder={"Gender"}
+                      placeholder={fieldsArray[9].place_holder}
                       handleChange={handleChange("gender")}
                       errors={errors}
                       touched={touched}
-                      selectValue={["Male", "Female", "Other"]}
+                      selectValue={fieldsArray[9].dropdown_values}
+                      value={values.gender}
                       icon={
                         <MaterialIcons name="person" size={23} color="black" />
                       }
                     />
 
                     <InputFields
-                      title={"Date of Birth"}
+                      title={fieldsArray[10].field_name}
                       name={"dob"}
-                      placeholder={"Date of Birth"}
+                      placeholder={fieldsArray[10].place_holder}
                       value={values.dob}
                       onChangeText={handleChange("dob")}
                       onBlur={handleBlur("dob")}
@@ -537,36 +544,28 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <SelectField
-                      title={"Place of Birth"}
+                      title={fieldsArray[11].field_name}
                       name={"placeOfBirth"}
-                      placeholder={"Place of Birth"}
+                      placeholder={fieldsArray[11].place_holder}
                       handleChange={handleChange("placeOfBirth")}
                       errors={errors}
                       touched={touched}
-                      selectValue={[
-                        "Pakistan",
-                        "United Arab Emirates",
-                        "India",
-                        "America",
-                      ]}
+                      selectValue={fieldsArray[11].dropdown_values}
+                      value={values.placeOfBirth}
                       icon={
                         <MaterialIcons name="person" size={23} color="black" />
                       }
                     />
 
                     <SelectField
-                      title={"Other Nationality if any"}
+                      title={fieldsArray[12].field_name}
                       name={"nationality"}
-                      placeholder={"Other Nationality if any"}
+                      placeholder={fieldsArray[12].field_name}
                       handleChange={handleChange("nationality")}
                       errors={errors}
                       touched={touched}
-                      selectValue={[
-                        "United Arab Emirates",
-                        "India",
-                        "America",
-                        "None",
-                      ]}
+                      selectValue={fieldsArray[12].dropdown_values}
+                      value={values.nationality}
                       icon={
                         <MaterialIcons name="person" size={23} color="black" />
                       }
@@ -576,11 +575,9 @@ const PersonalDetails = ({ route, navigation }) => {
                       Address
                     </Text>
                     <InputFields
-                      title={"Residence/ Correspondence (Mailing) Address"}
+                      title={fieldsArray[13].field_name}
                       name={"mailingAddress"}
-                      placeholder={
-                        "Residence/ Correspondence (Mailing) Address"
-                      }
+                      placeholder={fieldsArray[13].place_holder}
                       value={values.mailingAddress}
                       onChangeText={handleChange("mailingAddress")}
                       onBlur={handleBlur("mailingAddress")}
@@ -599,9 +596,9 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <InputFields
-                      title={"Permanant Address"}
+                      title={fieldsArray[14].field_name}
                       name={"permanantAddress"}
-                      placeholder={"Permanant Address"}
+                      placeholder={fieldsArray[14].place_holder}
                       value={values.permanantAddress}
                       onChangeText={handleChange("permanantAddress")}
                       onBlur={handleBlur("permanantAddress")}
@@ -620,13 +617,14 @@ const PersonalDetails = ({ route, navigation }) => {
                     />
 
                     <SelectField
-                      title={"Preferred Postal Communication"}
+                      title={fieldsArray[15].field_name}
                       name={"postalCommunication"}
-                      placeholder={"Preferred Postal Communication"}
+                      placeholder={fieldsArray[15].place_holder}
                       handleChange={handleChange("postalCommunication")}
                       touched={touched}
                       errors={errors}
-                      selectValue={["Residence Address", "Permanent Address"]}
+                      selectValue={fieldsArray[15].dropdown_values}
+                      value={values.postalCommunication}
                       icon={
                         <MaterialIcons name="person" size={23} color="black" />
                       }
@@ -661,6 +659,7 @@ const PersonalDetails = ({ route, navigation }) => {
                         // navigation.goBack()
                         {
                           console.log(analytics);
+                          console.log(fatherRef);
                         }
                       // navigation.navigate("VerifyOTP")
                     }
