@@ -41,8 +41,11 @@ import SelectField from "../CustomComponents/SelectField";
 import InputFieldsDumb from "../CustomComponents/InputFieldsDumb";
 
 const PEP = ({ route, navigation }) => {
-  const fieldsArray = route?.params?.fields;
-  const applicantData = route?.params?.applicantData;
+  const pageData = route?.params?.page
+  const fieldsArray = pageData?.pages.filter(
+    (page) => page.name == "Upload Documents"
+  )[0].fields
+  const applicantData = route?.params?.data;
   let applicant_id = applicantData?.applicant_id;
   const [pep, setpep] = useState(false);
 
@@ -362,7 +365,7 @@ const PEP = ({ route, navigation }) => {
                   // navigation.goBack()
                   navigation.navigate("Declaration", {
                     data: applicantData,
-                    fields: fieldsArray
+                    page: pageData
                   })
                 // submitForm()
               }

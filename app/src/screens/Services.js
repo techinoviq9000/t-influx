@@ -57,7 +57,8 @@ mutation MyMutation(
 `;
 
 const Services = ({ route, navigation }) => {
-  const fieldsArray = route?.params?.fields;
+  const pageData = route?.params?.page
+  const fieldsArray = pageData?.pages.filter(page => page.name == "Services")[0].fields
   const applicantData = route?.params?.data;
   const applicant_id = applicantData?.applicant_id;
   // const email = applicantData?.applicant.email;
@@ -69,7 +70,7 @@ const Services = ({ route, navigation }) => {
       setShowLoadingModal(false);
       navigation.navigate("Personal Details", {
         data: applicantData,
-        fields: fieldsArray
+        page: pageData
       })
     },
     onError: (error) => {
@@ -111,8 +112,8 @@ const Services = ({ route, navigation }) => {
       const vairables = {}
       if(formValues.chequeBook != "") {vairables.value_1 = formValues.chequeBook}
       if(formValues.atmCard != "") {vairables.value_2 = formValues.atmCard}
-      vairables.field_id_1= fieldsArray[4].id,
-      vairables.field_id_2= fieldsArray[5].id,
+      vairables.field_id_1= fieldsArray[0].id,
+      vairables.field_id_2= fieldsArray[1].id,
       vairables.applicant_id_1= applicant_id,
       vairables.applicant_id_2= applicant_id,
 
@@ -183,13 +184,13 @@ const Services = ({ route, navigation }) => {
                 <Text color={chequeBookShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
               <SelectFieldNoFormik
-                title={fieldsArray[4].field_name}
+                title={fieldsArray[0].field_name}
                 name={"chequeBook"}
-                placeholder={fieldsArray[4].place_holder}
+                placeholder={fieldsArray[0].place_holder}
                 handleChange={handleChange}
                 isDisabled={!chequeBookShow}
                 errors={errors}
-                selectValue={chequeBookShow ? fieldsArray[4].dropdown_values : []}
+                selectValue={chequeBookShow ? fieldsArray[0].dropdown_values : []}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 
@@ -212,13 +213,13 @@ const Services = ({ route, navigation }) => {
                 <Text color={atmCardShow ? "#13B995" : "black"}>Yes</Text>
               </HStack>
               <SelectFieldNoFormik
-                title={fieldsArray[5].field_name}
+                title={fieldsArray[1].field_name}
                 name={"atmCard"}
-                placeholder={fieldsArray[5].place_holder}
+                placeholder={fieldsArray[1].place_holder}
                 handleChange={handleChange}
                 isDisabled={!atmCardShow}
                 errors={errors}
-                selectValue={atmCardShow ? fieldsArray[5].dropdown_values : []}
+                selectValue={atmCardShow ? fieldsArray[1].dropdown_values : []}
                 icon={<MaterialIcons name="person" size={23} color="black" />}
               />
 

@@ -40,9 +40,12 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
 const ForeignTax = ({ route, navigation }) => {
-  const fieldsArray = route?.params?.fields;
-  const applicantData = route?.params?.applicantData;
-  let applicant_id = applicantData?.applicant_id;
+  const pageData = route?.params?.page
+  const fieldsArray = pageData?.pages.filter(
+    (page) => page.name == "Upload Documents"
+  )[0].fields
+  const applicantData = route?.params?.data
+  const applicant_id = applicantData?.applicant_id
   const [foreignTax, setforeignTax] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
@@ -288,7 +291,7 @@ const ForeignTax = ({ route, navigation }) => {
                   // navigation.goBack()
                   navigation.navigate("Next Of Kin",{
                     data: applicantData,
-                    fields: fieldsArray
+                    page: pageData
                   })
                 // submitForm()
               }

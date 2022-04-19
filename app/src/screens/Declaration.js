@@ -41,8 +41,11 @@ import StepHeader from "../CustomComponents/StepsHeader";
 import SelectField from "../CustomComponents/SelectField";
 
 const Declaration = ({ route, navigation }) => {
-  const fieldsArray = route?.params?.fields;
-  const applicantData = route?.params?.applicantData;
+  const pageData = route?.params?.page
+  const fieldsArray = pageData?.pages.filter(
+    (page) => page.name == "Upload Documents"
+  )[0].fields
+  const applicantData = route?.params?.data;
   let applicant_id = applicantData?.applicant_id;
   const [value, setValue] = React.useState("one");
   const [date, setDate] = useState(new Date());
@@ -375,7 +378,7 @@ const Declaration = ({ route, navigation }) => {
                 // navigation.goBack()
                 navigation.navigate("ToC", {
                   data: applicantData,
-                  fields: fieldsArray
+                    page: pageData
                 })
               // submitForm()
             }

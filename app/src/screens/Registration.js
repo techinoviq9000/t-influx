@@ -234,8 +234,8 @@ const Registration = ({ route, navigation }) => {
     <Formik
       id="sign-in-button"
       initialValues={{
-        email: "",
-        mobile_number: "",
+        email: "s@gmail.com",
+        mobile_number: "03222681573",
         cnic: cnic,
       }}
       validateOnChange={false}

@@ -8,15 +8,25 @@ import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client";
 import * as Network from 'expo-network';
 import moment from "moment";
 
-const GET_APPLICANT = gql`
-query getFields {
-  fields(order_by: {id: asc}) {
+const GET_FIELDS = gql`
+query getData {
+  pages(order_by: {id: asc}) {
     id
-    field_name
-    place_holder
-    dropdown_values
+    name
+    fields(order_by: {order: asc}) {
+      id
+      field_name
+      name
+      place_holder
+      dropdown_values
+      order
+      type
+      mandatory
+      icon
+    }
   }
 }
+
 `;
 
 const GetStarted = ({ route, navigation }) => {
@@ -25,7 +35,7 @@ const GetStarted = ({ route, navigation }) => {
   const [nextPage, setNextPage] = useState("Loading Please Wait")
 
   const [getFields, { data: fieldArray, loading }] = useLazyQuery(
-    GET_APPLICANT,
+    GET_FIELDS,
     {
       fetchPolicy: "network-only",
       nextFetchPolicy: "network-only",
@@ -34,7 +44,6 @@ const GetStarted = ({ route, navigation }) => {
       }
     }
   );
-
   const mountedAnimation = useRef(new Animated.Value(0)).current;
 
   const animation = {
@@ -59,6 +68,7 @@ const GetStarted = ({ route, navigation }) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      getNetworkStatus();
       fadeIn();
     }, [])
   );
@@ -76,9 +86,7 @@ const GetStarted = ({ route, navigation }) => {
       getFields()
     }
   }
-  useEffect(() => {
-    getNetworkStatus()
-  }, [])
+
 
   const textArray = [
     "Active Mobile number & Email ID",
@@ -172,7 +180,7 @@ const GetStarted = ({ route, navigation }) => {
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Basic Account Details", { id: 1, fields: fieldArray.fields, data });
+              navigation.navigate("Basic Account Details", { id: 1, page: fieldArray, data });
             }, 200);
           }}
         >

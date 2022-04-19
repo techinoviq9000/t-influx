@@ -26,7 +26,7 @@ const middleString = (number, word) => {
     object: {
       value: $value_${number}
       field_id: $field_id_${number}
-      applicant_id: $applicant_id_${number}
+      applicant_id: $applicant_id
     },
     on_conflict: {constraint: data_table_field_id_applicant_id_key, update_columns: value, where: {field_id: {_eq: $field_id_${number}}}}
   ) {
@@ -41,12 +41,12 @@ const generateQuery = (number) => {
       let middlestring = ""
       for (let i = 1; i <= number; i++) {
         firstString+=`$value_${i}: String $field_id_${i}: Int!
-          $applicant_id_${i}: uuid! `
+         `
           middlestring+=middleString(i, numtoword(i))
       }
 
-      let finalString = `${startString} ${firstString} ${closeFirstString} ${middlestring} ${endString}`
+      let finalString = `${startString} ${firstString}  $applicant_id: uuid! ${closeFirstString} ${middlestring} ${endString}`
       return finalString
 }
 
-console.log(generateQuery(10))
+console.log(generateQuery(5))

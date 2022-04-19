@@ -103,10 +103,14 @@ const INSERT_DATA = gql`
 
 
 const BeginDocumentSubmission = ({ route, navigation }) => {
-  const fieldsArray = route?.params?.fields;
-  const applicantData = route?.params?.applicantData;
-  let applicant_id = applicantData?.applicant_id;
-  let preFilledFields = route?.params?.data;
+  const pageData = route?.params?.page
+  const fieldsArray = pageData?.pages.filter(
+    (page) => page.name == "Upload Documents"
+  )[0].fields
+  const applicantData = route?.params?.data
+  const applicant_id = applicantData?.applicant_id
+  // let preFilledFields = route?.params?.data;
+  let preFilledFields = null
   if (preFilledFields) {
     preFilledFields = preFilledFields.map((data) => {
       return { field_name: data.field_name, value: data.data_table[0].value };
@@ -157,7 +161,7 @@ React.useEffect(() => {
       setShowLoadingModal(false);
       navigation.navigate("Foreign Tax", {
         data: applicantData,
-        fields: fieldsArray
+        page: pageData
       }); 
     },
     onError: (error) => {
