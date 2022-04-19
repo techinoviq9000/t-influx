@@ -28,16 +28,16 @@ import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 const INSERT_DATA = gql`
   mutation MyMutation(
-    $value_1: String!
+    $value_1: String
     $field_id_1: Int!
     $applicant_id: uuid!
-    $value_2: String!
+    $value_2: String
     $field_id_2: Int!
-    $value_3: String!
+    $value_3: String
     $field_id_3: Int!
-    $value_4: String!
+    $value_4: String
     $field_id_4: Int!
-    $status: String!
+    $status: String
     $custom_updated_at: String!
   ) {
     one: insert_data_table_one(
@@ -149,8 +149,8 @@ const BeginDocumentSubmissionLogin = ({ route, navigation }) => {
 React.useEffect(() => {
   setPictures(dummyFields.map((item, index) => (
     {name: item.field_name,  id: item.id, edit: false,
-      taken: preFilledFields[index]?.value ? true : false,
-      image: preFilledFields[index]?.value,}
+      taken: preFilledFields?.[index]?.value ? true : false,
+      image: preFilledFields?.[index]?.value,}
   )))
 
 }, [])

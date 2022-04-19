@@ -47,14 +47,24 @@ const INSERT_APPLICANT_ID = gql`mutation insertApplicantId($user_id: Int!) {
 `
 
 const GET_FIELDS = gql`
-query getFields {
-  fields(order_by: {id: asc}) {
+query getData {
+  pages(order_by: {id: asc}) {
     id
-    field_name
-    place_holder
-    dropdown_values
+    name
+    fields(order_by: {order: asc}) {
+      id
+      field_name
+      name
+      place_holder
+      dropdown_values
+      order
+      type
+      mandatory
+      icon
+    }
   }
 }
+
 `;
 
 const PreviousApplications = ({ route, navigation }) => {
@@ -76,7 +86,6 @@ const PreviousApplications = ({ route, navigation }) => {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
       setRefreshing(false)
-      console.log(data);
       setApplicantIdData(data.applicant_id)
     },
     onError: (data) => {
@@ -87,11 +96,12 @@ const PreviousApplications = ({ route, navigation }) => {
   const [getFields, { data: fieldArray }] = useLazyQuery(
     GET_FIELDS,
     {
+      notifyOnNetworkStatusChange: true,
       fetchPolicy: "network-only",
       nextFetchPolicy: "network-only",
       onCompleted: data => {
-        setLoadingNewApplicant(false)
-        navigation.navigate("Basic Account Details", { id: 1, fields: data.fields, data: addApplicantData });
+      setLoadingNewApplicant(false)
+        navigation.navigate("Basic Account Details", { id: 1, page: data, data: addApplicantData });
         
       }
     }

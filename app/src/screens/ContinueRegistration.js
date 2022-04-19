@@ -84,6 +84,7 @@ const ContinueRegistration = ({ route, navigation }) => {
   const [getFields, { data: fieldArray, loading }] = useLazyQuery(
     GET_APPLICANT,
     {
+      notifyOnNetworkStatusChange: true,
       fetchPolicy: "network-only",
       nextFetchPolicy: "network-only",
       onCompleted: (data) => {
@@ -189,7 +190,7 @@ const ContinueRegistration = ({ route, navigation }) => {
                 color={isFocused ? "#87e3ff" : "white"}
                 onPress={
                   () => navigation.navigate("Previous Applications", {
-                    data: applicantData.applicant_id
+                    data: applicantData
                   })
                   // navigation.navigate("Welcome")
                 }
