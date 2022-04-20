@@ -31,7 +31,7 @@ import { useFocusEffect } from "@react-navigation/native";
 
 const GET_DATA = gql`
   query getData($applicant_id: uuid = "") {
-    pages(order_by: { id: asc }) {
+    pages(order_by: {id: asc}, where: {editable: {_eq: true}}) {
       id
       name
       fields(order_by: { id: asc }) {
