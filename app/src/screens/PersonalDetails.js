@@ -99,9 +99,9 @@ const PersonalDetails = ({ route, navigation }) => {
         setShowLoadingModal(true);
         let variables = {}
         fieldsArray.map((item, i) => {
-          variables[`value_${i+1}`] = values[item.name]
-          variables[`field_id_${i+1}`] = item.id
-          variables[`analysis_${i+1}`] = analytics[item.name]
+          variables[item.name] = values[item.name];
+          variables[`field_${item.id}`] = item.id;
+          variables[`analysis_${item.id}`] = analytics[item.name]
         })
         variables.applicant_id = applicant_id
         console.log(variables)

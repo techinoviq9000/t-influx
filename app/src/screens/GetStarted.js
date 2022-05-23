@@ -23,10 +23,26 @@ query getData {
       type
       mandatory
       icon
+      isDependent
+      depends_on
+      default_value
+      dependent_on {
+        id
+        field_name
+        name
+        place_holder
+        dropdown_values
+        order
+        type
+        mandatory
+        icon
+        isDependent
+        depends_on
+        default_value
+      }
     }
   }
 }
-
 `;
 
 const GetStarted = ({ route, navigation }) => {

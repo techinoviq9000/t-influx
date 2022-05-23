@@ -1,4 +1,11 @@
-import { Box, Button, Pressable, ScrollView, Stack, useToast } from "native-base";
+import {
+  Box,
+  Button,
+  Pressable,
+  ScrollView,
+  Stack,
+  useToast,
+} from "native-base";
 import React, { useState } from "react";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -22,19 +29,24 @@ import BtnNext from "../CustomComponents/BtnNext";
 const BasicAccountDetails = ({ route, navigation }) => {
   const mountedAnimation = React.useRef(new Animated.Value(0)).current;
   const translateX = React.useRef(new Animated.Value(500)).current;
-  const pageData = route?.params?.page
-  const fieldsArray = pageData?.pages.filter(page => page.name == "Basic Account Details")[0].fields
-  const INSERT_DATA= gql`${INSERT_DATA_GQL(fieldsArray)}`
+  const pageData = route?.params?.page;
+  const fieldsArray = pageData?.pages.filter(
+    (page) => page.name == "Basic Account Details"
+  )[0].fields;
+  const INSERT_DATA = gql`
+    ${INSERT_DATA_GQL(fieldsArray)}
+  `;
   const applicantData = route?.params?.data?.insert_applicant_id_one;
   let applicant_id = applicantData?.applicant_id;
-  if(!applicant_id) {
-    applicant_id = route?.params?.applicant_id
+  if (!applicant_id) {
+    applicant_id = route?.params?.applicant_id;
   }
   const toast = useToast();
   const [showLoadingModal, setShowLoadingModal] = useState(false);
 
-
-  const registerValidationSchema = yup.object().shape(dynamicRegisterValidationSchema(fieldsArray));
+  const registerValidationSchema = yup
+    .object()
+    .shape(dynamicRegisterValidationSchema(fieldsArray));
 
   const translationX = (toValue, delay) => {
     Animated.timing(translateX, {
@@ -54,7 +66,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
       setShowLoadingModal(false);
       navigation.navigate("Services", {
         data: applicantData,
-        page: pageData
+        page: pageData,
       }); //navigate if otp correct
     },
     onError: (error) => {
@@ -64,14 +76,16 @@ const BasicAccountDetails = ({ route, navigation }) => {
         title: "Error",
         placement: "top",
         status: "error",
-        description: "Unable to proceed. Please contact support at support@techinoviq.com"
-      })
+        description:
+          "Unable to proceed. Please contact support at support@techinoviq.com",
+      });
     },
   });
-  let initialValues = {}
-    fieldsArray.map((item, index) => {
-     initialValues[item.name] =  ""
-    })
+  let analytics = {}
+  let initialValues = {};
+  fieldsArray.map((item, index) => {
+    initialValues[item.name] = "";
+  });
   return (
     <Formik
       id="sign-in-button"
@@ -81,15 +95,15 @@ const BasicAccountDetails = ({ route, navigation }) => {
       validateOnBlur={true}
       onSubmit={(values) => {
         setShowLoadingModal(true);
-        let variables = {}
+        let variables = {};
         fieldsArray.map((item, i) => {
-          variables[`value_${i+1}`] = values[item.name]
-          variables[`field_id_${i+1}`] = item.id
-        })
-        variables.applicant_id = applicant_id
+          variables[item.name] = values[item.name];
+          variables[`field_${item.id}`] = item.id;
+        });
+        variables.applicant_id = applicant_id;
         console.log(variables);
         insertData({
-          variables
+          variables,
         });
       }}
     >
@@ -101,80 +115,158 @@ const BasicAccountDetails = ({ route, navigation }) => {
         errors,
         touched,
         isValid,
-      }) => (
-        <Box flex={1} minHeight="100%" safeAreaTop={10}>
-          <Box alignItems="flex-start" px={6} mt={6}>
-            <Pressable>
-              {({ isHovered, isFocused, isPressed }) => {
-                return (
-                  <Ionicons
-                    name="arrow-back-circle-sharp"
-                    size={36}
-                    color={isFocused ? "#87e3ff" : "white"}
-                    onPress={
-                      () => navigation.goBack()
-                      // navigation.navigate("Welcome")
-                    }
-                  />
-                );
-              }}
-            </Pressable>
-          </Box>
-          <Box alignItems="center">
-            <StepHeader
-              title="Basic Account Details"
-              nextTitle="Next: Services"
-              step="1"
-            />
-          </Box>
-          <Box
-            backgroundColor="white"
-            rounded="xl"
-            roundedBottom="none"
-            pt={8}
-            flex={1}
-            // minHeight="100%"
-            mt={5}
-          >
-            <ScrollView
-              _contentContainerStyle={{
-                flexGrow: 1,
-                px: 6,
-                pb: 8,
-              }}
+      }) => {
+        const analysis = (key, startTime, endTime) => {
+          let prevTimeTaken = analytics[key]?.timeTaken;
+          if (!prevTimeTaken) prevTimeTaken = 0;
+          let timer = {};
+          let count = 1;
+          let errorCount = 0;
+          let tapped = analytics[key]?.tapped;
+          if (typeof tapped == "number") {
+            count += tapped;
+          } else {
+            tapped = 0;
+          }
+          if (!startTime) {
+            //onExit
+            let oldStartTime = analytics[key]?.startTime;
+            errorCount = analytics[key]?.errorCount;
+            if (typeof errorCount == "number") {
+              if (touched[key] && errors[key]) {
+                errorCount += 1;
+              }
+            }
+            let timeTaken =
+              endTime.diff(oldStartTime, "seconds", true) + prevTimeTaken;
+            timer = {
+              startTime: oldStartTime,
+              endTime,
+              tapped: count,
+              errorCount,
+              timeTaken,
+              avgTime: timeTaken / count,
+            };
+          } else {
+            //onEnter
+            let previousErrorCount = analytics[key]?.errorCount;
+            if (typeof previousErrorCount == "number") {
+              errorCount = previousErrorCount;
+            } else {
+              errorCount = 0;
+            }
+            let timeTaken =
+              endTime.diff(startTime, "seconds", true) + prevTimeTaken;
+            timer = {
+              startTime,
+              endTime,
+              tapped,
+              errorCount,
+              timeTaken,
+              avgTime: timeTaken / tapped,
+            };
+          }
+          analytics[key] = timer;
+          return analytics;
+        };
+        return (
+          <Box flex={1} minHeight="100%" safeAreaTop={10}>
+            <Box alignItems="flex-start" px={6} mt={6}>
+              <Pressable>
+                {({ isHovered, isFocused, isPressed }) => {
+                  return (
+                    <Ionicons
+                      name="arrow-back-circle-sharp"
+                      size={36}
+                      color={isFocused ? "#87e3ff" : "white"}
+                      onPress={
+                        () => navigation.goBack()
+                        // navigation.navigate("Welcome")
+                      }
+                    />
+                  );
+                }}
+              </Pressable>
+            </Box>
+            <Box alignItems="center">
+              <StepHeader
+                title="Basic Account Details"
+                nextTitle="Next: Services"
+                step="1"
+              />
+            </Box>
+            <Box
+              backgroundColor="white"
+              rounded="xl"
+              roundedBottom="none"
+              pt={8}
+              flex={1}
+              // minHeight="100%"
+              mt={5}
             >
-              {fieldsArray.map((item, i) => {
-                if(item.type == "Select") {
-                  return <SelectField
-                  key={item.id}
-                  title={item.field_name}
-                  name={item.name}
-                  placeholder={item.place_holder}
-                  handleChange={handleChange(item.name)}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={item.dropdown_values}
-                  value={values[item.name]}
-                  icon={<MaterialIcons name={item.icon.name} size={item.icon.size} color={item.icon.color} />}
-                />
-                } else if(item.type == "Input") {
-                  return <SelectField
-                  title={item.field_name}
-                  name={item.name}
-                  placeholder={item.place_holder}
-                  handleChange={handleChange(item.name)}
-                  errors={errors}
-                  touched={touched}
-                  selectValue={item.dropdown_values}
-                  value={values[item.name]}
-                  icon={<MaterialIcons name="person" size={23} color="black" />}
-                />
-                } else {
-                  return <></>
-                }
-              })}
-             
-              {/* Account Type (2)
+              <ScrollView
+                _contentContainerStyle={{
+                  flexGrow: 1,
+                  px: 6,
+                  pb: 8,
+                }}
+              >
+                {fieldsArray.map((item, i) => {
+                  if (item.type == "Select") {
+                    return (
+                      <SelectField
+                        key={item.id}
+                        title={item.field_name}
+                        name={item.name}
+                        placeholder={item.place_holder}
+                        handleChange={handleChange(item.name)}
+                        errors={errors}
+                        touched={touched}
+                        selectValue={item.dropdown_values}
+                        value={values[item.name]}
+                        icon={
+                          <MaterialIcons
+                            name={item.icon.name}
+                            size={item.icon.size}
+                            color={item.icon.color}
+                          />
+                        }
+                      />
+                    );
+                  } else if (item.type == "Input") {
+                    return (
+                      <InputFields
+                        key={item.id}
+                        title={item.field_name}
+                        name={item.name}
+                        placeholder={item.place_holder}
+                        value={values[item.name]}
+                        onChangeText={handleChange(item.name)}
+                        onBlur={handleBlur(item.name)}
+                        analysisOnFocus={() =>
+                          analysis(item.name, moment(), moment())
+                        }
+                        analysisOnBlur={() =>
+                          analysis(item.name, null, moment())
+                        }
+                        errors={errors}
+                        touched={touched}
+                        isValid={isValid}
+                        icon={
+                          <MaterialIcons
+                            name={item.icon.name}
+                            size={item.icon.size}
+                            color={item.icon.color}
+                          />
+                        }
+                      />
+                    );
+                  } else {
+                    return <></>;
+                  }
+                })}
+
+                {/* Account Type (2)
                  <SelectField
 
                   title={"Account Type (2)"}
@@ -198,8 +290,8 @@ const BasicAccountDetails = ({ route, navigation }) => {
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 /> */}
 
-              {/* Account Type (3) */}
-              {/* <SelectField
+                {/* Account Type (3) */}
+                {/* <SelectField
 
                   title={"Account Type (3)"}
                   name={"accType3"}
@@ -221,18 +313,23 @@ const BasicAccountDetails = ({ route, navigation }) => {
                   ]}
                   icon={<MaterialIcons name="person" size={23} color="black" />}
                 /> */}
-            </ScrollView>
+              </ScrollView>
+            </Box>
+            <Box justifyContent="flex-end">
+              <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
+                <BtnSaveAndExit navigation={navigation} toNavigate="Welcome">
+                  SAVE & EXIT
+                </BtnSaveAndExit>
+                <BtnNext handleSubmit={handleSubmit}>CONFIRM</BtnNext>
+              </Stack>
+            </Box>
+            <LoadingModal
+              message="Saving information. Please wait."
+              showModal={showLoadingModal}
+            />
           </Box>
-          <Box justifyContent="flex-end">
-            <Stack backgroundColor="#f7f7f7" p={5} direction="row" space={5}>
-             <BtnSaveAndExit navigation={navigation} toNavigate="Welcome">SAVE & EXIT</BtnSaveAndExit>
-             <BtnNext handleSubmit={handleSubmit}>CONFIRM</BtnNext>
-            </Stack>
-          </Box>
-      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
-
-        </Box>
-      )}
+        );
+      }}
     </Formik>
   );
 };
