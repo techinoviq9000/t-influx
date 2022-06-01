@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24.564" height="22.675" viewBox="0 0 24.564 22.675">
+  <g id="Group_4009" data-name="Group 4009" transform="translate(-93.005 -16.663)">
+    <g id="Icon_ionic-ios-qr-scanner" data-name="Icon ionic-ios-qr-scanner" transform="translate(89.63 12.163)">
+      <path id="Path_904" data-name="Path 904" d="M12.234,4.5H8.1A4.726,4.726,0,0,0,3.375,9.225v4.134a.984.984,0,0,0,1.969,0v-4.2a2.7,2.7,0,0,1,.823-1.842A2.685,2.685,0,0,1,8.03,6.469h4.2a.984.984,0,0,0,0-1.969Z" fill="#fff"/>
+      <path id="Path_905" data-name="Path 905" d="M27.97,4.5h-4.2a.984.984,0,0,0,0,1.969h4.2a2.685,2.685,0,0,1,1.863.844,2.7,2.7,0,0,1,.823,1.842v4.2a.984.984,0,0,0,1.969,0v-4.2A4.66,4.66,0,0,0,27.97,4.5Z" transform="translate(-4.686)" fill="#fff"/>
+      <path id="Path_906" data-name="Path 906" d="M12.234,29.531H8.03a2.685,2.685,0,0,1-1.863-.844,2.7,2.7,0,0,1-.823-1.842v-4.2a.984.984,0,0,0-1.969,0v4.2A4.66,4.66,0,0,0,8.03,31.5h4.2a.984.984,0,0,0,0-1.969Z" transform="translate(0 -4.325)" fill="#fff"/>
+      <path id="Path_907" data-name="Path 907" d="M31.641,21.656a.987.987,0,0,0-.984.984v4.2a2.862,2.862,0,0,1-2.686,2.686h-4.2a.984.984,0,0,0,0,1.969H27.9a4.731,4.731,0,0,0,4.725-4.725V22.641A.987.987,0,0,0,31.641,21.656Z" transform="translate(-4.686 -4.325)" fill="#fff"/>
+    </g>
+    <g id="Icon_feather-user" data-name="Icon feather-user" transform="translate(96.287 19)">
+      <path id="Path_908" data-name="Path 908" d="M15,15.75v-1.5a3,3,0,0,0-3-3H6a3,3,0,0,0-3,3v1.5" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_909" data-name="Path 909" d="M12,5.25a3,3,0,1,1-3-3A3,3,0,0,1,12,5.25Z" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

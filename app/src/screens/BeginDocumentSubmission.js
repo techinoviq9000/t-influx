@@ -203,6 +203,18 @@ React.useEffect(() => {
         name: filename,
         type,
       };
+          const config = {
+          headers: {
+              'content-type': 'multipart/form-data'
+          }
+      }
+      // const res  = await http.post("/imageOCR", {data: "123"}, config)
+        const res = await axios.post("http://localhost:5000/imageOCR", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      console.log(res.data.detections[0].description.split("\n"))
       setErrorMessage("");
       setState(state.map(item => {if (item.name == name) { return {...item, edit: true, taken: true, image: result.uri, file } } else {return item}}))
     }

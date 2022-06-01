@@ -196,7 +196,7 @@ const GetStarted = ({ route, navigation }) => {
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Basic Account Details", { id: 1, page: fieldArray, data });
+              navigation.navigate("Personal Details", { id: 1, page: fieldArray, data });
             }, 200);
           }}
         >

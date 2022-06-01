@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "t-influx-350712",
+  "private_key_id": "5481d5f141497ce5760cff7a9c1b23e10c8bc317",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbjcQ5me2zZSoB\nt3PekZFUK8q9f0suURcyFnVLiMEBuL2TrQVul5U/5isCw0W+QspheXseNJnY+lsi\n9DWho/TFSYFHx+3mEtPz6BaE8MbBDDs+wwAhJgug8SjukByKKP92XkQd6Y4+T/d2\n1R0QKKiEGHI7Czf47KQjqPSgRA9DtF7yV/+Ubatc2OHNN5ra94QQL1HdQ7RbHIZV\nFd+h+BsltLtWeJqFHRJFwqNp1oEHDMIK3lKiTbaY6XEANVgXxGhUVAxH5wU4CL4k\nVmO2L3XlUR35ucquVqyNqcKXVgBFDOgvGJ3gvVwV2NdnyObIajYDbb8fouJhLGWK\ngeiF95LFAgMBAAECggEAHyJ9g5/9NVqK0WQkQ4i0Y3oObuZzKFafw20+VfuN0ifl\nfhD0FOIvQ+ZwdnGaXI4mzuLPU0jpAEaABluF/pAAFprzTuhEBDiBhwDNvRcqWQp3\nM0U5mejxC+opLLLYm4jANTOCA9CzIWLFH9phIlJZBHOWLZ49uku3QNH5ALkOqxi3\nmobilA+mOGmVtdbBrTFozI+4ete3f7IdTVdfZmhyI5gvSd1mgGjecX8XQOXswiFl\nOQVb7pJTEwagapt31Y5WREhX92lbeIFaM+Xm3EkI2xfy/JCrQgGkQ2JP51vJ0BGZ\n7FpdqZX25+9ryRdoeW6ScfG5C3oSEXr6E3PCHGY7MwKBgQDUrDgR3uFr7c8CR9AF\nGUUsgPFPJWOPEqDijfUymJNJ5rb192Vu1fDSWMfXmucUXnYXr4w1sh5+ek47GkdF\nfBdaeTP4Lte8iynH27XlsD+lmBy11o3eMsc8KkJkXBd7OsaoLeGK2rokIEZMSyaU\nlHB9ljSycgQcOrAjNkITRrPLRwKBgQC7Po2CI3T/tAz2yRshj1MLxSKSCDp/ZkqT\nqJdx7+E4fAVf7TwgnNmVSnrQzfw5TSTK/6wkEBkEW0SAoTn4ocf4U9u9GckE5jFQ\nrTC9Nkocbj+79Tzi9JmXf2hbl+vqTR47mFS6exEJOHny9K5j8jS4LDFKyyBC4COv\nXatEUaHfkwKBgFJAxXLL8/1tPWoRYjgGnQVoXWwR9t6IAud8pf/KmPS1IcAhzf4/\nCmQgaDJQO91Z52yjvaOq3zZlkUo0kKokI1gflmT/oPrQC/m7VS+fqg4etcPyVm5A\nz2PKqGDuaTqE8f5ruFae3+1G+klZq3M9sgAwjvMRO9u7KxKDUqzn5HPTAoGBALBD\nATjZoeC3oGCMDaM45Uc2KwXnAxI8u8VmNjJGSvA+J10W2LwmithzhUucLGvQh+sk\nZOqJ0NL+C20+2HCJ8tF8N2U6qbWX8CJu9muXeIps6khIYimPcipgAGAAkk88i1I0\nYsYs5WuVo46m8KcbMK+SwlATCOqLTmxds8SbR9NLAoGBAKOFfPG3u23+vpcF9mWS\nJP1ZO1ya6zqdtG+5JLGou7zzOX2jFJp8WfhjGZenBUaGFGENxIxIEGWXtzsLJGyz\noqfvgLVlWyWlN0OZseGZ9WN4od8eLksvdUIx2YAxMpIt7lSC7e6LidnPrZYmNVoK\n+j8nYnfB+UgZQJUC6SjY6LY9\n-----END PRIVATE KEY-----\n",
+  "client_email": "t-influx-service-account@t-influx-350712.iam.gserviceaccount.com",
+  "client_id": "114079260616675186596",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/t-influx-service-account%40t-influx-350712.iam.gserviceaccount.com"
+}

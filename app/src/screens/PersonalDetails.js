@@ -9,6 +9,7 @@ import {
   useToast
 } from "native-base"
 import React, { useState } from "react"
+import axios from 'axios'
 import { StyleSheet, Animated } from "react-native"
 import { SharedElement } from "react-navigation-shared-element"
 
@@ -21,6 +22,8 @@ import StepHeader from "../CustomComponents/StepsHeader"
 import SelectField from "../CustomComponents/SelectField"
 import { gql, useMutation } from "@apollo/client"
 import LoadingModal from "../CustomComponents/LoadingModal"
+import { Camera } from "expo-camera";
+import * as ImagePicker from 'expo-image-picker'; 
 import moment from "moment"
 import { useFocusEffect } from "@react-navigation/native"
 import INSERT_PERSONAL_DATA from "../Queries/INSERT_PERSONAL_DATA"
@@ -89,6 +92,61 @@ const PersonalDetails = ({ route, navigation }) => {
   fieldsArray.map((item, index) => {
     initialValues[item.name] =  ""
    })
+
+   const __startCamera = async () => {
+    try {
+      console.log("meow")
+    //   const { status } = await MediaLibrary.requestPermissionsAsync()
+    // if (status !== "granted") {
+    //   alert("Sorry, we need camera roll permissions to make this work!");
+    // }
+    const { status: status2 } = await Camera.requestCameraPermissionsAsync();
+    if (status2 !== "granted") {
+      alert("Sorry, we need camera roll permissions to make this work!");
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      exif: true,
+      quality: 0.5,
+    });
+    if (!result.cancelled) {
+      let localUri = result.uri;
+      let filename = localUri.split("/").pop();
+
+      // Infer the type of the image
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      const file = {
+        uri: localUri,
+        name: filename,
+        type,
+      }
+      
+        let formData = new FormData();
+        formData.append('file', file);
+
+
+          const config = {
+          headers: {
+              'content-type': 'multipart/form-data'
+          }
+      }
+      // const res  = await http.post("/imageOCR", {data: "123"}, config)
+        const res = await axios.post("http://192.168.18.38:5000/imageOCR", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      console.log(res.data.data)
+      // setErrorMessage("");
+      
+    }
+  }
+    catch(e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Formik
       id="sign-in-button"
@@ -219,6 +277,20 @@ const PersonalDetails = ({ route, navigation }) => {
                     pb: 8
                   }}
                 >
+                  <Pressable onPress={() =>{ __startCamera(); console.log("meow")}}>
+                  {({ isHovered, isFocused, isPressed }) => {
+                    return (
+                      <Box bgColor={isPressed ? "blue.300" : "#2A6EFF"} rounded="xl" style={{
+                        transform: [{
+                          scale: isPressed ? 0.96 : 1
+                        }]
+                      }} p="4">
+                    <Text textAlign="center" color="white" fontWeight="bold">Scan CNIC/Passport</Text>
+                  </Box>
+                    )
+                  }}
+                </Pressable>
+                 
                   <Animated.View style={{ transform: [{ translateX }] }}>
                     {fieldsArray.map((item, i) => {
                       if (item.type == "Select") {
