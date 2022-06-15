@@ -22,7 +22,7 @@ const GET_CNIC = gql`
     }
   }
 `
-const VERSION = "2.0.2 (beta)"
+const VERSION = "3.0.0 (beta)"
 const WelcomeScreen = ({ navigation }) => {
   const [backspace, setBackspace] = useState(false)
   const [cnic, setCnic] = useState("")

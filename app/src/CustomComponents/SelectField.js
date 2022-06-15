@@ -32,30 +32,25 @@ const SelectField = ({
             borderColor: "#13B995",
           }}
         >
-          <Text ml={12} pl={3} position="relative" top="25px" fontSize="xs"  color={touched?.[name] && errors?.[name] ? "red.500" : "#13B995"} zIndex={10}>
+          <Text ml={12} pl={3} position="relative" top="25px" fontSize="xs"  color={errors?.[name] ? "red.500" : "#13B995"} zIndex={10}>
             {title}
           </Text>
           <Select
           isDisabled={isDisabled}
             InputLeftElement={<Box pl="5">{icon}</Box>}
-            borderColor={touched?.[name] && errors?.[name] ? "red.500" : "#a4ffc8"}
+            borderColor={errors?.[name] ? "red.500" : "#a4ffc8"}
             _focus={{
-              borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "#13B995"}`,
+              borderColor: `${errors?.[name] ? "red.500" : "#13B995"}`,
             }}
             borderRadius="lg"
             borderWidth={1}
             selectedValue={value ?? ""}
             InputRightElement={
               <>
-                {touched?.[name] && errors?.[name] ? (
+                {errors?.[name] ? (
                   <>
                   <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
                   <ChevronDownIcon size="5" color="red.500" mr="2"/>
-                  </>
-                ) : touched?.[name] ? (
-                  <> 
-                  <CheckIcon size="5" mt="0.5" color="emerald.400" mr="4" />
-                  <ChevronDownIcon size="5" color="emerald.400" mr="2"/>
                   </>
                 ) : (
                   <ChevronDownIcon size="5" color="emerald.400" mr="2"/>
@@ -85,7 +80,7 @@ const SelectField = ({
             ))}
           </Select>
         </FormControl>
-        {touched?.[name] && errors?.[name] && (
+        {errors?.[name] && (
           <Text color="red.500" mt={2} ml={5}>
             {errors?.[name]}
           </Text>

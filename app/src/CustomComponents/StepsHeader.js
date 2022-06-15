@@ -34,7 +34,7 @@ const StepHeader = ({title, nextTitle, step}) => {
         {nextTitle}
       </Text>}
     </Box>
-    {step && <Center
+    {/* {step && <Center
       borderColor="#a6dfd2"
       borderWidth="6"
       borderRadius="full"
@@ -42,7 +42,7 @@ const StepHeader = ({title, nextTitle, step}) => {
       width="20"
     >
       <Text color="white">{step} of 9</Text>
-    </Center>}
+    </Center>} */}
   </Stack>
   );
 };

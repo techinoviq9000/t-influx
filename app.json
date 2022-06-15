@@ -2,7 +2,7 @@
   "expo": {
     "name": "T-Influx",
     "slug": "T-Influx",
-    "version": "1.0.0",
+    "version": "3.0.0",
     "orientation": "portrait",
     "icon": "./app/src/assets/ic_launcher.png",
     "splash": {
@@ -24,7 +24,9 @@
         "foregroundImage": "./app/src/assets/ic_launcher_adaptive_fore.png",
         "backgroundColor": "#34D3C2"
       },
-      "package": "com.salman9000.TInflux"
+      "package": "com.demo.TInflux",
+      "versionCode": 2,
+      "permissions": [ "CAMERA", "WRITE_EXTERNAL_STORAGE", "CAMERA_ROLL" ]
     },
     "web": {
       "favicon": "./app/src/assets/favicon.png"

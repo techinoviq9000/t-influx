@@ -334,7 +334,7 @@ console.log(formValues)
             </Button>
           </Stack>
         </Box>
-      <LoadingModal message="Saving information. Please wait. servicves page" showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
 
       </Box>
     )

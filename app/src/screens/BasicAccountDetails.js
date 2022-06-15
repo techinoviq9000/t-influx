@@ -92,7 +92,7 @@ const BasicAccountDetails = ({ route, navigation }) => {
       initialValues={initialValues}
       validationSchema={registerValidationSchema}
       validateOnChange={false}
-      validateOnBlur={true}
+      validateOnBlur={false}
       onSubmit={(values) => {
         setShowLoadingModal(true);
         let variables = {};

@@ -9,11 +9,12 @@ import {
   HStack,
   Icon,
   Text,
-  VStack
+  VStack,
+  Tooltip
 } from "native-base"
 import React, { useState, useRef, useEffect } from "react"
 import { RefreshControl } from "react-native"
-import { MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons, FontAwesome } from "@expo/vector-icons"
 import { gql, useQuery, useLazyQuery, useMutation } from "@apollo/client"
 import moment from "moment"
 import LoadingModal from "../CustomComponents/LoadingModal"
@@ -220,6 +221,27 @@ const PreviousApplications = ({ route, navigation }) => {
                           mr={1}
                         ></Box>
                         <Text fontSize="xs">{item.status}</Text>
+                        {item.status == "Completed"  && <Box display="flex" flexDir="row" alignItems="center">
+                        <Box
+                          rounded="full"
+                          ml={5}
+                          backgroundColor="amber.400"
+                          w={3}
+                          h={3}
+                          mr={1}
+                        ></Box>
+                        <Tooltip label="Click here to read more" openDelay={100}>
+                          <Box display="flex" flexDir="row" alignItems="center">
+                        <Text fontSize="xs" mr="1">Pending Verification</Text>
+                        <Icon
+                        as={FontAwesome}
+                        name="question-circle-o"
+                        size="3"
+                        color="gray.400"
+                      /></Box>
+      </Tooltip>
+                        
+                        </Box>}
                       </HStack>
                       <VStack>
                         <Text fontSize="xs" color="coolGray.400">

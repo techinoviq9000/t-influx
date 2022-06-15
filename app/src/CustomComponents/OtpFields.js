@@ -20,13 +20,12 @@ const OtpFields = ({otpRef, secondRef, otp, handleChange, index}) => {
     py={5}
     // px={6}
     textAlign="center"
-    borderColor={otp[index].value ? "#13B995" : "white"}
+    borderColor={otp[index].value ? "#13B995" : "gray.300"}
     backgroundColor="white"
     borderRadius="lg"
     borderWidth={1}
     color="black"
     width={16}
-    shadow={4}
     mb={4}
     maxLength={1}
     fontSize="4xl"

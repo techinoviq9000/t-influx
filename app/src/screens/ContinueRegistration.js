@@ -340,7 +340,11 @@ const ContinueRegistration = ({ route, navigation }) => {
             // shadow={5}
             onPress={() =>
               // navigation.goBack()
-              navigation.navigate("Upload Documents")
+             {
+              navigation.navigate("ToC", {
+                data: applicantData,
+              });
+             }
             }
           >
             CONTINUE REGISTRATION

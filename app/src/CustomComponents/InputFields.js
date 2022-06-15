@@ -24,7 +24,7 @@ const InputFields = ({
         position="relative"
         top="25px"
         zIndex={10}
-        color={touched?.[name] && errors?.[name] ? "red.500" : "emerald.400"}
+        color={errors?.[name] ? "red.500" : "emerald.400"}
         fontSize="xs"
       >
         {title}
@@ -44,10 +44,8 @@ const InputFields = ({
         value={value}
         InputRightElement={
           <>
-            {touched?.[name] && errors?.[name] ? (
+            {errors?.[name] ? (
               <CloseIcon size="5" mt="0.5" color="red.500" mr="4" />
-            ) : touched?.[name] ? (
-              <CheckIcon size="5" mt="0.5" color="emerald.500" mr="4" />
             ) : (
               <></>
             )}
@@ -57,14 +55,14 @@ const InputFields = ({
         pb={2}
         pt={6}
         px={4}
-        borderColor={touched?.[name] && errors?.[name] ? "red.500" : "emerald.200"}
+        borderColor={errors?.[name] ? "red.500" : "emerald.200"}
         borderRadius="lg"
         borderWidth={1}
         _focus={{
-          borderColor: `${touched?.[name] && errors?.[name] ? "red.500" : "emerald.400"}`,
+          borderColor: `${errors?.[name] ? "red.500" : "emerald.400"}`,
         }}
       />
-      {touched?.[name] && errors?.[name] && (
+      {errors?.[name] && (
         <Text color="red.500" mt={2} ml={5}>
           {errors?.[name]}
         </Text>

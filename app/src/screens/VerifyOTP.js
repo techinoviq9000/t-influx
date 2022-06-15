@@ -97,15 +97,15 @@ const VerifyOTP = ({ route, navigation }) => {
   let expiryDuration = config?.config[0]?.otp_expiry_duration;
   useEffect(() => {
     getConfig();
-    // const backHandler = BackHandler.addEventListener(
-    //   "hardwareBackPress",
-    //   () => true
-    // );
-    // return () =>
-    //   BackHandler.removeEventListener(
-    //     "hardwareBackPress",
-    //     backHandler.remove()
-    //   );
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => true
+    );
+    return () =>
+      BackHandler.removeEventListener(
+        "hardwareBackPress",
+        backHandler.remove()
+      );
   }, []);
 
   const [otpError, setOtpError] = useState(null);
@@ -335,7 +335,7 @@ const VerifyOTP = ({ route, navigation }) => {
                   () => {
                     animateBack()
                     setTimeout(() => {
-                      navigation.goBack()                      
+                      navigation.navigate("Welcome");                      
                     }, 200);
                   }
                   // navigation.navigate("Welcome")
@@ -407,13 +407,12 @@ const VerifyOTP = ({ route, navigation }) => {
                 py={5}
                 // px={6}
                 textAlign="center"
-                borderColor={otp[3].value ? "#13B995" : "white"}
+                borderColor={otp[3].value ? "#13B995" : "gray.300"}
                 backgroundColor="white"
                 borderRadius="lg"
                 borderWidth={1}
                 color="black"
                 width={16}
-                shadow={4}
                 mb={4}
                 maxLength={1}
                 fontSize="4xl"
@@ -512,8 +511,13 @@ const VerifyOTP = ({ route, navigation }) => {
             border={1}
             borderWidth="1"
             borderColor="white"
-            //mb={25}
-            // shadow={5}
+            isDisabled={finalOTP.toString().length != 4}
+            _disabled={{
+              backgroundColor: "gray.400"
+            }}
+            _text={{
+              color: "white"
+            }}
             onPress={() => {
               if (parseInt(getDifference()) >= parseInt(expiryDuration)) {
                 clearOTP();
@@ -534,7 +538,7 @@ const VerifyOTP = ({ route, navigation }) => {
         </Stack>
         </SharedElement>
       </Box>
-      <LoadingModal message="Saving information. Please wait. otp page" showModal={showLoadingModal} />
+      <LoadingModal message="Saving information. Please wait." showModal={showLoadingModal} />
       <ModalOverlay />
     </Box>
   );

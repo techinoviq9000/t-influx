@@ -175,9 +175,9 @@ const GetStarted = ({ route, navigation }) => {
           borderColor="white"
           shadow={5}
           mb={5}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Welcome")}
         >
-          GO BACK
+          LOGOUT
         </Button>
         </SharedElement>
         <SharedElement id="getStartedBtn2">
@@ -196,7 +196,7 @@ const GetStarted = ({ route, navigation }) => {
           onPress={() => {
             fadeOut();
             setTimeout(() => {
-              navigation.navigate("Personal Details", { id: 1, page: fieldArray, data });
+              navigation.navigate("Basic Account Details", { id: 1, page: fieldArray, data });
             }, 200);
           }}
         >

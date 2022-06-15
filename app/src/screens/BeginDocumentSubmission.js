@@ -39,8 +39,6 @@ const INSERT_DATA = gql`
     $field_id_2: Int!
     $value_3: String
     $field_id_3: Int!
-    $value_4: String
-    $field_id_4: Int!
   ) {
     one: insert_data_table_one(
       object: {
@@ -84,20 +82,6 @@ const INSERT_DATA = gql`
     ) {
       id
     }
-    four: insert_data_table_one(
-      object: {
-        value: $value_4
-        field_id: $field_id_4
-        applicant_id: $applicant_id
-      }
-      on_conflict: {
-        constraint: data_table_field_id_applicant_id_key
-        update_columns: value
-        where: { field_id: { _eq: $field_id_4 } }
-      }
-    ) {
-      id
-    }
   }
 `;
 
@@ -122,12 +106,12 @@ const BeginDocumentSubmission = ({ route, navigation }) => {
   const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [pictures, setPictures] = useState([])
   const dummyFields = [
-    {
-      id: 25,
-      field_name: "Nadra NIC Front",
-      place_holder: null,
-      dropdown_values: null
-    },
+    // {
+    //   id: 25,
+    //   field_name: "Nadra NIC Front",
+    //   place_holder: null,
+    //   dropdown_values: null
+    // },
     {
       id: 26,
       field_name: "Nadra NIC Back",
@@ -203,18 +187,18 @@ React.useEffect(() => {
         name: filename,
         type,
       };
-          const config = {
-          headers: {
-              'content-type': 'multipart/form-data'
-          }
-      }
-      // const res  = await http.post("/imageOCR", {data: "123"}, config)
-        const res = await axios.post("http://localhost:5000/imageOCR", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-      console.log(res.data.detections[0].description.split("\n"))
+      //     const config = {
+      //     headers: {
+      //         'content-type': 'multipart/form-data'
+      //     }
+      // }
+      // // const res  = await http.post("/imageOCR", {data: "123"}, config)
+      //   const res = await axios.post("http://localhost:5000/imageOCR", formData, {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   });
+      // console.log(res.data.detections[0].description.split("\n"))
       setErrorMessage("");
       setState(state.map(item => {if (item.name == name) { return {...item, edit: true, taken: true, image: result.uri, file } } else {return item}}))
     }
@@ -290,7 +274,7 @@ React.useEffect(() => {
   //   console.log(pictures)
   // }
   const handleSubmit = async () => {
-    if (!pictures[0]?.image && !pictures[1]?.image) {
+    if (!pictures[0]?.image) {
       // if (false) {
       setErrorMessage("Please add NIC images");
     } else {
@@ -375,7 +359,7 @@ React.useEffect(() => {
                 <Pressable onPress={() =>{ __startCamera(pictures, setPictures, item.name); console.log("im pressed")}} key={index}>
                 <Uploader
                   title={item.name}
-                  mandtory={true}
+                  mandtory={false}
                   imagePreview={item}
                   setState={setPictures}
                   name={item.name}

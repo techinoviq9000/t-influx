@@ -697,7 +697,7 @@ const PersonalDetailsLogin = ({ route, navigation }) => {
               </SharedElement>
             </Box>
             <LoadingModal
-              message="Saving information. Please wait. Personal apge"
+              message="Saving information. Please wait."
               showModal={showLoadingModal}
             />
           </Box>

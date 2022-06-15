@@ -115,19 +115,19 @@ const VerifyOTPLogin = ({ route, navigation }) => {
   const [otp, setOtp] = useState([
     {
       id: 0,
-      value: "0"
+      value: ""
     },
     {
       id: 1,
-      value: "0"
+      value: ""
     },
     {
       id: 2,
-      value: "0"
+      value: ""
     },
     {
       id: 3,
-      value: "0"
+      value: ""
     }
   ])
 
@@ -483,10 +483,10 @@ const VerifyOTPLogin = ({ route, navigation }) => {
           </Stack>
         </SharedElement>
       </Box>
-      {/* <LoadingModal
-        message="Saving information. Please wait. otplogin page" 
+      <LoadingModal
+        message="Saving information. Please wait." 
         showModal={showLoadingModal}
-      /> */}
+      />
       <ModalOverlay />
     </Box>
   )

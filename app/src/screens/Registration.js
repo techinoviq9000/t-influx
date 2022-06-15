@@ -239,6 +239,7 @@ const Registration = ({ route, navigation }) => {
         cnic: cnic,
       }}
       validateOnChange={false}
+      validateOnBlur={false}
       validate={(values) => validate(values)}
       onSubmit={(values) => {
         //Register new user
@@ -280,10 +281,10 @@ const Registration = ({ route, navigation }) => {
                       () => {
                         animateBack()
                         setTimeout(() => {
-                          navigation.goBack()                      
+                          navigation.navigate("Welcome")                   
                         }, 200);
                       }
-                      // navigation.navigate("Welcome")
+                      
                     }
                   />
                 );
@@ -407,7 +408,7 @@ const Registration = ({ route, navigation }) => {
             </SharedElement>
           </Box>
           
-          <LoadingModal message="Saving information. Please wait. Registration page" showModal={showModal} />
+          <LoadingModal message="Saving information. Please wait" showModal={showModal} />
         </Box>
       )}
     </Formik>
